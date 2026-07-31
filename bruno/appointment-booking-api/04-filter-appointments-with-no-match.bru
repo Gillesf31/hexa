@@ -1,0 +1,26 @@
+meta {
+  name: Filter appointments — no match
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/appointments?date=2099-01-01
+  body: none
+  auth: none
+}
+
+params:query {
+  date: 2099-01-01
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("returns an empty array", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.lengthOf(0);
+  });
+}

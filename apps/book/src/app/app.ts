@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcome } from './nx-welcome';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { GET_APPOINTMENTS_USE_CASE } from './app.config';
 
 @Component({
-  imports: [NxWelcome, RouterModule],
+  imports: [],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  protected title = 'book';
+  // PO: Je veux que l'utilisateur puisse voir des rendez-vous
+  appointments = toSignal(inject(GET_APPOINTMENTS_USE_CASE).execute());
 }
