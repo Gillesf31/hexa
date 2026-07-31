@@ -2,24 +2,38 @@
   "appointments": [
     {
       "id": "1",
-      "customerName": "Sample Customer",
-      "date": "2026-08-03",
-      "startTime": "10:00",
+      "customerName": "Gilles",
+      "date": "2026-07-30",
+      "startTime": "09:00",
       "durationMinutes": 60
     },
     {
       "id": "2",
-      "customerName": "Another Customer",
-      "date": "2026-08-04",
-      "startTime": "14:00",
-      "durationMinutes": 60
+      "customerName": "Malo",
+      "date": "2026-07-31",
+      "startTime": "10:00",
+      "durationMinutes": 45
     },
     {
       "id": "3",
-      "customerName": "Toto",
-      "date": "2026-08-04",
+      "customerName": "Alice",
+      "date": "2026-08-01",
       "startTime": "14:00",
+      "durationMinutes": 30
+    },
+    {
+      "id": "4",
+      "customerName": "Bob",
+      "date": "2026-08-03",
+      "startTime": "11:00",
       "durationMinutes": 60
+    },
+    {
+      "id": "5",
+      "customerName": "Clara",
+      "date": "2026-08-05",
+      "startTime": "16:00",
+      "durationMinutes": 90
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

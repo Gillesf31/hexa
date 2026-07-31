@@ -1,4 +1,7 @@
+import { map } from 'rxjs';
+import { filterPastAppointments } from '../domain/appointment.model';
 import { AppointmentsPort } from '../ports/appointments.port';
+import { ClockPort } from '../ports/clock.port';
 
 // A use-case may look overkill when it simply delegates to a port, but it
 // becomes essential as business rules grow. This is where you would add
@@ -9,9 +12,14 @@ import { AppointmentsPort } from '../ports/appointments.port';
 // Plain class, not an Angular service: depends only on the port interface,
 // so it's unit-testable by simply passing a mock to the constructor.
 export class GetAppointmentsUseCase {
-  constructor(private readonly appointmentsPort: AppointmentsPort) {}
+  constructor(
+    private readonly appointmentsPort: AppointmentsPort,
+    private readonly clock: ClockPort
+  ) {}
 
   execute() {
-    return this.appointmentsPort.getAppointments();
+    return this.appointmentsPort
+      .getAppointments()
+      .pipe(map((appointments) => filterPastAppointments(appointments, this.clock.today())));
   }
 }
