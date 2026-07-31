@@ -1,0 +1,28 @@
+meta {
+  name: Filter appointments — 2026-08-04
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/appointments?date=2026-08-04
+  body: none
+  auth: none
+}
+
+params:query {
+  date: 2026-08-04
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("returns the 14:00 seed appointment", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.lengthOf(1);
+    expect(res.body[0].id).to.equal("2");
+    expect(res.body[0].startTime).to.equal("14:00");
+  });
+}

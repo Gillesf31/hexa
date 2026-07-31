@@ -1,10 +1,36 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { appRoutes } from './app.routes';
+import { ApplicationConfig, inject, InjectionToken, provideBrowserGlobalErrorListeners, Provider } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AppointmentsPort } from './ports/appointments.port';
+import { InMemoryAppointmentsAdapter } from './adapters/in-memory-appointments.adapter';
+import { HttpAppointmentsAdapter } from './adapters/http-appointments.adapter';
+import { GetAppointmentsUseCase } from './use-cases/get-appointments.use-case';
+
+export const APPOINTMENTS_PORT = new InjectionToken<AppointmentsPort>(
+  'AppointmentsPort'
+);
+
+export const GET_APPOINTMENTS_USE_CASE = new InjectionToken<GetAppointmentsUseCase>(
+  'GetAppointmentsUseCase'
+);
+
+export function provideAppointmentsPort(useInMemory = false): Provider[] {
+  return [
+    {
+      provide: APPOINTMENTS_PORT,
+      useFactory: useInMemory
+        ? () => new InMemoryAppointmentsAdapter()
+        : () => new HttpAppointmentsAdapter(inject(HttpClient)),
+    },
+    {
+      provide: GET_APPOINTMENTS_USE_CASE,
+      useFactory: () => new GetAppointmentsUseCase(inject(APPOINTMENTS_PORT)),
+    },
+  ];
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(appRoutes)
-  ]
+    provideAppointmentsPort(),
+  ],
 };
