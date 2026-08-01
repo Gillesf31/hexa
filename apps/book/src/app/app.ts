@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { GET_APPOINTMENTS_USE_CASE } from './app.config';
+import { GetAppointmentsUseCase } from './use-cases/get-appointments.use-case';
 import { AppointmentCardComponent } from './ui/appointment-card.component';
 
 @Component({
@@ -9,5 +9,5 @@ import { AppointmentCardComponent } from './ui/appointment-card.component';
   templateUrl: './app.html',
 })
 export class App {
-  appointments = toSignal(inject(GET_APPOINTMENTS_USE_CASE).execute());
+  appointments = toSignal(inject(GetAppointmentsUseCase).execute());
 }

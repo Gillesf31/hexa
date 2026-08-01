@@ -52,6 +52,9 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "dependsOn": [
+        "api"
+      ],
       "defaultConfiguration": "development",
       "configurations": {
         "production": {
@@ -60,6 +63,13 @@
         "development": {
           "buildTarget": "book:build:development"
         }
+      }
+    },
+    "api": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run api"
       }
     },
     "lint": {

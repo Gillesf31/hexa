@@ -13,10 +13,6 @@ export const APPOINTMENTS_PORT = new InjectionToken<AppointmentsPort>(
 
 export const CLOCK_PORT = new InjectionToken<ClockPort>('ClockPort');
 
-export const GET_APPOINTMENTS_USE_CASE = new InjectionToken<GetAppointmentsUseCase>(
-  'GetAppointmentsUseCase'
-);
-
 export function provideAppointmentsPort(useInMemory = false): Provider[] {
   return [
     {
@@ -30,7 +26,7 @@ export function provideAppointmentsPort(useInMemory = false): Provider[] {
         : () => new HttpAppointmentsAdapter(inject(HttpClient)),
     },
     {
-      provide: GET_APPOINTMENTS_USE_CASE,
+      provide: GetAppointmentsUseCase,
       useFactory: () => new GetAppointmentsUseCase(
         inject(APPOINTMENTS_PORT),
         inject(CLOCK_PORT)
@@ -42,6 +38,6 @@ export function provideAppointmentsPort(useInMemory = false): Provider[] {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideAppointmentsPort(true),
+    provideAppointmentsPort(),
   ],
 };
