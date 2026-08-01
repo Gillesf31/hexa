@@ -2,6 +2,62 @@
 
 Appointment-booking exercise built with Angular and a local JSON Server API.
 
+## Architecture review
+
+Open [the current architecture review](docs/architecture-review.html) in a browser.
+
+## Architecture boundaries
+
+The appointment-booking slice is split into Nx libraries. Arrows show allowed
+dependencies between the current projects.
+
+```mermaid
+flowchart TB
+  APP["book app\n(type:app)"]
+
+  subgraph APPOINTMENTS["appointments scope"]
+    FEATURE["feature\n(type:feature)"]
+    APPLICATION["application\n(type:application)"]
+    INFRA["infrastructure\n(type:infrastructure)"]
+    PORTS["ports\n(type:ports)"]
+    DOMAIN["domain\n(type:domain)"]
+  end
+
+  APP --> FEATURE
+  FEATURE --> APPLICATION
+  FEATURE --> INFRA
+  FEATURE --> PORTS
+  FEATURE --> DOMAIN
+  APPLICATION --> PORTS
+  APPLICATION --> DOMAIN
+  INFRA --> PORTS
+  INFRA --> DOMAIN
+  PORTS --> DOMAIN
+```
+
+### Nx dependency rules
+
+[`eslint.config.mjs`](eslint.config.mjs) enforces these directions for any
+project carrying the corresponding tags. Every arrow means "may depend on";
+all other cross-project directions are rejected by
+`@nx/enforce-module-boundaries`.
+
+```mermaid
+flowchart TB
+  BOOK_SCOPE["scope:book"] -->|"only scope:appointments"| APPOINTMENTS_SCOPE["scope:appointments\n(no cross-scope imports)"]
+
+  APP_TYPE["type:app"] --> FEATURE_TYPE["type:feature"]
+  FEATURE_TYPE --> APPLICATION_TYPE["type:application"]
+  FEATURE_TYPE --> INFRASTRUCTURE_TYPE["type:infrastructure"]
+  FEATURE_TYPE --> PORTS_TYPE["type:ports"]
+  FEATURE_TYPE --> DOMAIN_TYPE["type:domain\n(no outward cross-type imports)"]
+  APPLICATION_TYPE --> PORTS_TYPE
+  APPLICATION_TYPE --> DOMAIN_TYPE
+  INFRASTRUCTURE_TYPE --> PORTS_TYPE
+  INFRASTRUCTURE_TYPE --> DOMAIN_TYPE
+  PORTS_TYPE --> DOMAIN_TYPE
+```
+
 ## Getting started
 
 Install dependencies:

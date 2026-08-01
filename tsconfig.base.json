@@ -14,7 +14,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": false,
-    "paths": {}
+    "paths": {
+      "@hexa/appointments-domain": ["./libs/appointments/domain/src/index.ts"],
+      "@hexa/appointments-ports": ["./libs/appointments/ports/src/index.ts"],
+      "@hexa/appointments-application": ["./libs/appointments/application/src/index.ts"],
+      "@hexa/appointments-infrastructure": ["./libs/appointments/infrastructure/src/index.ts"],
+      "@hexa/appointments-feature": ["./libs/appointments/feature/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
