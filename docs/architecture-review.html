@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Architecture review — Hexa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        securityLevel: 'loose',
+      });
+    </script>
+    <style>
+      .eyebrow {
+        letter-spacing: 0.22em;
+      }
+      .diagram {
+        min-height: 14rem;
+      }
+      .seam {
+        border-style: dashed;
+      }
+    </style>
+  </head>
+  <body class="bg-stone-50 text-slate-900 font-sans">
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-10">
+      <header
+        class="border-b border-slate-200 pb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
+      >
+        <div>
+          <p class="eyebrow text-xs uppercase text-emerald-700">
+            Architecture review
+          </p>
+          <h1 class="mt-2 text-4xl font-serif font-semibold">
+            Hexa — appointment booking
+          </h1>
+          <p class="mt-3 max-w-3xl text-slate-600">
+            A fresh review of the current library-based slice. It distinguishes
+            an already-enforced seam from risks that are still real in the
+            running path.
+          </p>
+        </div>
+        <p class="shrink-0 text-sm text-slate-500">1 August 2026</p>
+      </header>
+
+      <section class="grid gap-4 md:grid-cols-3 text-sm">
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+          <p class="font-semibold text-emerald-900">Verdict</p>
+          <p class="mt-2">
+            The dependency direction is now an executable rule, not a
+            convention. The app enters through the feature module; application
+            code uses only domain and port modules.
+          </p>
+        </div>
+        <div class="rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <p class="font-semibold text-amber-900">Primary gap</p>
+          <p class="mt-2">
+            Nine focused tests protect domain, application, and clock behaviour.
+            The HTTP and primary-adapter seams have no test files.
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-5">
+          <p class="font-semibold">Verification</p>
+          <p class="mt-2">
+            <code>nx test</code> passed for all five projects; the feature and
+            app targets passed because they allow zero tests.
+            <code>nx lint book</code> passed.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-10" aria-label="Review findings">
+        <article
+          id="enforced-seam"
+          class="rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm"
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 class="mr-auto text-2xl font-serif">
+              Keep the dependency seam that is now real
+            </h2>
+            <span
+              class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800"
+              >Implemented</span
+            ><span class="rounded-full bg-slate-100 px-3 py-1 text-xs"
+              >no change recommended</span
+            >
+          </div>
+          <p class="mt-3 font-mono text-sm text-slate-600">
+            apps/book/src/{main.ts,app.config.ts} ·
+            libs/appointments/{feature,application,ports,domain,infrastructure}
+            · eslint.config.mjs
+          </p>
+          <div class="mt-6 grid gap-4 lg:grid-cols-2">
+            <div
+              class="diagram rounded-xl border border-slate-200 bg-slate-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-slate-600">
+                Before
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  APP["One app module"] --> ANY["Any internal import"]
+  ANY --> RULE["Direction lives in people's heads"]
+  classDef weak fill:#f1f5f9,stroke:#64748b,color:#0f172a;
+  class APP,ANY,RULE weak;
+            </pre
+              >
+            </div>
+            <div
+              class="diagram rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-emerald-700">
+                Now
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  APP["App"] --> FEATURE["Feature / composition"]
+  FEATURE --> APPLICATION["Application module"]
+  APPLICATION --> PORTS["Port interfaces"]
+  APPLICATION --> DOMAIN["Domain module"]
+  INFRA["Secondary adapters"] --> PORTS
+  INFRA --> DOMAIN
+  classDef deep fill:#0f172a,stroke:#0f172a,color:#fff;
+  class FEATURE,APPLICATION,DOMAIN deep;
+            </pre
+              >
+            </div>
+          </div>
+          <div class="mt-5 grid gap-4 md:grid-cols-3 text-sm">
+            <div>
+              <b>Problem resolved</b><br />The former app-only structure asked
+              maintainers to remember dependency direction.
+            </div>
+            <div>
+              <b>Current shape</b><br />Nx tags and
+              <code>@nx/enforce-module-boundaries</code> restrict the allowed
+              imports. <code>provideAppointmentsFeature()</code> concentrates
+              adapter selection and use-case construction at the composition
+              seam.
+            </div>
+            <div>
+              <b>Why keep it</b><br /><b>Locality:</b> a forbidden import fails
+              at the source. <b>Leverage:</b> callers only need the small
+              interfaces of their own modules. The deletion test succeeds:
+              removing this structure would spread wiring and dependency
+              knowledge back across callers.
+            </div>
+          </div>
+        </article>
+
+        <article
+          id="edge-tests"
+          class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 class="mr-auto text-2xl font-serif">
+              Test the two edges that callers rely on
+            </h2>
+            <span
+              class="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-800"
+              >Strong</span
+            ><span class="rounded-full bg-slate-100 px-3 py-1 text-xs"
+              >ports &amp; adapters</span
+            >
+          </div>
+          <p class="mt-3 font-mono text-sm text-slate-600">
+            http-appointments.adapter.ts · appointment-book.component.ts ·
+            appointment-card.component.ts · feature/project.json
+          </p>
+          <div class="mt-6 grid gap-4 lg:grid-cols-2">
+            <div
+              class="diagram rounded-xl border border-slate-200 bg-slate-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-slate-600">
+                Today
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  D["Domain: 4 tests"] --> U["Application: 3 tests"]
+  C["Clock: 2 tests"]
+  H["HTTP adapter: no test"]
+  P["Primary adapter: no test"]
+  classDef weak fill:#f1f5f9,stroke:#64748b,color:#0f172a;
+  class H,P weak;
+            </pre
+              >
+            </div>
+            <div
+              class="diagram rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-emerald-700">
+                Deepened test surface
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  HT["HTTP contract test"] --> H["HTTP adapter"] --> I["AppointmentsPort interface"]
+  PT["Primary adapter test"] --> P["Feature module"] --> I
+  classDef deep fill:#0f172a,stroke:#0f172a,color:#fff;
+  class I deep;
+            </pre
+              >
+            </div>
+          </div>
+          <div class="mt-5 grid gap-4 md:grid-cols-3 text-sm">
+            <div>
+              <b>Problem</b><br />The HTTP adapter hard-codes the endpoint and
+              the primary adapter creates its signal from the use-case result,
+              but neither interface is exercised in a test. The feature target
+              accepts an empty test suite.
+            </div>
+            <div>
+              <b>Solution</b><br />Add one HTTP adapter contract test that fixes
+              request method, URL, and response mapping; add one primary-adapter
+              test with a controlled <code>AppointmentsPort</code> adapter that
+              proves the rendered fields and empty state.
+            </div>
+            <div>
+              <b>Benefits</b><br /><b>Locality:</b> integration and rendering
+              regressions fail at their seams, without a running server.
+              <b>Leverage:</b> each test crosses the same interface as its
+              callers, rather than testing internal details.
+            </div>
+          </div>
+        </article>
+
+        <article
+          id="local-data-source"
+          class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 class="mr-auto text-2xl font-serif">
+              Make local data-source selection explicit
+            </h2>
+            <span
+              class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
+              >Worth exploring</span
+            ><span class="rounded-full bg-slate-100 px-3 py-1 text-xs"
+              >composition</span
+            >
+          </div>
+          <p class="mt-3 font-mono text-sm text-slate-600">
+            provide-appointments-feature.ts · apps/book/src/app.config.ts ·
+            apps/book/docs/in-memory-services.md
+          </p>
+          <div class="mt-6 grid gap-4 lg:grid-cols-2">
+            <div
+              class="diagram rounded-xl border border-slate-200 bg-slate-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-slate-600">
+                Today
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  APP["App config"] --> P["provideAppointmentsFeature(useInMemory)"]
+  P --> HTTP["HTTP adapter"]
+  P --> MEM["In-memory adapter"]
+  classDef weak fill:#f1f5f9,stroke:#64748b,color:#0f172a;
+  class P weak;
+            </pre
+              >
+            </div>
+            <div
+              class="diagram rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-emerald-700">
+                Direction to explore
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  PROD["Production composition"] --> HTTP["HTTP adapter"]
+  DEV["Dev/test-only composition"] --> MEM["In-memory adapter"]
+  HTTP --> PORT["AppointmentsPort interface"]
+  MEM --> PORT
+  classDef deep fill:#0f172a,stroke:#0f172a,color:#fff;
+  class PORT deep;
+            </pre
+              >
+            </div>
+          </div>
+          <div class="mt-5 grid gap-4 md:grid-cols-3 text-sm">
+            <div>
+              <b>Problem</b><br />The public provider interface uses a boolean
+              to select production or sample data. The checked-in guidance
+              instead calls for a separate, explicit dev/test composition that
+              cannot accidentally be selected by production startup.
+            </div>
+            <div>
+              <b>Solution</b><br />Keep the production composition deep and
+              simple; introduce a deliberately local dev/test composition that
+              overrides the port adapter. Design this with the existing Nx tags
+              before changing it.
+            </div>
+            <div>
+              <b>Benefits</b><br /><b>Locality:</b> the active data source is
+              visible at a single startup seam. <b>Leverage:</b> the feature and
+              application modules remain unaware of the selected adapter. This
+              is a real seam because HTTP and in-memory adapters already exist.
+            </div>
+          </div>
+        </article>
+
+        <article
+          id="calendar-date"
+          class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 class="mr-auto text-2xl font-serif">
+              Only deepen dates when the input rule becomes product behaviour
+            </h2>
+            <span
+              class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+              >Speculative</span
+            ><span class="rounded-full bg-slate-100 px-3 py-1 text-xs"
+              >domain</span
+            >
+          </div>
+          <p class="mt-3 font-mono text-sm text-slate-600">
+            appointment.model.ts · clock.port.ts · system-clock.adapter.ts ·
+            http-appointments.adapter.ts
+          </p>
+          <div class="mt-6 grid gap-4 lg:grid-cols-2">
+            <div
+              class="diagram rounded-xl border border-slate-200 bg-slate-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-slate-600">
+                Today
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  CLOCK["Clock string"] --> CMP["Lexical string comparison"]
+  HTTP["HTTP date string"] --> CMP
+  MEM["Fixture date string"] --> CMP
+  classDef weak fill:#f1f5f9,stroke:#64748b,color:#0f172a;
+  class CMP weak;
+            </pre
+              >
+            </div>
+            <div
+              class="diagram rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+            >
+              <p class="text-xs uppercase tracking-wider text-emerald-700">
+                If validation is needed
+              </p>
+              <pre class="mermaid">
+flowchart LR
+  EXT["External date value"] --> DATE["Calendar-date domain module"]
+  CLOCK["Clock adapter"] --> DATE
+  DATE --> RULE["Past appointment rule"]
+  classDef deep fill:#0f172a,stroke:#0f172a,color:#fff;
+  class DATE deep;
+            </pre
+              >
+            </div>
+          </div>
+          <div class="mt-5 grid gap-4 md:grid-cols-3 text-sm">
+            <div>
+              <b>Problem</b><br />Filtering depends on the implicit invariant
+              that every date is a zero-padded <code>YYYY-MM-DD</code> string.
+              The system clock creates that form, but the HTTP adapter accepts
+              it unchecked.
+            </div>
+            <div>
+              <b>Solution</b><br />Do nothing yet for this increment. If invalid
+              input, time zones, or date arithmetic enter the requirements,
+              introduce one calendar-date module that owns parsing, canonical
+              form, and comparison before appointments enter the domain rule.
+            </div>
+            <div>
+              <b>Why speculative</b><br />Today there is no product requirement
+              for date validation or time-zone conversion. Adding a seam before
+              that variation exists would reduce <b>depth</b>; with only the
+              current known format, the simple implementation has better
+              locality.
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section
+        id="top-recommendation"
+        class="rounded-2xl border-2 border-emerald-700 bg-emerald-50 p-7"
+      >
+        <p class="eyebrow text-xs uppercase text-emerald-800">
+          Top recommendation
+        </p>
+        <h2 class="mt-2 text-3xl font-serif">
+          <a class="underline" href="#edge-tests"
+            >Test the two edges that callers rely on</a
+          >
+        </h2>
+        <p class="mt-3 max-w-3xl">
+          It protects the user-visible path without widening the architecture:
+          the existing port interface and two real adapters already supply the
+          seam. The test suite is currently strongest where risk is lowest, so
+          this gives the most immediate leverage.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
