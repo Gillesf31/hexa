@@ -1,18 +1,20 @@
-<h1>Appointments</h1>
+<div class="block max-w-xl mx-auto px-4 py-8 font-sans">
+  <h1 class="text-2xl font-bold mb-6 text-gray-100">Appointments</h1>
 
-<div class="appointments">
-  @for (appointment of appointments(); track appointment.id) {
-    <div class="card">
-      <div class="card-header">
-        <span class="customer">{{ appointment.customerName }}</span>
-        <span class="duration">{{ appointment.durationMinutes }} min</span>
+  <div class="flex flex-col gap-3">
+    @for (appointment of appointments(); track appointment.id) {
+      <div class="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-lg font-semibold text-gray-100">{{ appointment.customerName }}</span>
+          <span class="text-xs text-gray-300 bg-gray-700 px-2 py-1 rounded-full">{{ appointment.durationMinutes }} min</span>
+        </div>
+        <div class="flex gap-4 text-sm text-gray-400">
+          <span>📅 {{ appointment.date }}</span>
+          <span>🕐 {{ appointment.startTime }}</span>
+        </div>
       </div>
-      <div class="card-body">
-        <span class="date">📅 {{ appointment.date }}</span>
-        <span class="time">🕐 {{ appointment.startTime }}</span>
-      </div>
-    </div>
-  } @empty {
-    <p class="empty">No appointments found.</p>
-  }
+    } @empty {
+      <p class="text-center text-gray-500 py-8">No appointments found.</p>
+    }
+  </div>
 </div>
