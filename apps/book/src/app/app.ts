@@ -6,7 +6,6 @@ import { GET_APPOINTMENTS_USE_CASE } from './app.config';
   imports: [],
   selector: 'app-root',
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App {
   // PO: Je veux que l'utilisateur puisse voir des rendez-vous
