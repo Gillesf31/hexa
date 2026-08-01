@@ -1,0 +1,8 @@
+{
+  "name": "appointments-ports",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/appointments/ports/src",
+  "tags": ["scope:appointments", "type:ports"],
+  "targets": { "lint": { "executor": "@nx/eslint:lint" } }
+}

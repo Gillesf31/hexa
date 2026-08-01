@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/book/src",
-  "tags": [],
+  "tags": ["scope:book", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -76,9 +76,9 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@angular/build:unit-test",
+      "executor": "nx:run-commands",
       "options": {
-        "watch": false
+        "command": "npx vitest run apps/book/src --passWithNoTests"
       }
     },
     "serve-static": {

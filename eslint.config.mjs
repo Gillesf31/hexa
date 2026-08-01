@@ -27,9 +27,56 @@ export default [
                     ],
                     depConstraints: [
                         {
-                            sourceTag: "*",
+                            sourceTag: "scope:book",
                             onlyDependOnLibsWithTags: [
-                                "*"
+                                "scope:appointments"
+                            ]
+                        },
+                        {
+                            sourceTag: "scope:appointments",
+                            onlyDependOnLibsWithTags: [
+                                "scope:appointments"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:app",
+                            onlyDependOnLibsWithTags: [
+                                "type:feature"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:feature",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain",
+                                "type:ports",
+                                "type:application",
+                                "type:infrastructure"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:application",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain",
+                                "type:ports"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:infrastructure",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain",
+                                "type:ports"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:ports",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:domain",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain"
                             ]
                         }
                     ]
