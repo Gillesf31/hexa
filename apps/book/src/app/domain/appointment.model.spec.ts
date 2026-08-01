@@ -5,15 +5,15 @@ import {
 } from './appointment.model';
 
 const mockAppointments: Appointment[] = [
-  { id: 1, customerName: 'Past',   date: '2026-07-29', startTime: '09:00', durationMinutes: 60 },
-  { id: 2, customerName: 'Today',  date: '2026-07-31', startTime: '10:00', durationMinutes: 45 },
-  { id: 3, customerName: 'Future', date: '2026-08-05', startTime: '14:00', durationMinutes: 30 },
+  { id: '1', customerName: 'Past',   date: '2026-07-29', startTime: '09:00', durationMinutes: 60 },
+  { id: '2', customerName: 'Today',  date: '2026-07-31', startTime: '10:00', durationMinutes: 45 },
+  { id: '3', customerName: 'Future', date: '2026-08-05', startTime: '14:00', durationMinutes: 30 },
 ];
 
 describe('filterPastAppointments', () => {
   it('should exclude appointments before today', () => {
     const result = filterPastAppointments(mockAppointments, '2026-07-31');
-    expect(result.map((a) => a.id)).toEqual([2, 3]);
+    expect(result.map((a) => a.id)).toEqual(['2', '3']);
   });
 
   it('should keep all appointments when all are in the future', () => {
