@@ -1,5 +1,8 @@
 import { map } from 'rxjs';
-import { filterPastAppointments } from '@hexa/appointments-domain';
+import {
+  filterAppointmentsWithCustomerName,
+  filterCurrentAndFutureAppointments,
+} from '@hexa/appointments-domain';
 import type { AppointmentsPort, ClockPort } from '@hexa/appointments-ports';
 
 export class GetAppointmentsUseCase {
@@ -11,6 +14,9 @@ export class GetAppointmentsUseCase {
   execute() {
     return this.appointmentsPort
       .getAppointments()
-      .pipe(map((appointments) => filterPastAppointments(appointments, this.clock.today())));
+      .pipe(
+        map((appointments) => filterCurrentAndFutureAppointments(appointments, this.clock.today())),
+        map(filterAppointmentsWithCustomerName)
+      );
   }
 }
