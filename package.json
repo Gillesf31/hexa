@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "api": "json-server server/db.json --port 3000"
+    "api": "json-server server/db.json --port 3000",
+    "test": "vitest run libs",
+    "test:coverage": "vitest run libs --coverage --coverage.include='libs/**/*.ts'"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +35,7 @@
     "@swc/helpers": "~0.5.18",
     "@tailwindcss/postcss": "^4.3.3",
     "@typescript-eslint/utils": "^8.58.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "angular-eslint": "^22.0.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
