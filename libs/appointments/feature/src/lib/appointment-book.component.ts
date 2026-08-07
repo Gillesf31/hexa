@@ -6,37 +6,27 @@ import {
   selectAppointmentsErrorMessage,
   selectIsLoadingAppointments,
 } from '@hexa/appointments-state';
-import { AppointmentCardComponent } from '@hexa/appointments-ui';
+import {
+  AppointmentListComponent,
+  AppointmentsHeaderComponent,
+  StatusMessageComponent,
+} from '@hexa/appointments-ui';
 
 @Component({
-  imports: [AppointmentCardComponent],
+  imports: [AppointmentListComponent, AppointmentsHeaderComponent, StatusMessageComponent],
   selector: 'app-root',
   template: `
     <div class="block max-w-xl mx-auto px-4 py-8 font-sans">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-100">Appointments</h1>
-        <button
-          type="button"
-          class="text-sm text-gray-300 bg-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-600 disabled:opacity-50"
-          [disabled]="isLoading()"
-          (click)="refresh()"
-        >
-          Refresh
-        </button>
-      </div>
+      <app-appointments-header [busy]="isLoading()" (refresh)="refresh()">
+        Appointments
+      </app-appointments-header>
 
       @if (isLoading()) {
-        <p class="text-center text-gray-500 py-8">Loading appointments…</p>
+        <app-status-message>Loading appointments…</app-status-message>
       } @else if (errorMessage(); as message) {
-        <p class="text-center text-red-400 py-8">{{ message }}</p>
+        <app-status-message variant="error">{{ message }}</app-status-message>
       } @else {
-        <div class="flex flex-col gap-3">
-          @for (appointment of appointments(); track appointment.id) {
-            <app-appointment-card [appointment]="appointment" />
-          } @empty {
-            <p class="text-center text-gray-500 py-8">No appointments found.</p>
-          }
-        </div>
+        <app-appointment-list [appointments]="appointments()" />
       }
     </div>
   `,
