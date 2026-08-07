@@ -13,7 +13,11 @@
         "buildTarget": "book:build:development",
         "tsConfig": "libs/appointments/ui/tsconfig.spec.json",
         "runner": "vitest",
-        "include": ["libs/appointments/ui/src/**/*.spec.ts"]
+        "include": ["libs/appointments/ui/src/**/*.spec.ts"],
+        "watch": false
+      },
+      "configurations": {
+        "watch": { "watch": true }
       }
     }
   }
