@@ -8,8 +8,13 @@
   "targets": {
     "lint": { "executor": "@nx/eslint:lint" },
     "test": {
-      "executor": "nx:run-commands",
-      "options": { "command": "npx vitest run libs/appointments/ui/src --passWithNoTests" }
+      "executor": "@nx/angular:unit-test",
+      "options": {
+        "buildTarget": "book:build:development",
+        "tsConfig": "libs/appointments/ui/tsconfig.spec.json",
+        "runner": "vitest",
+        "include": ["libs/appointments/ui/src/**/*.spec.ts"]
+      }
     }
   }
 }

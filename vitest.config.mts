@@ -15,5 +15,8 @@ export default defineConfig({
   },
   test: {
     setupFiles: [fileURLToPath(new URL('./vitest.setup.ts', import.meta.url))],
+    // Component specs need the Angular AOT compiler for signal inputs, so the ui
+    // library runs through `nx test appointments-ui` (@angular/build:unit-test).
+    exclude: ['**/node_modules/**', '**/dist/**', 'libs/appointments/ui/**'],
   },
 });
