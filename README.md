@@ -16,6 +16,7 @@ flowchart TB
   APP["book app\n(type:app)"]
 
   subgraph APPOINTMENTS["appointments scope"]
+    SHELL["shell\n(type:shell)"]
     FEATURE["feature\n(type:feature)"]
     UI["ui\n(type:ui)"]
     STATE["state\n(type:state)"]
@@ -25,13 +26,14 @@ flowchart TB
     DOMAIN["domain\n(type:domain)"]
   end
 
-  APP --> FEATURE
+  APP --> SHELL
+  SHELL --> FEATURE
+  SHELL --> STATE
+  SHELL --> APPLICATION
+  SHELL --> INFRA
+  SHELL --> PORTS
   FEATURE --> UI
   FEATURE --> STATE
-  FEATURE --> APPLICATION
-  FEATURE --> INFRA
-  FEATURE --> PORTS
-  FEATURE --> DOMAIN
   UI --> DOMAIN
   STATE --> APPLICATION
   STATE --> DOMAIN
@@ -53,13 +55,17 @@ all other cross-project directions are rejected by
 flowchart TB
   BOOK_SCOPE["scope:book"] -->|"only scope:appointments"| APPOINTMENTS_SCOPE["scope:appointments\n(no cross-scope imports)"]
 
-  APP_TYPE["type:app"] --> FEATURE_TYPE["type:feature"]
-  FEATURE_TYPE --> UI_TYPE["type:ui"]
-  FEATURE_TYPE --> STATE_TYPE["type:state"]
-  FEATURE_TYPE --> APPLICATION_TYPE["type:application"]
-  FEATURE_TYPE --> INFRASTRUCTURE_TYPE["type:infrastructure"]
-  FEATURE_TYPE --> PORTS_TYPE["type:ports"]
-  FEATURE_TYPE --> DOMAIN_TYPE["type:domain\n(no outward cross-type imports)"]
+  APP_TYPE["type:app"] -->|"only type:shell"| SHELL_TYPE["type:shell"]
+  SHELL_TYPE --> FEATURE_TYPE["type:feature"]
+  SHELL_TYPE --> UI_TYPE["type:ui"]
+  SHELL_TYPE --> STATE_TYPE["type:state"]
+  SHELL_TYPE --> APPLICATION_TYPE["type:application"]
+  SHELL_TYPE --> INFRASTRUCTURE_TYPE["type:infrastructure"]
+  SHELL_TYPE --> PORTS_TYPE["type:ports"]
+  SHELL_TYPE --> DOMAIN_TYPE["type:domain\n(no outward cross-type imports)"]
+  FEATURE_TYPE --> UI_TYPE
+  FEATURE_TYPE --> STATE_TYPE
+  FEATURE_TYPE --> DOMAIN_TYPE
   UI_TYPE --> DOMAIN_TYPE
   STATE_TYPE --> APPLICATION_TYPE
   STATE_TYPE --> DOMAIN_TYPE
@@ -102,7 +108,11 @@ sequenceDiagram
 ```
 
 `provideAppointmentsState()` registers the feature slice and its effects, and is
-called from `provideAppointmentsFeature()`. The root store and the devtools live
+called from `provideAppointmentsShell()`. That provider is applied on the
+appointments route in
+[`libs/appointments/shell`](libs/appointments/shell/src/lib/appointments.routes.ts),
+so the port bindings and the state slice live in the route's environment
+injector rather than the application root. The root store and the devtools live
 in [`apps/book/src/app.config.ts`](apps/book/src/app.config.ts).
 
 ## Getting started

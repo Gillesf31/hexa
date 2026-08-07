@@ -41,16 +41,25 @@ export default [
                         {
                             sourceTag: "type:app",
                             onlyDependOnLibsWithTags: [
-                                "type:feature"
+                                "type:shell"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:shell",
+                            onlyDependOnLibsWithTags: [
+                                "type:feature",
+                                "type:ui",
+                                "type:state",
+                                "type:application",
+                                "type:infrastructure",
+                                "type:ports",
+                                "type:domain"
                             ]
                         },
                         {
                             sourceTag: "type:feature",
                             onlyDependOnLibsWithTags: [
                                 "type:domain",
-                                "type:ports",
-                                "type:application",
-                                "type:infrastructure",
                                 "type:state",
                                 "type:ui"
                             ]

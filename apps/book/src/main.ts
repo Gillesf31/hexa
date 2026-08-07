@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppointmentBookComponent } from '@hexa/appointments-feature';
+import { AppComponent } from './app.component';
 import { appConfig } from './app.config';
 
-bootstrapApplication(AppointmentBookComponent, appConfig).catch((err) =>
+bootstrapApplication(AppComponent, appConfig).catch((err) =>
   console.error(err)
 );

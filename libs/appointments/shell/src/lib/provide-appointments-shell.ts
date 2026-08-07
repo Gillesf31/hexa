@@ -1,20 +1,16 @@
-import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { inject, InjectionToken, makeEnvironmentProviders } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, makeEnvironmentProviders } from '@angular/core';
 import { GetAppointmentsUseCase } from '@hexa/appointments-application';
 import {
   HttpAppointmentsAdapter,
   InMemoryAppointmentsAdapter,
   SystemClockAdapter,
 } from '@hexa/appointments-infrastructure';
-import type { AppointmentsPort, ClockPort } from '@hexa/appointments-ports';
+import { APPOINTMENTS_PORT, CLOCK_PORT } from '@hexa/appointments-ports';
 import { provideAppointmentsState } from '@hexa/appointments-state';
 
-export const APPOINTMENTS_PORT = new InjectionToken<AppointmentsPort>('AppointmentsPort');
-export const CLOCK_PORT = new InjectionToken<ClockPort>('ClockPort');
-
-export function provideAppointmentsFeature(useInMemory = false) {
+export function provideAppointmentsShell(useInMemory = false) {
   return makeEnvironmentProviders([
-    provideHttpClient(),
     {
       provide: CLOCK_PORT,
       useFactory: () => new SystemClockAdapter(),
