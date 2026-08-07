@@ -6,7 +6,7 @@ import {
   selectAppointmentsErrorMessage,
   selectIsLoadingAppointments,
 } from '@hexa/appointments-state';
-import { AppointmentCardComponent } from './appointment-card.component';
+import { AppointmentCardComponent } from '@hexa/appointments-ui';
 
 @Component({
   imports: [AppointmentCardComponent],
