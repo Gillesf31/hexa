@@ -1,0 +1,14 @@
+{
+  "name": "appointments-state",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/appointments/state/src",
+  "tags": ["scope:appointments", "type:state"],
+  "targets": {
+    "lint": { "executor": "@nx/eslint:lint" },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npx vitest run libs/appointments/state/src" }
+    }
+  }
+}

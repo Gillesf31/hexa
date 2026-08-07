@@ -17,6 +17,7 @@ flowchart TB
 
   subgraph APPOINTMENTS["appointments scope"]
     FEATURE["feature\n(type:feature)"]
+    STATE["state\n(type:state)"]
     APPLICATION["application\n(type:application)"]
     INFRA["infrastructure\n(type:infrastructure)"]
     PORTS["ports\n(type:ports)"]
@@ -24,10 +25,13 @@ flowchart TB
   end
 
   APP --> FEATURE
+  FEATURE --> STATE
   FEATURE --> APPLICATION
   FEATURE --> INFRA
   FEATURE --> PORTS
   FEATURE --> DOMAIN
+  STATE --> APPLICATION
+  STATE --> DOMAIN
   APPLICATION --> PORTS
   APPLICATION --> DOMAIN
   INFRA --> PORTS
@@ -47,16 +51,54 @@ flowchart TB
   BOOK_SCOPE["scope:book"] -->|"only scope:appointments"| APPOINTMENTS_SCOPE["scope:appointments\n(no cross-scope imports)"]
 
   APP_TYPE["type:app"] --> FEATURE_TYPE["type:feature"]
+  FEATURE_TYPE --> STATE_TYPE["type:state"]
   FEATURE_TYPE --> APPLICATION_TYPE["type:application"]
   FEATURE_TYPE --> INFRASTRUCTURE_TYPE["type:infrastructure"]
   FEATURE_TYPE --> PORTS_TYPE["type:ports"]
   FEATURE_TYPE --> DOMAIN_TYPE["type:domain\n(no outward cross-type imports)"]
+  STATE_TYPE --> APPLICATION_TYPE
+  STATE_TYPE --> DOMAIN_TYPE
   APPLICATION_TYPE --> PORTS_TYPE
   APPLICATION_TYPE --> DOMAIN_TYPE
   INFRASTRUCTURE_TYPE --> PORTS_TYPE
   INFRASTRUCTURE_TYPE --> DOMAIN_TYPE
   PORTS_TYPE --> DOMAIN_TYPE
 ```
+
+## State management
+
+NgRx holds the page state in `libs/appointments/state`. It is an outer layer:
+the store knows the use cases, the use cases know nothing about the store.
+
+- **Actions** are named after their source, not after the reducer:
+  `appointmentsPageActions` for user intents, `appointmentsApiActions` for results.
+- **The reducer** stores `Appointment` values from the domain plus a `status`
+  and an `errorMessage`, so loading, empty, and failed states are distinguishable.
+- **Effects** call `GetAppointmentsUseCase` and translate its result into actions.
+  They never reach a port, an HTTP client, or a domain rule directly.
+- **Selectors** derive what the template needs; components only dispatch and select.
+
+```mermaid
+sequenceDiagram
+  participant C as AppointmentBookComponent
+  participant S as Store
+  participant E as LoadAppointmentsEffects
+  participant U as GetAppointmentsUseCase
+  participant P as AppointmentsPort
+
+  C->>S: appointmentsPageActions.opened()
+  S->>E: action
+  E->>U: execute()
+  U->>P: getAppointments()
+  P-->>U: Appointment[]
+  U-->>E: Appointment[] (domain rules applied)
+  E->>S: appointmentsApiActions.loadedSuccess()
+  S-->>C: selectors emit
+```
+
+`provideAppointmentsState()` registers the feature slice and its effects, and is
+called from `provideAppointmentsFeature()`. The root store and the devtools live
+in [`apps/book/src/app.config.ts`](apps/book/src/app.config.ts).
 
 ## Getting started
 

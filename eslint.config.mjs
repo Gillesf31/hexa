@@ -50,7 +50,15 @@ export default [
                                 "type:domain",
                                 "type:ports",
                                 "type:application",
-                                "type:infrastructure"
+                                "type:infrastructure",
+                                "type:state"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:state",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain",
+                                "type:application"
                             ]
                         },
                         {

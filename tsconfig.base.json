@@ -19,6 +19,7 @@
       "@hexa/appointments-ports": ["./libs/appointments/ports/src/index.ts"],
       "@hexa/appointments-application": ["./libs/appointments/application/src/index.ts"],
       "@hexa/appointments-infrastructure": ["./libs/appointments/infrastructure/src/index.ts"],
+      "@hexa/appointments-state": ["./libs/appointments/state/src/index.ts"],
       "@hexa/appointments-feature": ["./libs/appointments/feature/src/index.ts"]
     }
   },
