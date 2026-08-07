@@ -7,6 +7,7 @@ import {
   SystemClockAdapter,
 } from '@hexa/appointments-infrastructure';
 import type { AppointmentsPort, ClockPort } from '@hexa/appointments-ports';
+import { provideAppointmentsState } from '@hexa/appointments-state';
 
 export const APPOINTMENTS_PORT = new InjectionToken<AppointmentsPort>('AppointmentsPort');
 export const CLOCK_PORT = new InjectionToken<ClockPort>('ClockPort');
@@ -31,5 +32,6 @@ export function provideAppointmentsFeature(useInMemory = false) {
         inject(CLOCK_PORT)
       ),
     },
+    provideAppointmentsState(),
   ]);
 }
