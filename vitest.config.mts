@@ -11,6 +11,7 @@ export default defineConfig({
       '@hexa/appointments-state': fileURLToPath(new URL('./libs/appointments/state/src/index.ts', import.meta.url)),
       '@hexa/appointments-ui': fileURLToPath(new URL('./libs/appointments/ui/src/index.ts', import.meta.url)),
       '@hexa/appointments-feature': fileURLToPath(new URL('./libs/appointments/feature/src/index.ts', import.meta.url)),
+      '@hexa/appointments-shell': fileURLToPath(new URL('./libs/appointments/shell/src/index.ts', import.meta.url)),
     },
   },
   test: {

@@ -14,7 +14,7 @@ import {
 
 @Component({
   imports: [AppointmentListComponent, AppointmentsHeaderComponent, StatusMessageComponent],
-  selector: 'app-root',
+  selector: 'app-appointment-book',
   template: `
     <div class="block max-w-xl mx-auto px-4 py-8 font-sans">
       <app-appointments-header [busy]="isLoading()" (refresh)="refresh()">
