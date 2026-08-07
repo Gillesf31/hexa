@@ -51,7 +51,14 @@ export default [
                                 "type:ports",
                                 "type:application",
                                 "type:infrastructure",
-                                "type:state"
+                                "type:state",
+                                "type:ui"
+                            ]
+                        },
+                        {
+                            sourceTag: "type:ui",
+                            onlyDependOnLibsWithTags: [
+                                "type:domain"
                             ]
                         },
                         {

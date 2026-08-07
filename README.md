@@ -17,6 +17,7 @@ flowchart TB
 
   subgraph APPOINTMENTS["appointments scope"]
     FEATURE["feature\n(type:feature)"]
+    UI["ui\n(type:ui)"]
     STATE["state\n(type:state)"]
     APPLICATION["application\n(type:application)"]
     INFRA["infrastructure\n(type:infrastructure)"]
@@ -25,11 +26,13 @@ flowchart TB
   end
 
   APP --> FEATURE
+  FEATURE --> UI
   FEATURE --> STATE
   FEATURE --> APPLICATION
   FEATURE --> INFRA
   FEATURE --> PORTS
   FEATURE --> DOMAIN
+  UI --> DOMAIN
   STATE --> APPLICATION
   STATE --> DOMAIN
   APPLICATION --> PORTS
@@ -51,11 +54,13 @@ flowchart TB
   BOOK_SCOPE["scope:book"] -->|"only scope:appointments"| APPOINTMENTS_SCOPE["scope:appointments\n(no cross-scope imports)"]
 
   APP_TYPE["type:app"] --> FEATURE_TYPE["type:feature"]
+  FEATURE_TYPE --> UI_TYPE["type:ui"]
   FEATURE_TYPE --> STATE_TYPE["type:state"]
   FEATURE_TYPE --> APPLICATION_TYPE["type:application"]
   FEATURE_TYPE --> INFRASTRUCTURE_TYPE["type:infrastructure"]
   FEATURE_TYPE --> PORTS_TYPE["type:ports"]
   FEATURE_TYPE --> DOMAIN_TYPE["type:domain\n(no outward cross-type imports)"]
+  UI_TYPE --> DOMAIN_TYPE
   STATE_TYPE --> APPLICATION_TYPE
   STATE_TYPE --> DOMAIN_TYPE
   APPLICATION_TYPE --> PORTS_TYPE
