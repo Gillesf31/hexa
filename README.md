@@ -115,6 +115,42 @@ so the port bindings and the state slice live in the route's environment
 injector rather than the application root. The root store and the devtools live
 in [`apps/book/src/app.config.ts`](apps/book/src/app.config.ts).
 
+## Trusting the API payload
+
+`HttpAppointmentsAdapter` is the only place that knows what the API returns. The
+API describes an appointment's start as a `date` and a `startTime`; the domain
+wants the single instant those two name. Translating between them is the reason
+the seam exists, and `AppointmentDto` never leaves the file.
+
+Typing the response — `http.get<AppointmentDto[]>` — would be a claim rather
+than a check. The type argument is erased, nothing inspects the body, and a
+vendor that breaks its contract breaks a layer that did nothing wrong: a `null`
+customer name used to throw inside a domain rule, and an unparsable date became
+an `Invalid Date` that the same rule then dropped without a word. The adapter
+asks for `unknown` and earns the type instead, so that everything past this file
+may trust what it receives.
+
+A [zod/mini](https://zod.dev) schema is that contract in executable form.
+`z.infer` derives `AppointmentDto` from it, so the shape and the checks are one
+declaration and cannot drift apart.
+
+**Structure is checked here; meaning stays in the domain.** An empty customer
+name is a valid string and passes the schema. That an appointment without a name
+is not worth showing is a decision about appointments, so
+[`filterAppointmentsWithCustomerName`](libs/appointments/domain/src/lib/appointment.rules.ts)
+still makes it. A test pins that boundary, because `.min(1)` is one word away and
+would quietly move a business rule into infrastructure.
+
+One check resists the schema. `2026-13-45` matches the date pattern — the digits
+are in the right places — and `new Date` rolls it over to February 2027 rather
+than refusing. The only way to know a string named the instant it claimed is to
+build the date and read the parts back.
+
+`zod/mini` rather than the chained API, decided by measurement: the lazy chunk
+this feature lives in grows from 4.21 kB to 7.82 kB transfer, where classic zod
+builds from identical source and costs 21.27 kB. The initial bundle is unchanged
+either way, so validation is paid for only by whoever opens the route.
+
 ## Choosing a data source
 
 `appointmentsRoutes` takes an `AppointmentsConfig` and hands it to the shell,
@@ -190,7 +226,7 @@ npx nx build book
 npx nx e2e book-e2e
 ```
 
-`npm test` runs every project's `test` target — 13 spec files, 44 tests. The `ui`
+`npm test` runs every project's `test` target — 13 spec files, 48 tests. The `ui`
 library goes through `@nx/angular:unit-test` because its component specs need the
 Angular AOT compiler for signal inputs; every other library runs on plain Vitest.
 Both are covered by that one command.
@@ -230,6 +266,15 @@ domain. That keeps the rule in the core where it is testable without a server,
 which is the right call for a demo dataset and the wrong one at a few thousand
 rows. The trigger is the first slow page load; the fix is a port method that
 takes a criterion, not moving the rule into the query.
+
+**One bad record fails the whole batch.** A malformed appointment aborts the
+request and the page shows an error, instead of being skipped so that the rest
+can render. Dropping it quietly would be the silent data loss this boundary
+exists to prevent, and a demo dataset has no rows to spare. That reverses on a
+large feed from a vendor who is routinely a little wrong: there, one bad row
+hiding forty good ones is the worse failure. The trigger is the first support
+question about a missing appointment; the fix is to collect the faults and
+report them alongside the results, not to ignore them.
 
 **One feature, eight libraries.** Two ports, two DI tokens, an effect, a reducer
 and three selectors around two lines of business rule. On a product this ratio
