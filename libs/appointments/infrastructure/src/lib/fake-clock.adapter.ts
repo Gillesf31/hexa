@@ -1,9 +1,9 @@
 import type { ClockPort } from '@hexa/appointments-ports';
 
 export class FakeClockAdapter implements ClockPort {
-  constructor(private readonly fakeToday: string) {}
+  constructor(private readonly fakeNow: Date) {}
 
-  today(): string {
-    return this.fakeToday;
+  now(): Date {
+    return this.fakeNow;
   }
 }

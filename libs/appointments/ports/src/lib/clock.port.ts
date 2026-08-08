@@ -1,3 +1,3 @@
 export interface ClockPort {
-  today(): string;
+  now(): Date;
 }

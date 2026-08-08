@@ -13,12 +13,20 @@ type AppointmentDto = {
   durationMinutes: number;
 };
 
+// The API splits an appointment's start across two strings; the domain wants the
+// single instant those two describe. This is the whole reason the seam exists.
+function toStartsAt(date: string, startTime: string): Date {
+  const [year, month, day] = date.split('-').map(Number);
+  const [hours, minutes] = startTime.split(':').map(Number);
+
+  return new Date(year, month - 1, day, hours, minutes);
+}
+
 function toAppointment(dto: AppointmentDto): Appointment {
   return {
     id: dto.id,
     customerName: dto.customerName,
-    date: dto.date,
-    startTime: dto.startTime,
+    startsAt: toStartsAt(dto.date, dto.startTime),
     durationMinutes: dto.durationMinutes,
   };
 }

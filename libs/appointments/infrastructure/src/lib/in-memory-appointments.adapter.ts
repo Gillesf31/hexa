@@ -2,7 +2,10 @@ import { of } from 'rxjs';
 import type { Appointment } from '@hexa/appointments-domain';
 import type { AppointmentsPort } from '@hexa/appointments-ports';
 
-type AppointmentSeed = Omit<Appointment, 'date'> & { dayOffset: number };
+type AppointmentSeed = Omit<Appointment, 'startsAt'> & {
+  dayOffset: number;
+  startTime: string;
+};
 
 const appointmentSeeds: AppointmentSeed[] = [
   { id: '1', customerName: 'Gilles', dayOffset: -6, startTime: '09:00', durationMinutes: 60 },
@@ -18,20 +21,18 @@ export class InMemoryAppointmentsAdapter implements AppointmentsPort {
 
   getAppointments = () =>
     of<Appointment[]>(
-      appointmentSeeds.map(({ dayOffset, ...appointment }) => ({
+      appointmentSeeds.map(({ dayOffset, startTime, ...appointment }) => ({
         ...appointment,
-        date: this.dateFromToday(dayOffset),
+        startsAt: this.startsAtFromToday(dayOffset, startTime),
       }))
     );
 
-  private dateFromToday(dayOffset: number): string {
-    const date = this.now();
-    date.setDate(date.getDate() + dayOffset);
+  private startsAtFromToday(dayOffset: number, startTime: string): Date {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const startsAt = new Date(this.now());
+    startsAt.setDate(startsAt.getDate() + dayOffset);
+    startsAt.setHours(hours, minutes, 0, 0);
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
+    return startsAt;
   }
 }

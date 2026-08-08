@@ -15,7 +15,7 @@ export class GetAppointmentsUseCase {
     return this.appointmentsPort
       .getAppointments()
       .pipe(
-        map((appointments) => filterCurrentAndFutureAppointments(appointments, this.clock.today())),
+        map((appointments) => filterCurrentAndFutureAppointments(appointments, this.clock.now())),
         map(filterAppointmentsWithCustomerName)
       );
   }

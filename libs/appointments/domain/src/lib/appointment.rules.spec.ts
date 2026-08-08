@@ -10,44 +10,41 @@ describe('filterCurrentAndFutureAppointments', () => {
     {
       id: '1',
       customerName: 'Past',
-      date: '2026-07-29',
-      startTime: '09:00',
+      startsAt: new Date(2026, 6, 29, 9, 0),
       durationMinutes: 60,
     },
     {
       id: '2',
       customerName: 'Today',
-      date: '2026-07-31',
-      startTime: '10:00',
+      startsAt: new Date(2026, 6, 31, 10, 0),
       durationMinutes: 45,
     },
     {
       id: '3',
       customerName: 'Future',
-      date: '2026-08-05',
-      startTime: '14:00',
+      startsAt: new Date(2026, 7, 5, 14, 0),
       durationMinutes: 30,
     },
   ];
 
   it('keeps appointments on or after today', () => {
     expect(
-      filterCurrentAndFutureAppointments(mockAppointments, '2026-07-31').map(
+      filterCurrentAndFutureAppointments(mockAppointments, new Date(2026, 6, 31)).map(
         (appointment) => appointment.id
       )
     ).toEqual(['2', '3']);
   });
 
   it('keeps every appointment when today is before all appointments', () => {
-    expect(filterCurrentAndFutureAppointments(mockAppointments, '2026-07-01')).toHaveLength(3);
+    expect(filterCurrentAndFutureAppointments(mockAppointments, new Date(2026, 6, 1))).toHaveLength(3);
   });
 
   it('returns no appointments when today is after all appointments', () => {
-    expect(filterCurrentAndFutureAppointments(mockAppointments, '2026-09-01')).toEqual([]);
+    expect(filterCurrentAndFutureAppointments(mockAppointments, new Date(2026, 8, 1))).toEqual([]);
   });
 
   it('returns no appointments when none are supplied', () => {
-    expect(filterCurrentAndFutureAppointments([], '2026-07-31')).toEqual([]);
+    expect(filterCurrentAndFutureAppointments([], new Date(2026, 6, 31))).toEqual([]);
   });
 });
 
@@ -56,8 +53,7 @@ describe('filterAppointmentsWithCustomerName', () => {
     const appointment: Appointment = {
       id: '4',
       customerName: '',
-      date: '2026-07-31',
-      startTime: '16:00',
+      startsAt: new Date(2026, 6, 31, 16, 0),
       durationMinutes: 30,
     };
 
@@ -68,8 +64,7 @@ describe('filterAppointmentsWithCustomerName', () => {
     const appointment: Appointment = {
       id: '5',
       customerName: '   ',
-      date: '2026-08-05',
-      startTime: '16:00',
+      startsAt: new Date(2026, 7, 5, 16, 0),
       durationMinutes: 30,
     };
 
@@ -81,15 +76,13 @@ describe('filterAppointmentsWithCustomerName', () => {
       {
         id: '6',
         customerName: 'Alice',
-        date: '2026-07-31',
-        startTime: '09:00',
+        startsAt: new Date(2026, 6, 31, 9, 0),
         durationMinutes: 30,
       },
       {
         id: '7',
         customerName: '  Alice  ',
-        date: '2026-08-05',
-        startTime: '10:00',
+        startsAt: new Date(2026, 7, 5, 10, 0),
         durationMinutes: 30,
       },
     ];

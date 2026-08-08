@@ -1,10 +1,19 @@
 import type { Appointment } from './appointment';
 
+function startOfDay(instant: Date): Date {
+  const start = new Date(instant);
+  start.setHours(0, 0, 0, 0);
+
+  return start;
+}
+
 export function filterCurrentAndFutureAppointments(
   appointments: Appointment[],
-  today: string
+  now: Date
 ): Appointment[] {
-  return appointments.filter((appointment) => appointment.date >= today);
+  const today = startOfDay(now);
+
+  return appointments.filter((appointment) => appointment.startsAt >= today);
 }
 
 export function filterAppointmentsWithCustomerName(

@@ -24,31 +24,32 @@ describe('InMemoryAppointmentsAdapter', () => {
     appointments.forEach((appointment: Appointment) => {
       expect(appointment.id).toBeTruthy();
       expect(appointment.customerName).toBeTruthy();
-      expect(appointment.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(appointment.startTime).toMatch(/^\d{2}:\d{2}$/);
+      expect(appointment.startsAt).toBeInstanceOf(Date);
+      expect(Number.isNaN(appointment.startsAt.getTime())).toBe(false);
       expect(appointment.durationMinutes).toBeGreaterThan(0);
     });
   });
 
-  it('spreads appointment dates around the current day', async () => {
-    const adapter = new InMemoryAppointmentsAdapter(() => new Date('2026-08-07T12:00:00'));
+  it('spreads appointment start times around the current day', async () => {
+    const adapter = new InMemoryAppointmentsAdapter(() => new Date(2026, 7, 7, 12, 0));
 
     const appointments = await firstValueFrom(adapter.getAppointments());
 
-    expect(appointments.map((appointment) => appointment.date)).toEqual([
-      '2026-08-01',
-      '2026-08-06',
-      '2026-08-07',
-      '2026-08-07',
-      '2026-08-09',
-      '2026-08-16',
+    expect(appointments.map((appointment) => appointment.startsAt)).toEqual([
+      new Date(2026, 7, 1, 9, 0),
+      new Date(2026, 7, 6, 10, 0),
+      new Date(2026, 7, 7, 14, 0),
+      new Date(2026, 7, 7, 16, 30),
+      new Date(2026, 7, 9, 11, 0),
+      new Date(2026, 7, 16, 8, 30),
     ]);
   });
 
-  it('always emits appointments on or after today', async () => {
+  it('always emits appointments at or after the start of today', async () => {
     const appointments = await firstValueFrom(new InMemoryAppointmentsAdapter().getAppointments());
-    const today = new Date().toISOString().slice(0, 10);
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
 
-    expect(appointments.some((appointment) => appointment.date >= today)).toBe(true);
+    expect(appointments.some((appointment) => appointment.startsAt >= startOfToday)).toBe(true);
   });
 });
