@@ -47,4 +47,42 @@ describe('HttpAppointmentsAdapter', () => {
       'startsAt',
     ]);
   });
+
+  describe('when the API breaks its contract', () => {
+    it('refuses a body that is not a list', async () => {
+      const { adapter } = adapterReturning({ error: 'Internal Server Error' });
+
+      await expect(firstValueFrom(adapter.getAppointments())).rejects.toThrow(
+        'the body is not an array'
+      );
+    });
+
+    it('refuses a record whose field has the wrong type, naming the entry', async () => {
+      const { adapter } = adapterReturning([apiResponse[0], { ...apiResponse[0], customerName: null }]);
+
+      await expect(firstValueFrom(adapter.getAppointments())).rejects.toThrow(
+        'entry 1: customerName must be a string'
+      );
+    });
+
+    // Without this the string parses, `new Date` rolls month 13 over into the
+    // next year, and a wrong instant renders as if it were fact.
+    it('refuses a date that is well formed but names no real instant', async () => {
+      const { adapter } = adapterReturning([{ ...apiResponse[0], date: '2026-13-45' }]);
+
+      await expect(firstValueFrom(adapter.getAppointments())).rejects.toThrow(
+        'names no real instant (2026-13-45 09:00)'
+      );
+    });
+
+    // The boundary checks types, the domain decides meaning. An empty name is a
+    // valid string, so it must survive to reach filterAppointmentsWithCustomerName.
+    it('accepts an empty customer name and leaves that judgement to the domain', async () => {
+      const { adapter } = adapterReturning([{ ...apiResponse[0], customerName: '' }]);
+
+      const [appointment] = await firstValueFrom(adapter.getAppointments());
+
+      expect(appointment.customerName).toBe('');
+    });
+  });
 });
