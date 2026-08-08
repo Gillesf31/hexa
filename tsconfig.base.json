@@ -13,7 +13,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "strict": false,
+    "strict": true,
     "paths": {
       "@hexa/appointments-domain": ["./libs/appointments/domain/src/index.ts"],
       "@hexa/appointments-ports": ["./libs/appointments/ports/src/index.ts"],
