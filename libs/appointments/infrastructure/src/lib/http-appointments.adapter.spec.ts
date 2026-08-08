@@ -7,19 +7,22 @@ const apiResponse = [
   { id: '1', customerName: 'Alice', date: '2026-08-05', startTime: '09:00', durationMinutes: 30 },
 ];
 
-function adapterReturning(payload: unknown) {
+function adapterReturning(payload: unknown, apiBaseUrl = 'http://localhost:3000') {
   const get = vi.fn().mockReturnValue(of(payload));
 
-  return { get, adapter: new HttpAppointmentsAdapter({ get } as unknown as HttpClient) };
+  return {
+    get,
+    adapter: new HttpAppointmentsAdapter({ get } as unknown as HttpClient, apiBaseUrl),
+  };
 }
 
 describe('HttpAppointmentsAdapter', () => {
-  it('requests appointments from the json-server endpoint', async () => {
-    const { get, adapter } = adapterReturning(apiResponse);
+  it('builds its endpoint from the base URL it was given', async () => {
+    const { get, adapter } = adapterReturning(apiResponse, 'https://api.example.test');
 
     await firstValueFrom(adapter.getAppointments());
 
-    expect(get).toHaveBeenCalledWith('http://localhost:3000/appointments');
+    expect(get).toHaveBeenCalledWith('https://api.example.test/appointments');
   });
 
   it('folds the API date and start time into a single instant', async () => {

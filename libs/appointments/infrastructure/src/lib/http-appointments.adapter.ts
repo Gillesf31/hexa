@@ -32,10 +32,13 @@ function toAppointment(dto: AppointmentDto): Appointment {
 }
 
 export class HttpAppointmentsAdapter implements AppointmentsPort {
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly apiBaseUrl: string
+  ) {}
 
   getAppointments = () =>
     this.http
-      .get<AppointmentDto[]>('http://localhost:3000/appointments')
+      .get<AppointmentDto[]>(`${this.apiBaseUrl}/appointments`)
       .pipe(map((dtos) => dtos.map(toAppointment)));
 }

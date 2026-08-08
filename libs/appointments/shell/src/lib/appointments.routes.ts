@@ -1,11 +1,14 @@
 import type { Routes } from '@angular/router';
 import { AppointmentBookComponent } from '@hexa/appointments-feature';
+import type { AppointmentsConfig } from './appointments.config';
 import { provideAppointmentsShell } from './provide-appointments-shell';
 
-export const appointmentsRoutes: Routes = [
-  {
-    path: '',
-    providers: [provideAppointmentsShell()],
-    children: [{ path: '', component: AppointmentBookComponent }],
-  },
-];
+export function appointmentsRoutes(config: AppointmentsConfig): Routes {
+  return [
+    {
+      path: '',
+      providers: [provideAppointmentsShell(config)],
+      children: [{ path: '', component: AppointmentBookComponent }],
+    },
+  ];
+}

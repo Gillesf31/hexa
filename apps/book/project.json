@@ -4,7 +4,10 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/book/src",
-  "tags": ["scope:book", "type:app"],
+  "tags": [
+    "scope:book",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -46,6 +49,17 @@
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true
+        },
+        "memory": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/book/src/environments/environment.ts",
+              "with": "apps/book/src/environments/environment.memory.ts"
+            }
+          ]
         }
       }
     },
@@ -63,6 +77,13 @@
         "development": {
           "buildTarget": "book:build:development"
         }
+      }
+    },
+    "serve-memory": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "options": {
+        "buildTarget": "book:build:memory"
       }
     },
     "api": {

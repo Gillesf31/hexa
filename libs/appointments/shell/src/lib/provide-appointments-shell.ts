@@ -7,9 +7,10 @@ import {
   SystemClockAdapter,
 } from '@hexa/appointments-infrastructure';
 import { provideAppointmentsState } from '@hexa/appointments-state';
+import type { AppointmentsConfig } from './appointments.config';
 import { APPOINTMENTS_PORT, CLOCK_PORT } from './port.tokens';
 
-export function provideAppointmentsShell(useInMemory = false) {
+export function provideAppointmentsShell(config: AppointmentsConfig) {
   return makeEnvironmentProviders([
     {
       provide: CLOCK_PORT,
@@ -17,9 +18,10 @@ export function provideAppointmentsShell(useInMemory = false) {
     },
     {
       provide: APPOINTMENTS_PORT,
-      useFactory: useInMemory
-        ? () => new InMemoryAppointmentsAdapter()
-        : () => new HttpAppointmentsAdapter(inject(HttpClient)),
+      useFactory:
+        config.dataSource === 'memory'
+          ? () => new InMemoryAppointmentsAdapter()
+          : () => new HttpAppointmentsAdapter(inject(HttpClient), config.apiBaseUrl),
     },
     {
       provide: GetAppointmentsUseCase,
