@@ -4,7 +4,7 @@ Appointment-booking exercise built with Angular and a local JSON Server API.
 
 ## Architecture review
 
-Open [the current architecture review](docs/architecture-review.html) in a browser.
+Read [the current architecture review](docs/architecture-review-2026-08-07.md).
 
 ## Architecture boundaries
 
@@ -115,6 +115,27 @@ so the port bindings and the state slice live in the route's environment
 injector rather than the application root. The root store and the devtools live
 in [`apps/book/src/app.config.ts`](apps/book/src/app.config.ts).
 
+## Choosing a data source
+
+`appointmentsRoutes` takes an `AppointmentsConfig` and hands it to the shell,
+which decides which adapter every port gets:
+
+```ts
+{ dataSource: 'api' | 'memory', apiBaseUrl: string }
+```
+
+The value comes from
+[`apps/book/src/environments/environment.ts`](apps/book/src/environments/environment.ts),
+and the `memory` build configuration swaps in `environment.memory.ts` through
+`fileReplacements`. Nothing reads a token or a global: the choice travels as an
+argument through the lazy route's dynamic import, which is also why a static
+import of the shell from `app.config.ts` is rejected by lint — it would pull the
+whole feature into the initial bundle.
+
+`serve-memory` is its own target rather than a `serve` configuration, because
+Nx `dependsOn` is per-target: a configuration would still have started
+json-server, which defeats the point.
+
 ## Getting started
 
 Install dependencies:
@@ -123,10 +144,16 @@ Install dependencies:
 npm install
 ```
 
-Run the Angular application:
+Run the Angular application against the API:
 
 ```sh
 npx nx serve book
+```
+
+Or run it with no backend at all, on the in-memory adapter's seed data:
+
+```sh
+npx nx serve-memory book
 ```
 
 ## Appointment API
@@ -145,7 +172,7 @@ The API supports:
 
 ### Bruno collection
 
-Import the [Appointment Booking API collection](/Users/gilferra/Sandbox/hexa/bruno/appointment-booking-api) in Bruno, select the `Local` environment, and run the requests. The create request persists a demo appointment.
+Import the [Appointment Booking API collection](bruno/appointment-booking-api) in Bruno, select the `Local` environment, and run the requests. The create request persists a demo appointment.
 
 Successful writes are persisted in `server/db.json`. To restore the two demo
 appointments, stop the API and run:
@@ -162,13 +189,45 @@ npx nx run-many -t lint
 npx nx build book
 ```
 
-`npm test` runs every project's `test` target — 13 spec files, 43 tests. The `ui`
+`npm test` runs every project's `test` target — 13 spec files, 44 tests. The `ui`
 library goes through `@nx/angular:unit-test` because its component specs need the
 Angular AOT compiler for signal inputs; every other library runs on plain Vitest.
 Both are covered by that one command.
+
+`npx nx run-many -t lint` is not only a style check. `@nx/enforce-module-boundaries`
+rejects a wrong-way project dependency *and*, through `bannedExternalImports`, an
+`@angular/*` or `@ngrx/*` import into `domain`, `ports` or `application`. Adding
+one deliberately turns lint red.
 
 For a coverage report across `libs/`:
 
 ```sh
 npm run test:coverage
 ```
+
+## Deliberate trade-offs
+
+These are decisions, not oversights. Each has a stated trigger for revisiting.
+
+**Ports return `Observable`.** `AppointmentsPort` is typed
+`Observable<Appointment[]>`, so `rxjs` sits in the ports and application
+libraries alongside the domain. This is pragmatic in an Angular app and costs
+nothing today. It stops being free if the core is ever consumed outside RxJS —
+a Node CLI, a worker — or if a port's stream semantics (does it complete? does
+it re-emit?) become part of the contract without being written down here.
+Revisit at the first non-Angular consumer.
+
+**Past appointments are filtered on the client.** The API supports
+`GET /appointments?date=YYYY-MM-DD`, but `HttpAppointmentsAdapter` fetches
+everything and `filterCurrentAndFutureAppointments` discards the past in the
+domain. That keeps the rule in the core where it is testable without a server,
+which is the right call for a demo dataset and the wrong one at a few thousand
+rows. The trigger is the first slow page load; the fix is a port method that
+takes a criterion, not moving the rule into the query.
+
+**One feature, eight libraries.** Two ports, two DI tokens, an effect, a reducer
+and three selectors around two lines of business rule. On a product this ratio
+would be the finding; here the structure is the deliverable. The honest test is
+the *second* feature: if booking an appointment reuses `domain`, `ports` and
+`application` as they stand, the granularity paid off. If it needs a new library
+at every layer to add one form, `ports` should merge into `application`.
