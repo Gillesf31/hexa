@@ -11,7 +11,14 @@ The screen displays every appointment returned by the application, including:
 - start time;
 - duration in minutes.
 
-For the initial increment, displaying current and upcoming appointments is the only user-facing behaviour. Appointments before today are not displayed. Creating, validating, cancelling, or rescheduling appointments is out of scope.
+For the initial increment, displaying current and upcoming appointments is the only user-facing behaviour. Creating, validating, cancelling, or rescheduling appointments is out of scope.
+
+Two exclusions apply to the list:
+
+- **appointments before today are not displayed.** Only what is still actionable is worth showing.
+- **appointments with no customer name are not displayed.** The screen identifies an appointment by its customer name, so a row with an empty or whitespace-only name cannot be recognised or acted on. The appointment data comes from an external system, which can return incomplete records regardless of what its contract claims.
+
+The second exclusion is a domain rule rather than a display concern: whether an appointment is showable is a decision about the appointment, so it belongs with the rules and is tested without a browser. It is deliberately a *filter*, not a validation — a record with no customer name is dropped, not reported. If incomplete records need to be surfaced rather than hidden, that is a payload-validation concern for the HTTP adapter, and it is not in this increment.
 
 ## Technical boundaries
 
@@ -31,8 +38,9 @@ The use case depends only on the appointment repository port and the clock port.
 2. The use case retrieves appointments through an appointment repository port.
 3. An HTTP adapter implements that port and retrieves appointment data.
 4. The use case excludes appointments before today.
-5. The primary adapter invokes the use case and displays each returned appointment's customer name, date, start time, and duration.
-6. No appointment can be created, changed, or deleted in this increment.
+5. The use case excludes appointments whose customer name is empty or whitespace only.
+6. The primary adapter invokes the use case and displays each returned appointment's customer name, date, start time, and duration.
+7. No appointment can be created, changed, or deleted in this increment.
 
 ## Not included in this increment
 

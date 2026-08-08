@@ -16,6 +16,9 @@ export function filterCurrentAndFutureAppointments(
   return appointments.filter((appointment) => appointment.startsAt >= today);
 }
 
+// The list identifies an appointment by its customer name, so a record without
+// one cannot be recognised or acted on. Deliberately a filter, not a validation:
+// see acceptance criterion 5 in docs/appointment-booking-business-requirements.md.
 export function filterAppointmentsWithCustomerName(
   appointments: Appointment[]
 ): Appointment[] {
