@@ -1,0 +1,13 @@
+{
+  "name": "book-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/book-e2e/src",
+  "tags": ["scope:book", "type:e2e"],
+  "implicitDependencies": ["book"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

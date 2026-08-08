@@ -187,6 +187,7 @@ git restore server/db.json
 npm test
 npx nx run-many -t lint
 npx nx build book
+npx nx e2e book-e2e
 ```
 
 `npm test` runs every project's `test` target — 13 spec files, 44 tests. The `ui`
@@ -198,6 +199,11 @@ Both are covered by that one command.
 rejects a wrong-way project dependency *and*, through `bannedExternalImports`, an
 `@angular/*` or `@ngrx/*` import into `domain`, `ports` or `application`. Adding
 one deliberately turns lint red.
+
+`npx nx e2e book-e2e` is Playwright, and it is currently one smoke test. It runs
+against `serve-memory`, so it starts its own dev server on the in-memory adapter
+and needs no json-server. Chromium only: nothing here is browser-specific yet.
+Artifacts land in `dist/.playwright`, which is already ignored.
 
 For a coverage report across `libs/`:
 
