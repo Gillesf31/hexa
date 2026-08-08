@@ -1,14 +1,9 @@
 import type { ClockPort } from '@hexa/appointments-ports';
 
 export class SystemClockAdapter implements ClockPort {
-  constructor(private readonly now: () => Date = () => new Date()) {}
+  constructor(private readonly currentInstant: () => Date = () => new Date()) {}
 
-  today(): string {
-    const currentDate = this.now();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
+  now(): Date {
+    return this.currentInstant();
   }
 }

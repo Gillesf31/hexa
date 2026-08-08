@@ -7,8 +7,7 @@ import { AppointmentCardComponent } from './appointment-card.component';
 const appointment: Appointment = {
   id: '1',
   customerName: 'Ada Lovelace',
-  date: '2026-08-06',
-  startTime: '09:00',
+  startsAt: new Date(2026, 7, 6, 9, 0),
   durationMinutes: 30,
 };
 

@@ -7,21 +7,19 @@ import { GetAppointmentsUseCase } from '@hexa/appointments-application';
 import { appointmentsApiActions, appointmentsPageActions } from './appointments.actions';
 import { LoadAppointmentsEffects } from './load-appointments.effects';
 
-const today = '2026-07-31';
+const now = new Date(2026, 6, 31);
 
 const pastAppointment: Appointment = {
   id: '1',
   customerName: 'Past',
-  date: '2026-07-29',
-  startTime: '09:00',
+  startsAt: new Date(2026, 6, 29, 9, 0),
   durationMinutes: 60,
 };
 
 const futureAppointment: Appointment = {
   id: '2',
   customerName: 'Future',
-  date: '2026-08-05',
-  startTime: '14:00',
+  startsAt: new Date(2026, 7, 5, 14, 0),
   durationMinutes: 30,
 };
 
@@ -32,13 +30,13 @@ function createEffects(getAppointments: GetAppointmentsUseCase) {
 }
 
 function createUseCase(appointments: Appointment[]) {
-  return new GetAppointmentsUseCase({ getAppointments: () => of(appointments) }, { today: () => today });
+  return new GetAppointmentsUseCase({ getAppointments: () => of(appointments) }, { now: () => now });
 }
 
 function createFailingUseCase(error: unknown) {
   return new GetAppointmentsUseCase(
     { getAppointments: () => throwError(() => error) },
-    { today: () => today }
+    { now: () => now }
   );
 }
 
@@ -93,7 +91,7 @@ describe('LoadAppointmentsEffects', () => {
       {
         getAppointments: () => (attempt++ === 0 ? throwError(() => new Error('boom')) : of([futureAppointment])),
       },
-      { today: () => today }
+      { now: () => now }
     );
     const { dispatched, effects } = createEffects(useCase);
 

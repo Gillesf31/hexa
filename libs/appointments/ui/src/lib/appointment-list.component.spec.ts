@@ -8,15 +8,13 @@ const appointments: Appointment[] = [
   {
     id: '1',
     customerName: 'Ada Lovelace',
-    date: '2026-08-06',
-    startTime: '09:00',
+    startsAt: new Date(2026, 7, 6, 9, 0),
     durationMinutes: 30,
   },
   {
     id: '2',
     customerName: 'Grace Hopper',
-    date: '2026-08-07',
-    startTime: '14:00',
+    startsAt: new Date(2026, 7, 7, 14, 0),
     durationMinutes: 60,
   },
 ];

@@ -9,8 +9,7 @@ const { reducer } = appointmentsFeature;
 const appointment: Appointment = {
   id: '1',
   customerName: 'Alice',
-  date: '2026-08-05',
-  startTime: '14:00',
+  startsAt: new Date(2026, 7, 5, 14, 0),
   durationMinutes: 30,
 };
 

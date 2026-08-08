@@ -2,11 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { SystemClockAdapter } from './system-clock.adapter';
 
 describe('SystemClockAdapter', () => {
-  it('returns the current local calendar date', () => {
-    expect(new SystemClockAdapter(() => new Date(2026, 7, 1, 23, 30)).today()).toBe('2026-08-01');
+  it('returns the instant its source reports', () => {
+    const instant = new Date(2026, 7, 1, 23, 30);
+
+    expect(new SystemClockAdapter(() => instant).now()).toEqual(instant);
   });
 
-  it('pads month and day to match the date contract', () => {
-    expect(new SystemClockAdapter(() => new Date(2026, 0, 5, 8, 30)).today()).toBe('2026-01-05');
+  it('reads its source on every call rather than caching', () => {
+    const instants = [new Date(2026, 0, 5, 8, 30), new Date(2026, 0, 5, 8, 31)];
+    const clock = new SystemClockAdapter(() => instants.shift() as Date);
+
+    expect(clock.now()).toEqual(new Date(2026, 0, 5, 8, 30));
+    expect(clock.now()).toEqual(new Date(2026, 0, 5, 8, 31));
   });
 });
