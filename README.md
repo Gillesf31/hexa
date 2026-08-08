@@ -146,10 +146,12 @@ are in the right places — and `new Date` rolls it over to February 2027 rather
 than refusing. The only way to know a string named the instant it claimed is to
 build the date and read the parts back.
 
-`zod/mini` rather than the chained API, decided by measurement: the lazy chunk
-this feature lives in grows from 4.21 kB to 7.82 kB transfer, where classic zod
-builds from identical source and costs 21.27 kB. The initial bundle is unchanged
-either way, so validation is paid for only by whoever opens the route.
+`zod/mini` rather than the chained API, decided by measurement rather than taste:
+both build from identical source — only the import differs — and the chained one
+costs several times more transferred bytes, because its validators hang off the
+schema instance where a bundler cannot drop the ones you never call. Neither
+touches the initial bundle, so validation is paid for only by whoever opens the
+route. `npx nx build book` prints the numbers if you want to check the claim.
 
 ## Choosing a data source
 
@@ -226,9 +228,9 @@ npx nx build book
 npx nx e2e book-e2e
 ```
 
-`npm test` runs every project's `test` target — 13 spec files, 48 tests. The `ui`
-library goes through `@nx/angular:unit-test` because its component specs need the
-Angular AOT compiler for signal inputs; every other library runs on plain Vitest.
+`npm test` runs every project's `test` target. The `ui` library goes through
+`@nx/angular:unit-test` because its component specs need the Angular AOT compiler
+for signal inputs; every other library runs on plain Vitest.
 Both are covered by that one command.
 
 `npx nx run-many -t lint` is not only a style check. `@nx/enforce-module-boundaries`
