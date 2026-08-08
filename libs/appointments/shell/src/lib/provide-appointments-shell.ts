@@ -6,8 +6,8 @@ import {
   InMemoryAppointmentsAdapter,
   SystemClockAdapter,
 } from '@hexa/appointments-infrastructure';
-import { APPOINTMENTS_PORT, CLOCK_PORT } from '@hexa/appointments-ports';
 import { provideAppointmentsState } from '@hexa/appointments-state';
+import { APPOINTMENTS_PORT, CLOCK_PORT } from './port.tokens';
 
 export function provideAppointmentsShell(useInMemory = false) {
   return makeEnvironmentProviders([
