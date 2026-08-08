@@ -82,6 +82,10 @@ export default [
                             onlyDependOnLibsWithTags: [
                                 "type:domain",
                                 "type:ports"
+                            ],
+                            bannedExternalImports: [
+                                "@angular/*",
+                                "@ngrx/*"
                             ]
                         },
                         {
@@ -95,12 +99,20 @@ export default [
                             sourceTag: "type:ports",
                             onlyDependOnLibsWithTags: [
                                 "type:domain"
+                            ],
+                            bannedExternalImports: [
+                                "@angular/*",
+                                "@ngrx/*"
                             ]
                         },
                         {
                             sourceTag: "type:domain",
                             onlyDependOnLibsWithTags: [
                                 "type:domain"
+                            ],
+                            bannedExternalImports: [
+                                "@angular/*",
+                                "@ngrx/*"
                             ]
                         }
                     ]
