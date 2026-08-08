@@ -4,10 +4,22 @@
   "license": "MIT",
   "scripts": {
     "api": "json-server server/db.json --port 3000",
-    "test": "vitest run libs",
-    "test:coverage": "vitest run libs --coverage --coverage.include='libs/**/*.ts'"
+    "test": "nx run-many -t test",
+    "test:coverage": "nx run hexa:test-coverage"
   },
   "private": true,
+  "nx": {
+    "name": "hexa",
+    "includedScripts": [],
+    "targets": {
+      "test-coverage": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx vitest run libs --coverage --coverage.include='libs/**/*.ts'"
+        }
+      }
+    }
+  },
   "dependencies": {
     "@angular/common": "~22.0.4",
     "@angular/compiler": "~22.0.4",

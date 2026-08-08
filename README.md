@@ -157,7 +157,18 @@ git restore server/db.json
 ## Checks
 
 ```sh
-npx nx test book
-npx nx lint book
+npm test
+npx nx run-many -t lint
 npx nx build book
+```
+
+`npm test` runs every project's `test` target — 13 spec files, 43 tests. The `ui`
+library goes through `@nx/angular:unit-test` because its component specs need the
+Angular AOT compiler for signal inputs; every other library runs on plain Vitest.
+Both are covered by that one command.
+
+For a coverage report across `libs/`:
+
+```sh
+npm run test:coverage
 ```
