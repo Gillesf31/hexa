@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "api": "json-server server/db.json --port 3000",
+    "api": "node server/seed.mjs && json-server server/db.json --port 3000",
     "test": "nx run-many -t test",
-    "test:coverage": "nx run hexa:test-coverage"
+    "test:coverage": "nx run hexa:test-coverage",
+    "seed": "node server/seed.mjs"
   },
   "private": true,
   "nx": {

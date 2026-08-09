@@ -17,7 +17,7 @@ headers {
 body:json {
   {
     "customerName": "Gilles",
-    "date": "2026-08-05",
+    "date": "{{createDate}}",
     "startTime": "09:30",
     "durationMinutes": 60
   }
@@ -31,5 +31,6 @@ tests {
   test("creates an appointment with a generated string id", function() {
     expect(res.status).to.equal(201);
     expect(res.body.id).to.be.a("string");
+    expect(res.body.date).to.equal(bru.getEnvVar("createDate"));
   });
 }
