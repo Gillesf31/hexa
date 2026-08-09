@@ -1,0 +1,66 @@
+# The same three stages the pre-push hook runs, run again on what actually
+# landed. `lefthook.yml` is the copy on your machine, and it is the one that
+# prevents; this is the one that reports.
+#
+# Steps are named `format`, `checks` and `e2e` after lefthook's jobs, in the same
+# order, so a failure here names the same thing it would name locally. Keeping
+# the two command lists identical is the point: `LEFTHOOK=0 git push` is only
+# safe while the remote runs what the hook would have.
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A superseded run answers a question nobody is asking any more.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    # Far enough above a healthy run that only a hang trips it — a dev server
+    # that never answers, not a slow build. `gh run list --workflow=checks.yml`
+    # prints what a healthy run costs.
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      # `.nvmrc` is the pin; nothing here restates the version.
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Not vendored, and the runner has no browser Playwright will accept.
+      - run: npx playwright install --with-deps chromium
+
+      - name: format
+        run: npx prettier --check .
+
+      - name: checks
+        run: npx nx run-many -t lint typecheck test build
+
+      # Nx starts `book:serve-memory` itself as a continuous dependency of the
+      # inferred `e2e` target — see the note in apps/book-e2e/playwright.config.mts.
+      - name: e2e
+        id: e2e
+        run: npx nx e2e book-e2e
+
+      # Only when e2e itself failed. An earlier red step leaves this path empty,
+      # and uploading nothing emits a warning that reads like a second failure.
+      - name: Upload the Playwright report
+        if: ${{ !cancelled() && steps.e2e.conclusion == 'failure' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: dist/.playwright
+          retention-days: 7
