@@ -208,6 +208,11 @@ The API supports:
 - `GET /appointments?date=YYYY-MM-DD`
 - `POST /appointments`
 
+json-server stands in for a backend owned by another team, so its shape is not
+ours to bend: when the domain wants something the API does not provide, the
+adapter translates rather than the server changing to match. [`CLAUDE.md`](CLAUDE.md)
+states the rule and where the line falls.
+
 ### Bruno collection
 
 Import the [Appointment Booking API collection](bruno/appointment-booking-api) in Bruno, select the `Local` environment, and run the requests. The create request persists a demo appointment.
