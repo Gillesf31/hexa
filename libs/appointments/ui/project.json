@@ -6,7 +6,19 @@
   "prefix": "app",
   "tags": ["scope:appointments", "type:ui"],
   "targets": {
-    "lint": { "executor": "@nx/eslint:lint" },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx tsc -p libs/appointments/ui/tsconfig.lib.json --noEmit",
+          "npx tsc -p libs/appointments/ui/tsconfig.spec.json --noEmit"
+        ]
+      }
+    },
     "test": {
       "executor": "@nx/angular:unit-test",
       "options": {
@@ -17,7 +29,9 @@
         "watch": false
       },
       "configurations": {
-        "watch": { "watch": true }
+        "watch": {
+          "watch": true
+        }
       }
     }
   }

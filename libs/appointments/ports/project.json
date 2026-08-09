@@ -4,5 +4,15 @@
   "projectType": "library",
   "sourceRoot": "libs/appointments/ports/src",
   "tags": ["scope:appointments", "type:ports"],
-  "targets": { "lint": { "executor": "@nx/eslint:lint" } }
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsc -p libs/appointments/ports/tsconfig.lib.json --noEmit"
+      }
+    }
+  }
 }

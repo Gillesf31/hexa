@@ -5,7 +5,19 @@
   "sourceRoot": "libs/appointments/infrastructure/src",
   "tags": ["scope:appointments", "type:infrastructure"],
   "targets": {
-    "lint": { "executor": "@nx/eslint:lint" },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx tsc -p libs/appointments/infrastructure/tsconfig.lib.json --noEmit",
+          "npx tsc -p libs/appointments/infrastructure/tsconfig.spec.json --noEmit"
+        ]
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {

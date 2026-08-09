@@ -5,7 +5,19 @@
   "sourceRoot": "libs/appointments/application/src",
   "tags": ["scope:appointments", "type:application"],
   "targets": {
-    "lint": { "executor": "@nx/eslint:lint" },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx tsc -p libs/appointments/application/tsconfig.lib.json --noEmit",
+          "npx tsc -p libs/appointments/application/tsconfig.spec.json --noEmit"
+        ]
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {

@@ -30,6 +30,14 @@
     "@angular/build:unit-test": {
       "cache": true,
       "inputs": ["default", "^production"]
+    },
+    "typecheck": {
+      "cache": true,
+      "inputs": ["default", "^default", "{workspaceRoot}/tsconfig.base.json"]
+    },
+    "test": {
+      "cache": true,
+      "inputs": ["default", "^default"]
     }
   },
   "generators": {

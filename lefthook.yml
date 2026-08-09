@@ -1,0 +1,31 @@
+# The checks the README lists, run at the push boundary because there is no CI.
+#
+# Nx owns the parallelism, lefthook owns the ordering: one `run-many` lets a
+# single Nx process schedule and cache four targets, where four lefthook jobs
+# would be four processes competing for one daemon and one cache.
+#
+# `LEFTHOOK=0 git push` skips all of it.
+#
+# To run this without pushing:
+#
+#     npx lefthook run pre-push --force
+#
+# `--force` is load-bearing. Lefthook resolves the push range first and skips
+# every job when it is empty — a branch level with its upstream prints
+# `(skip) no matching push files` under a green summary, having run nothing.
+# Add `--job format`, `--job checks` or `--job e2e` to narrow it to one stage.
+pre-push:
+  piped: true
+  jobs:
+    - name: format
+      run: npx prettier --check .
+
+    # `build` is here for what typecheck cannot reach: `tsc --noEmit` does not
+    # check Angular templates, and the AOT compiler does.
+    - name: checks
+      run: npx nx run-many -t lint typecheck test build
+
+    # Last and alone: this one boots a real dev server on :4200 and is the only
+    # job Nx cannot cache.
+    - name: e2e
+      run: npx nx e2e book-e2e

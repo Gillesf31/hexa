@@ -81,18 +81,33 @@ returning `undefined`; and a `PropertyKey` reaching string interpolation. Lint
 missed both too. After changing a signature, run:
 
 ```sh
-for p in domain ports application infrastructure state ui feature shell; do
-  npx tsc -p libs/appointments/$p/tsconfig.lib.json --noEmit
-done
+npx nx run-many -t typecheck
 ```
 
 Class-based fakes fail at compile time. Object literals fail at runtime, in a
 test that looks fine.
 
+**Typecheck has to run `tsconfig.spec.json`, not only `tsconfig.lib.json`.** The
+lib config carries `"exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]`, so it
+cannot see test code — and the structural-fake escape above lived in a spec.
+Checked by putting that exact fake back: the lib config exits `0`, the spec
+config reports `TS2353`. Both are still worth running, because the lib config
+sets `"types": []` and would catch library code leaning on Vitest globals.
+
+**`tsc --noEmit` does not check Angular templates.** `{{ appointment.nope }}`
+passes every `typecheck` target and fails `npx nx build book`, because only the
+AOT compiler reads the template. That is why the pre-push gate builds.
+
 **An undeclared `lint` target is silently skipped.** `@nx/eslint` infers a target
 named `eslint:lint`, which `nx run-many -t lint` does not match. Every project
 needs `"lint": { "executor": "@nx/eslint:lint" }` in its `project.json`. Check the
-project count in the output, not just that it passed.
+project count in the output, not just that it passed. `typecheck` has the same
+shape and no inference at all behind it: ten projects, ten explicit entries.
+
+**An unknown key in `lefthook.yml` is dropped without a word.** `skip_empty:` is
+not a v2 job key; lefthook parsed the file, discarded it and ran. `npx lefthook
+dump` prints the config as lefthook actually understood it, which is the only
+way to tell a key that took effect from a key that was ignored.
 
 **A static import of a lazy library is a lint error on purpose.** Importing
 `@hexa/appointments-shell` from `app.config.ts` pulls the whole feature into the

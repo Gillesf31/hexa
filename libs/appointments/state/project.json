@@ -5,10 +5,24 @@
   "sourceRoot": "libs/appointments/state/src",
   "tags": ["scope:appointments", "type:state"],
   "targets": {
-    "lint": { "executor": "@nx/eslint:lint" },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx tsc -p libs/appointments/state/tsconfig.lib.json --noEmit",
+          "npx tsc -p libs/appointments/state/tsconfig.spec.json --noEmit"
+        ]
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
-      "options": { "command": "npx vitest run libs/appointments/state/src" }
+      "options": {
+        "command": "npx vitest run libs/appointments/state/src"
+      }
     }
   }
 }

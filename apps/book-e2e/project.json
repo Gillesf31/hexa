@@ -8,6 +8,12 @@
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsc -p apps/book-e2e/tsconfig.json --noEmit"
+      }
     }
   }
 }

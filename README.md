@@ -250,9 +250,46 @@ than leaving a request that quietly describes an API nobody serves.
 ```sh
 npm test
 npx nx run-many -t lint
+npx nx run-many -t typecheck
 npx nx build book
 npx nx e2e book-e2e
 ```
+
+**These run on `git push`, not on request.** There is no CI, so
+[`lefthook.yml`](lefthook.yml) is the only thing standing between a broken commit
+and the remote. `lefthook` installs the hook from its own `postinstall`, so
+`npm install` is all a fresh clone needs — except Playwright's browser, which is
+downloaded on demand:
+
+```sh
+npx playwright install chromium
+```
+
+`LEFTHOOK=0 git push` skips the gate. Reach for it when the check is wrong, not
+when it is slow; if it is slow, that is the trade-off below asking to be
+revisited.
+
+To run the gate without pushing — the whole thing, in the order the hook runs it:
+
+```sh
+npx lefthook run pre-push --force
+```
+
+`--job format`, `--job checks` or `--job e2e` narrows it to one stage while you
+iterate.
+
+**`--force` is not optional.** Lefthook resolves the push range before it runs
+anything and skips every job when that range is empty, which is what a
+`main` already level with its upstream looks like. The output then reads
+`(skip) no matching push files` and the summary is green — a gate that ran
+nothing, indistinguishable at a glance from a gate that passed. `--force` says
+run regardless of what changed.
+
+To watch a gate refuse rather than pass, break something and run it again:
+double-space a `const` for `format`, import `@angular/core` into `domain` for
+lint, put `{{ appointment().nope }}` in a template for the build. Each one is a
+mistake the gate exists to catch, and the only way to know it still catches it
+is to make it.
 
 `npm test` runs every project's `test` target. The `ui` library goes through
 `@nx/angular:unit-test` because its component specs need the Angular AOT compiler
@@ -263,6 +300,11 @@ Both are covered by that one command.
 rejects a wrong-way project dependency _and_, through `bannedExternalImports`, an
 `@angular/*` or `@ngrx/*` import into `domain`, `ports` or `application`. Adding
 one deliberately turns lint red.
+
+`npx nx run-many -t typecheck` exists because Vitest transpiles rather than
+typechecks, so a type error survives a green test run. Each project runs `tsc
+--noEmit` over both its lib and its spec `tsconfig` — the lib one excludes
+`*.spec.ts`, and the escape this guards against was in a spec.
 
 `npx nx e2e book-e2e` is Playwright, and it is currently one smoke test. It runs
 against `serve-memory`, so it starts its own dev server on the in-memory adapter
@@ -278,6 +320,22 @@ npm run test:coverage
 ## Deliberate trade-offs
 
 These are decisions, not oversights. Each has a stated trigger for revisiting.
+
+**The pre-push gate runs e2e, and everything else.** Format, lint, typecheck,
+unit tests, an Angular build and Playwright, all before a push is allowed. That
+is more than a hook usually carries, and it is deliberate: with no CI, a check
+that does not run here does not run anywhere. Nx caches all of it except e2e,
+which boots a real dev server every time to run one smoke test — affordable at
+one spec, and the first thing to move once there are twenty. The trigger is the
+first `LEFTHOOK=0` reached for because the gate is slow rather than because the
+check is wrong; the fix is to stand up CI and leave the fast half here, not to
+delete the checks.
+
+**One `run-many`, not one job per target.** `lefthook.yml` groups lint,
+typecheck, test and build into a single command. Splitting them would name each
+failure in lefthook's own summary, at the cost of four Nx processes contending
+for one daemon and one cache. Revisit if a failure ever becomes hard to locate
+in the combined output.
 
 **Ports return `Observable`.** `AppointmentsPort` is typed
 `Observable<Appointment[]>`, so `rxjs` sits in the ports and application

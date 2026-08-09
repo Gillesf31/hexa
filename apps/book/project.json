@@ -87,6 +87,16 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx tsc -p apps/book/tsconfig.app.json --noEmit",
+          "npx tsc -p apps/book/tsconfig.spec.json --noEmit"
+        ]
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
