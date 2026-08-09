@@ -3,11 +3,11 @@ import { appointmentsFeature } from './appointments.reducer';
 
 export const selectIsLoadingAppointments = createSelector(
   appointmentsFeature.selectStatus,
-  (status) => status === 'loading'
+  (status) => status === 'loading',
 );
 
 export const selectAppointmentsErrorMessage = createSelector(
   appointmentsFeature.selectStatus,
   appointmentsFeature.selectErrorMessage,
-  (status, errorMessage) => (status === 'failed' ? errorMessage : null)
+  (status, errorMessage) => (status === 'failed' ? errorMessage : null),
 );

@@ -9,7 +9,7 @@ function startOfDay(instant: Date): Date {
 
 export function filterCurrentAndFutureAppointments(
   appointments: Appointment[],
-  now: Date
+  now: Date,
 ): Appointment[] {
   const today = startOfDay(now);
 
@@ -20,9 +20,11 @@ export function filterCurrentAndFutureAppointments(
 // one cannot be recognised or acted on. Deliberately a filter, not a validation:
 // see acceptance criterion 5 in docs/appointment-booking-business-requirements.md.
 export function filterAppointmentsWithCustomerName(
-  appointments: Appointment[]
+  appointments: Appointment[],
 ): Appointment[] {
-  return appointments.filter((appointment) => appointment.customerName.trim() !== '');
+  return appointments.filter(
+    (appointment) => appointment.customerName.trim() !== '',
+  );
 }
 
 const REROUTED_MAX_DURATION_MINUTES = 30;

@@ -1,6 +1,15 @@
-export { appointmentsApiActions, appointmentsPageActions } from './lib/appointments.actions';
-export { appointmentsFeature, initialAppointmentsState } from './lib/appointments.reducer';
-export type { AppointmentsState, AppointmentsStatus } from './lib/appointments.reducer';
+export {
+  appointmentsApiActions,
+  appointmentsPageActions,
+} from './lib/appointments.actions';
+export {
+  appointmentsFeature,
+  initialAppointmentsState,
+} from './lib/appointments.reducer';
+export type {
+  AppointmentsState,
+  AppointmentsStatus,
+} from './lib/appointments.reducer';
 export {
   selectAppointmentsErrorMessage,
   selectIsLoadingAppointments,

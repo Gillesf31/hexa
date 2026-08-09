@@ -1,6 +1,9 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import type { Appointment } from '@hexa/appointments-domain';
-import { appointmentsApiActions, appointmentsPageActions } from './appointments.actions';
+import {
+  appointmentsApiActions,
+  appointmentsPageActions,
+} from './appointments.actions';
 
 export type AppointmentsStatus = 'idle' | 'loading' | 'loaded' | 'failed';
 
@@ -23,7 +26,11 @@ export const appointmentsFeature = createFeature({
     on(
       appointmentsPageActions.opened,
       appointmentsPageActions.refreshed,
-      (state): AppointmentsState => ({ ...state, status: 'loading', errorMessage: null })
+      (state): AppointmentsState => ({
+        ...state,
+        status: 'loading',
+        errorMessage: null,
+      }),
     ),
     on(
       appointmentsApiActions.loadedSuccess,
@@ -32,7 +39,7 @@ export const appointmentsFeature = createFeature({
         appointments,
         status: 'loaded',
         errorMessage: null,
-      })
+      }),
     ),
     on(
       appointmentsApiActions.loadedFailure,
@@ -41,7 +48,7 @@ export const appointmentsFeature = createFeature({
         appointments: [],
         status: 'failed',
         errorMessage: message,
-      })
-    )
+      }),
+    ),
   ),
 });

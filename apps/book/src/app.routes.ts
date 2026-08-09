@@ -6,7 +6,7 @@ export const appRoutes: Routes = [
     path: '',
     loadChildren: () =>
       import('@hexa/appointments-shell').then((m) =>
-        m.appointmentsRoutes(environment.appointments)
+        m.appointmentsRoutes(environment.appointments),
       ),
   },
 ];

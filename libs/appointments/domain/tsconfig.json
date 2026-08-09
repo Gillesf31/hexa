@@ -1,7 +1,15 @@
 {
   "extends": "../../../tsconfig.base.json",
-  "compilerOptions": { "strict": true, "isolatedModules": true, "target": "es2022", "module": "preserve" },
+  "compilerOptions": {
+    "strict": true,
+    "isolatedModules": true,
+    "target": "es2022",
+    "module": "preserve"
+  },
   "files": [],
   "include": [],
-  "references": [{ "path": "./tsconfig.lib.json" }, { "path": "./tsconfig.spec.json" }]
+  "references": [
+    { "path": "./tsconfig.lib.json" },
+    { "path": "./tsconfig.spec.json" }
+  ]
 }

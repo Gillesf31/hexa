@@ -5,7 +5,9 @@ import { InMemoryAppointmentsAdapter } from './in-memory-appointments.adapter';
 
 describe('InMemoryAppointmentsAdapter', () => {
   it('emits its seeded appointments', async () => {
-    const appointments = await firstValueFrom(new InMemoryAppointmentsAdapter().getAppointments());
+    const appointments = await firstValueFrom(
+      new InMemoryAppointmentsAdapter().getAppointments(),
+    );
 
     expect(appointments).toHaveLength(7);
     expect(appointments.map((appointment) => appointment.id)).toEqual([
@@ -20,7 +22,9 @@ describe('InMemoryAppointmentsAdapter', () => {
   });
 
   it('emits appointments that satisfy the Appointment contract', async () => {
-    const appointments = await firstValueFrom(new InMemoryAppointmentsAdapter().getAppointments());
+    const appointments = await firstValueFrom(
+      new InMemoryAppointmentsAdapter().getAppointments(),
+    );
 
     appointments.forEach((appointment: Appointment) => {
       expect(appointment.id).toBeTruthy();
@@ -32,7 +36,9 @@ describe('InMemoryAppointmentsAdapter', () => {
   });
 
   it('spreads appointment start times around the current day', async () => {
-    const adapter = new InMemoryAppointmentsAdapter(() => new Date(2026, 7, 7, 12, 0));
+    const adapter = new InMemoryAppointmentsAdapter(
+      () => new Date(2026, 7, 7, 12, 0),
+    );
 
     const appointments = await firstValueFrom(adapter.getAppointments());
 
@@ -48,10 +54,14 @@ describe('InMemoryAppointmentsAdapter', () => {
   });
 
   it('always emits appointments at or after the start of today', async () => {
-    const appointments = await firstValueFrom(new InMemoryAppointmentsAdapter().getAppointments());
+    const appointments = await firstValueFrom(
+      new InMemoryAppointmentsAdapter().getAppointments(),
+    );
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
-    expect(appointments.some((appointment) => appointment.startsAt >= startOfToday)).toBe(true);
+    expect(
+      appointments.some((appointment) => appointment.startsAt >= startOfToday),
+    ).toBe(true);
   });
 });

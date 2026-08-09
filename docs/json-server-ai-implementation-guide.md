@@ -66,13 +66,13 @@ Create one top-level array resource named `appointments`.
 
 Each appointment record has exactly these fields:
 
-| Field | Type | Required | Meaning | Example |
-|---|---|---|---|---|
-| `id` | string | Present on stored records | Storage identifier | `"1"` |
-| `customerName` | string | Yes | Name supplied for the appointment | `"Sample Customer"` |
-| `date` | string | Yes | Local calendar date in `YYYY-MM-DD` form | `"2026-08-03"` |
-| `startTime` | string | Yes | Local 24-hour time in `HH:mm` form | `"10:00"` |
-| `durationMinutes` | number | Yes | Appointment duration | `60` |
+| Field             | Type   | Required                  | Meaning                                  | Example             |
+| ----------------- | ------ | ------------------------- | ---------------------------------------- | ------------------- |
+| `id`              | string | Present on stored records | Storage identifier                       | `"1"`               |
+| `customerName`    | string | Yes                       | Name supplied for the appointment        | `"Sample Customer"` |
+| `date`            | string | Yes                       | Local calendar date in `YYYY-MM-DD` form | `"2026-08-03"`      |
+| `startTime`       | string | Yes                       | Local 24-hour time in `HH:mm` form       | `"10:00"`           |
+| `durationMinutes` | number | Yes                       | Appointment duration                     | `60`                |
 
 Do not store JavaScript date strings, timestamps, time-zone offsets, calculated end times, availability flags, or conflict flags.
 
@@ -82,10 +82,10 @@ The client owns the interpretation of the date and time. The server stores the s
 
 Seed the database with these two records:
 
-| ID | Customer name | Date | Start time | Duration |
-|---|---|---|---|---|
-| `1` | Sample Customer | 2026-08-03 | 10:00 | 60 minutes |
-| `2` | Another Customer | 2026-08-04 | 14:00 | 60 minutes |
+| ID  | Customer name    | Date       | Start time | Duration   |
+| --- | ---------------- | ---------- | ---------- | ---------- |
+| `1` | Sample Customer  | 2026-08-03 | 10:00      | 60 minutes |
+| `2` | Another Customer | 2026-08-04 | 14:00      | 60 minutes |
 
 The second date is intentional: it allows the date-filter behavior to be verified.
 

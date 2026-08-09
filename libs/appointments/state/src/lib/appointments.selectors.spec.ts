@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { selectAppointmentsErrorMessage, selectIsLoadingAppointments } from './appointments.selectors';
+import {
+  selectAppointmentsErrorMessage,
+  selectIsLoadingAppointments,
+} from './appointments.selectors';
 
 describe('selectIsLoadingAppointments', () => {
   it('is true only while loading', () => {
@@ -12,11 +15,15 @@ describe('selectIsLoadingAppointments', () => {
 
 describe('selectAppointmentsErrorMessage', () => {
   it('exposes the message when the last load failed', () => {
-    expect(selectAppointmentsErrorMessage.projector('failed', 'API unreachable')).toBe('API unreachable');
+    expect(
+      selectAppointmentsErrorMessage.projector('failed', 'API unreachable'),
+    ).toBe('API unreachable');
   });
 
   it('hides a stale message once loading starts again', () => {
-    expect(selectAppointmentsErrorMessage.projector('loading', 'API unreachable')).toBeNull();
+    expect(
+      selectAppointmentsErrorMessage.projector('loading', 'API unreachable'),
+    ).toBeNull();
   });
 
   it('returns nothing when the appointments loaded', () => {

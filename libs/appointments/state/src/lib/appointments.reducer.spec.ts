@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { Appointment } from '@hexa/appointments-domain';
-import { appointmentsApiActions, appointmentsPageActions } from './appointments.actions';
-import { appointmentsFeature, initialAppointmentsState } from './appointments.reducer';
+import {
+  appointmentsApiActions,
+  appointmentsPageActions,
+} from './appointments.actions';
+import {
+  appointmentsFeature,
+  initialAppointmentsState,
+} from './appointments.reducer';
 import type { AppointmentsState } from './appointments.reducer';
 
 const { reducer } = appointmentsFeature;
@@ -21,11 +27,15 @@ const failedState: AppointmentsState = {
 
 describe('appointments reducer', () => {
   it('starts idle without appointments', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialAppointmentsState);
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(
+      initialAppointmentsState,
+    );
   });
 
   it('moves to loading when the page is opened', () => {
-    expect(reducer(initialAppointmentsState, appointmentsPageActions.opened())).toEqual({
+    expect(
+      reducer(initialAppointmentsState, appointmentsPageActions.opened()),
+    ).toEqual({
       appointments: [],
       status: 'loading',
       errorMessage: null,
@@ -47,7 +57,9 @@ describe('appointments reducer', () => {
       errorMessage: null,
     };
 
-    expect(reducer(loadedState, appointmentsPageActions.refreshed()).appointments).toEqual([appointment]);
+    expect(
+      reducer(loadedState, appointmentsPageActions.refreshed()).appointments,
+    ).toEqual([appointment]);
   });
 
   it('stores the loaded appointments', () => {
@@ -58,7 +70,10 @@ describe('appointments reducer', () => {
     };
 
     expect(
-      reducer(loadingState, appointmentsApiActions.loadedSuccess({ appointments: [appointment] }))
+      reducer(
+        loadingState,
+        appointmentsApiActions.loadedSuccess({ appointments: [appointment] }),
+      ),
     ).toEqual({
       appointments: [appointment],
       status: 'loaded',
@@ -74,7 +89,10 @@ describe('appointments reducer', () => {
     };
 
     expect(
-      reducer(loadedState, appointmentsApiActions.loadedFailure({ message: 'API unreachable' }))
+      reducer(
+        loadedState,
+        appointmentsApiActions.loadedFailure({ message: 'API unreachable' }),
+      ),
     ).toEqual(failedState);
   });
 });

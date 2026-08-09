@@ -70,10 +70,10 @@ Use dependency injection to select an implementation behind a service token or i
 
 ```ts
 // Production or integration environment
-provideDataService(HttpDataService)
+provideDataService(HttpDataService);
 
 // Test or local-development environment
-provideDataService(InMemoryDataService)
+provideDataService(InMemoryDataService);
 ```
 
 The exact syntax depends on the framework. The important part is that changing the data source does not require changing the feature or component code.

@@ -50,7 +50,9 @@ function describeIssue({ path, message }: z.core.$ZodIssue): string {
   const entry = String(index);
   const field = rest.map(String).join('.');
 
-  return field ? `entry ${entry}: ${field} ${message}` : `entry ${entry} ${message}`;
+  return field
+    ? `entry ${entry}: ${field} ${message}`
+    : `entry ${entry} ${message}`;
 }
 
 // The API splits an appointment's start across two strings; the domain wants the
@@ -79,7 +81,7 @@ function toAppointment(dto: AppointmentDto, index: number): Appointment {
 
   if (startsAt === null) {
     throw new MalformedPayloadError(
-      `entry ${index} names no real instant (${dto.date} ${dto.startTime})`
+      `entry ${index} names no real instant (${dto.date} ${dto.startTime})`,
     );
   }
 
@@ -98,7 +100,9 @@ function toAppointments(payload: unknown): Appointment[] {
   const result = appointmentsPayloadSchema.safeParse(payload);
 
   if (!result.success) {
-    throw new MalformedPayloadError(result.error.issues.map(describeIssue).join('; '));
+    throw new MalformedPayloadError(
+      result.error.issues.map(describeIssue).join('; '),
+    );
   }
 
   return result.data.map(toAppointment);
@@ -107,9 +111,11 @@ function toAppointments(payload: unknown): Appointment[] {
 export class HttpAppointmentsAdapter implements AppointmentsPort {
   constructor(
     private readonly http: HttpClient,
-    private readonly apiBaseUrl: string
+    private readonly apiBaseUrl: string,
   ) {}
 
   getAppointments = () =>
-    this.http.get<unknown>(`${this.apiBaseUrl}/appointments`).pipe(map(toAppointments));
+    this.http
+      .get<unknown>(`${this.apiBaseUrl}/appointments`)
+      .pipe(map(toAppointments));
 }

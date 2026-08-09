@@ -38,7 +38,8 @@ describe('AppointmentCardComponent', () => {
 
   // The negative case is the one that catches a notice wired to always show.
   it('says nothing about re-routing a longer appointment', () => {
-    const text = render({ ...appointment, durationMinutes: 60 }).nativeElement.textContent;
+    const text = render({ ...appointment, durationMinutes: 60 }).nativeElement
+      .textContent;
 
     expect(text).not.toContain('Re-routed');
   });

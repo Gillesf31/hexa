@@ -13,7 +13,11 @@ import {
 } from '@hexa/appointments-ui';
 
 @Component({
-  imports: [AppointmentListComponent, AppointmentsHeaderComponent, StatusMessageComponent],
+  imports: [
+    AppointmentListComponent,
+    AppointmentsHeaderComponent,
+    StatusMessageComponent,
+  ],
   selector: 'app-appointment-book',
   template: `
     <div class="block max-w-xl mx-auto px-4 py-8 font-sans">
@@ -34,9 +38,13 @@ import {
 export class AppointmentBookComponent implements OnInit {
   private readonly store = inject(Store);
 
-  readonly appointments = this.store.selectSignal(appointmentsFeature.selectAppointments);
+  readonly appointments = this.store.selectSignal(
+    appointmentsFeature.selectAppointments,
+  );
   readonly isLoading = this.store.selectSignal(selectIsLoadingAppointments);
-  readonly errorMessage = this.store.selectSignal(selectAppointmentsErrorMessage);
+  readonly errorMessage = this.store.selectSignal(
+    selectAppointmentsErrorMessage,
+  );
 
   ngOnInit(): void {
     this.store.dispatch(appointmentsPageActions.opened());

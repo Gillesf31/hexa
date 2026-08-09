@@ -18,7 +18,7 @@ Two exclusions apply to the list:
 - **appointments before today are not displayed.** Only what is still actionable is worth showing.
 - **appointments with no customer name are not displayed.** The screen identifies an appointment by its customer name, so a row with an empty or whitespace-only name cannot be recognised or acted on. The appointment data comes from an external system, which can return incomplete records regardless of what its contract claims.
 
-The second exclusion is a domain rule rather than a display concern: whether an appointment is showable is a decision about the appointment, so it belongs with the rules and is tested without a browser. It is deliberately a *filter*, not a validation — a record with no customer name is dropped, not reported. If incomplete records need to be surfaced rather than hidden, that is a payload-validation concern for the HTTP adapter, and it is not in this increment.
+The second exclusion is a domain rule rather than a display concern: whether an appointment is showable is a decision about the appointment, so it belongs with the rules and is tested without a browser. It is deliberately a _filter_, not a validation — a record with no customer name is dropped, not reported. If incomplete records need to be surfaced rather than hidden, that is a payload-validation concern for the HTTP adapter, and it is not in this increment.
 
 ## Requirement 2: Announce re-routed appointments
 
@@ -26,17 +26,17 @@ As a customer, I can see which of the listed appointments will be handled by
 someone else, so that I am not surprised on the day.
 
 An appointment of **30 minutes or less** is not handled by the advisor who would
-normally take it. The list says so on that appointment, in words: *re-routed to
-another advisor*. Exactly 30 minutes is short enough to be re-routed.
+normally take it. The list says so on that appointment, in words: _re-routed to
+another advisor_. Exactly 30 minutes is short enough to be re-routed.
 
 This is a rule about the appointment, not about the screen, so it belongs with
 the other rules and is tested without a browser. Unlike the two exclusions above
-it is a *predicate*, not a filter: a re-routed appointment is still listed, still
+it is a _predicate_, not a filter: a re-routed appointment is still listed, still
 shows the same four fields, and nothing about it changes except what the list
 says about who will handle it.
 
 It re-routes; it does not assign. No advisor is named, chosen, or recorded — see
-*Not included* below.
+_Not included_ below.
 
 ## Technical boundaries
 
@@ -67,7 +67,7 @@ The use case depends only on the appointment repository port and the clock port.
 - appointment availability or overlap checks;
 - opening-hour rules;
 - cancellations or rescheduling;
-- multiple advisors — requirement 2 says an appointment *is* re-routed, and stops
+- multiple advisors — requirement 2 says an appointment _is_ re-routed, and stops
   there. Who receives it, whether that advisor is free, and how the hand-over is
   recorded are all out of scope: there is no advisor in the model at all;
 - customer accounts, payments, reminders, or time-zone conversion.

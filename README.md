@@ -260,7 +260,7 @@ for signal inputs; every other library runs on plain Vitest.
 Both are covered by that one command.
 
 `npx nx run-many -t lint` is not only a style check. `@nx/enforce-module-boundaries`
-rejects a wrong-way project dependency *and*, through `bannedExternalImports`, an
+rejects a wrong-way project dependency _and_, through `bannedExternalImports`, an
 `@angular/*` or `@ngrx/*` import into `domain`, `ports` or `application`. Adding
 one deliberately turns lint red.
 
@@ -313,7 +313,7 @@ question — routing it through `application` and `state` would add two hops tha
 carry no decision. The rule still cannot be edited from the UI layer: `ui` may
 import `domain`, and that is the only direction the boundary allows. Two things
 reverse this. A second consumer — a filter, a count in the header, anything that
-needs *which* appointments are re-routed rather than *whether this one is* — makes
+needs _which_ appointments are re-routed rather than _whether this one is_ — makes
 it a selector. A rule that needs anything an `Appointment` does not carry, such
 as who the receiving advisor is or whether they are free, makes it a use-case
 output, because that needs a port.
@@ -321,7 +321,7 @@ output, because that needs a port.
 **One feature, eight libraries.** Two ports, two DI tokens, an effect, a reducer
 and three selectors around three small rules. On a product this ratio would be
 the finding; here the structure is the deliverable. The honest test is the
-*second* feature: if booking an appointment reuses `domain`, `ports` and
+_second_ feature: if booking an appointment reuses `domain`, `ports` and
 `application` as they stand, the granularity paid off. If it needs a new library
 at every layer to add one form, `ports` should merge into `application`. The
 re-routing rule is a first, small piece of evidence: it added a domain function

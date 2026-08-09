@@ -23,7 +23,7 @@ const brunoEnvironment = join(
   'bruno',
   'appointment-booking-api',
   'environments',
-  'Local.bru'
+  'Local.bru',
 );
 
 const BASE_URL = 'http://localhost:3000';
@@ -68,7 +68,7 @@ function findDayWith(counts, wanted, description) {
     throw new Error(
       `server/db.seed.json has no day with ${description}. The Bruno collection ` +
         `filters on one, so seeding would leave that request describing an API ` +
-        `that no longer answers the way it claims.`
+        `that no longer answers the way it claims.`,
     );
   }
 
@@ -90,12 +90,14 @@ writeFileSync(
   `${JSON.stringify(
     { appointments, $schema: './node_modules/json-server/schema.json' },
     null,
-    2
-  )}\n`
+    2,
+  )}\n`,
 );
 
 const counts = countByDayOffset(seed.appointments);
-const latestDayOffset = Math.max(...seed.appointments.map(({ dayOffset }) => dayOffset));
+const latestDayOffset = Math.max(
+  ...seed.appointments.map(({ dayOffset }) => dayOffset),
+);
 
 const variables = {
   baseUrl: BASE_URL,
@@ -104,11 +106,13 @@ const variables = {
   createDate: toIsoDate(latestDayOffset + 1),
 };
 
-const lines = Object.entries(variables).map(([name, value]) => `  ${name}: ${value}`);
+const lines = Object.entries(variables).map(
+  ([name, value]) => `  ${name}: ${value}`,
+);
 
 writeFileSync(brunoEnvironment, `vars {\n${lines.join('\n')}\n}\n`);
 
 console.log(
   `Seeded ${appointments.length} appointments from db.seed.json ` +
-    `(${variables.singleMatchDate} has one, ${variables.multiMatchDate} has two).`
+    `(${variables.singleMatchDate} has one, ${variables.multiMatchDate} has two).`,
 );

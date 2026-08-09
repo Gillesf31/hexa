@@ -70,10 +70,10 @@ Utilisez l'injection de dépendances pour sélectionner une implémentation derr
 
 ```ts
 // Environnement de production ou d'intégration
-provideDataService(HttpDataService)
+provideDataService(HttpDataService);
 
 // Environnement de test ou de développement local
-provideDataService(InMemoryDataService)
+provideDataService(InMemoryDataService);
 ```
 
 La syntaxe exacte dépend du framework. L'essentiel est que changer la source des données ne demande aucune modification du code de la fonctionnalité ou du composant.

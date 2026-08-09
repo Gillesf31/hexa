@@ -21,14 +21,19 @@ export function provideAppointmentsShell(config: AppointmentsConfig) {
       useFactory:
         config.dataSource === 'memory'
           ? () => new InMemoryAppointmentsAdapter()
-          : () => new HttpAppointmentsAdapter(inject(HttpClient), config.apiBaseUrl),
+          : () =>
+              new HttpAppointmentsAdapter(
+                inject(HttpClient),
+                config.apiBaseUrl,
+              ),
     },
     {
       provide: GetAppointmentsUseCase,
-      useFactory: () => new GetAppointmentsUseCase(
-        inject(APPOINTMENTS_PORT),
-        inject(CLOCK_PORT)
-      ),
+      useFactory: () =>
+        new GetAppointmentsUseCase(
+          inject(APPOINTMENTS_PORT),
+          inject(CLOCK_PORT),
+        ),
     },
     provideAppointmentsState(),
   ]);

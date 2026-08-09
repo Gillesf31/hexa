@@ -32,7 +32,9 @@ describe('AppointmentListComponent', () => {
   it('renders one card per appointment', () => {
     const fixture = render(appointments);
 
-    const cards = fixture.nativeElement.querySelectorAll('app-appointment-card');
+    const cards = fixture.nativeElement.querySelectorAll(
+      'app-appointment-card',
+    );
     expect(cards).toHaveLength(2);
     expect(fixture.nativeElement.textContent).toContain('Ada Lovelace');
     expect(fixture.nativeElement.textContent).toContain('Grace Hopper');
@@ -41,7 +43,11 @@ describe('AppointmentListComponent', () => {
   it('shows an empty state when there is nothing to book', () => {
     const fixture = render([]);
 
-    expect(fixture.nativeElement.querySelectorAll('app-appointment-card')).toHaveLength(0);
-    expect(fixture.nativeElement.textContent).toContain('No appointments found.');
+    expect(
+      fixture.nativeElement.querySelectorAll('app-appointment-card'),
+    ).toHaveLength(0);
+    expect(fixture.nativeElement.textContent).toContain(
+      'No appointments found.',
+    );
   });
 });

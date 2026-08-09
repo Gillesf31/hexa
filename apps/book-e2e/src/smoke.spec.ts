@@ -6,6 +6,8 @@ import { expect, test } from '@playwright/test';
 test('renders the appointment book', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Appointments');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Appointments',
+  );
   await expect(page.getByText('Alice')).toBeVisible();
 });

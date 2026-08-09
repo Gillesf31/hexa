@@ -30,22 +30,35 @@ describe('filterCurrentAndFutureAppointments', () => {
 
   it('keeps appointments on or after today', () => {
     expect(
-      filterCurrentAndFutureAppointments(mockAppointments, new Date(2026, 6, 31)).map(
-        (appointment) => appointment.id
-      )
+      filterCurrentAndFutureAppointments(
+        mockAppointments,
+        new Date(2026, 6, 31),
+      ).map((appointment) => appointment.id),
     ).toEqual(['2', '3']);
   });
 
   it('keeps every appointment when today is before all appointments', () => {
-    expect(filterCurrentAndFutureAppointments(mockAppointments, new Date(2026, 6, 1))).toHaveLength(3);
+    expect(
+      filterCurrentAndFutureAppointments(
+        mockAppointments,
+        new Date(2026, 6, 1),
+      ),
+    ).toHaveLength(3);
   });
 
   it('returns no appointments when today is after all appointments', () => {
-    expect(filterCurrentAndFutureAppointments(mockAppointments, new Date(2026, 8, 1))).toEqual([]);
+    expect(
+      filterCurrentAndFutureAppointments(
+        mockAppointments,
+        new Date(2026, 8, 1),
+      ),
+    ).toEqual([]);
   });
 
   it('returns no appointments when none are supplied', () => {
-    expect(filterCurrentAndFutureAppointments([], new Date(2026, 6, 31))).toEqual([]);
+    expect(
+      filterCurrentAndFutureAppointments([], new Date(2026, 6, 31)),
+    ).toEqual([]);
   });
 });
 
@@ -88,10 +101,11 @@ describe('filterAppointmentsWithCustomerName', () => {
       },
     ];
 
-    expect(filterAppointmentsWithCustomerName(appointments).map((appointment) => appointment.id)).toEqual([
-      '6',
-      '7',
-    ]);
+    expect(
+      filterAppointmentsWithCustomerName(appointments).map(
+        (appointment) => appointment.id,
+      ),
+    ).toEqual(['6', '7']);
   });
 });
 

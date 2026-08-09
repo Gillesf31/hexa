@@ -4,14 +4,36 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   resolve: {
     alias: {
-      '@hexa/appointments-domain': fileURLToPath(new URL('./libs/appointments/domain/src/index.ts', import.meta.url)),
-      '@hexa/appointments-ports': fileURLToPath(new URL('./libs/appointments/ports/src/index.ts', import.meta.url)),
-      '@hexa/appointments-application': fileURLToPath(new URL('./libs/appointments/application/src/index.ts', import.meta.url)),
-      '@hexa/appointments-infrastructure': fileURLToPath(new URL('./libs/appointments/infrastructure/src/index.ts', import.meta.url)),
-      '@hexa/appointments-state': fileURLToPath(new URL('./libs/appointments/state/src/index.ts', import.meta.url)),
-      '@hexa/appointments-ui': fileURLToPath(new URL('./libs/appointments/ui/src/index.ts', import.meta.url)),
-      '@hexa/appointments-feature': fileURLToPath(new URL('./libs/appointments/feature/src/index.ts', import.meta.url)),
-      '@hexa/appointments-shell': fileURLToPath(new URL('./libs/appointments/shell/src/index.ts', import.meta.url)),
+      '@hexa/appointments-domain': fileURLToPath(
+        new URL('./libs/appointments/domain/src/index.ts', import.meta.url),
+      ),
+      '@hexa/appointments-ports': fileURLToPath(
+        new URL('./libs/appointments/ports/src/index.ts', import.meta.url),
+      ),
+      '@hexa/appointments-application': fileURLToPath(
+        new URL(
+          './libs/appointments/application/src/index.ts',
+          import.meta.url,
+        ),
+      ),
+      '@hexa/appointments-infrastructure': fileURLToPath(
+        new URL(
+          './libs/appointments/infrastructure/src/index.ts',
+          import.meta.url,
+        ),
+      ),
+      '@hexa/appointments-state': fileURLToPath(
+        new URL('./libs/appointments/state/src/index.ts', import.meta.url),
+      ),
+      '@hexa/appointments-ui': fileURLToPath(
+        new URL('./libs/appointments/ui/src/index.ts', import.meta.url),
+      ),
+      '@hexa/appointments-feature': fileURLToPath(
+        new URL('./libs/appointments/feature/src/index.ts', import.meta.url),
+      ),
+      '@hexa/appointments-shell': fileURLToPath(
+        new URL('./libs/appointments/shell/src/index.ts', import.meta.url),
+      ),
     },
   },
   test: {
@@ -21,6 +43,11 @@ export default defineConfig({
     // `.claude/worktrees` holds full copies of the workspace; without this a
     // path filter like `libs/appointments/domain/src` matches them too and every
     // count is doubled against stale code.
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', 'libs/appointments/ui/**'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.claude/**',
+      'libs/appointments/ui/**',
+    ],
   },
 });

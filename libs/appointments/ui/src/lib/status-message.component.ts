@@ -14,8 +14,10 @@ export class StatusMessageComponent {
   readonly variant = input<StatusMessageVariant>('info');
 
   protected readonly toneClass = computed(() =>
-    this.variant() === 'error' ? 'text-red-400' : 'text-gray-500'
+    this.variant() === 'error' ? 'text-red-400' : 'text-gray-500',
   );
 
-  protected readonly role = computed(() => (this.variant() === 'error' ? 'alert' : 'status'));
+  protected readonly role = computed(() =>
+    this.variant() === 'error' ? 'alert' : 'status',
+  );
 }

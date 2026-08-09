@@ -4,16 +4,11 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/book/src",
-  "tags": [
-    "scope:book",
-    "type:app"
-  ],
+  "tags": ["scope:book", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/book",
@@ -25,9 +20,7 @@
             "input": "apps/book/public"
           }
         ],
-        "styles": [
-          "apps/book/src/styles.css"
-        ]
+        "styles": ["apps/book/src/styles.css"]
       },
       "configurations": {
         "production": {
@@ -66,9 +59,7 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
-      "dependsOn": [
-        "api"
-      ],
+      "dependsOn": ["api"],
       "defaultConfiguration": "development",
       "configurations": {
         "production": {

@@ -7,7 +7,9 @@ import { StatusMessageComponent } from './status-message.component';
   imports: [StatusMessageComponent],
   template: `
     <app-status-message>Loading appointments…</app-status-message>
-    <app-status-message variant="error">Something went wrong.</app-status-message>
+    <app-status-message variant="error"
+      >Something went wrong.</app-status-message
+    >
   `,
 })
 class HostComponent {}
@@ -16,7 +18,9 @@ function render() {
   const fixture = TestBed.createComponent(HostComponent);
   fixture.detectChanges();
 
-  return fixture.nativeElement.querySelectorAll('p') as NodeListOf<HTMLParagraphElement>;
+  return fixture.nativeElement.querySelectorAll(
+    'p',
+  ) as NodeListOf<HTMLParagraphElement>;
 }
 
 describe('StatusMessageComponent', () => {

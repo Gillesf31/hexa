@@ -1,6 +1,6 @@
 # hexa
 
-An appointment-booking exercise whose deliverable is the *structure*, not the
+An appointment-booking exercise whose deliverable is the _structure_, not the
 feature. Three small business rules sit behind eight Nx libraries, and that ratio
 is deliberate — advice that would be right on a product ("this is over-built for
 what it does") is usually wrong here. What is genuinely under review is whether
@@ -16,7 +16,7 @@ the API does not have, or wants two of its fields folded into one, that
 translation belongs in
 [`HttpAppointmentsAdapter`](libs/appointments/infrastructure/src/lib/http-appointments.adapter.ts).
 Editing the server so the two shapes already agree deletes the reason the adapter
-exists. This repository shipped that bug once: the domain type *was* the wire
+exists. This repository shipped that bug once: the domain type _was_ the wire
 schema, and nothing caught it because both happened to have identical fields.
 
 Off-limits without a stated change to the business requirements:
@@ -26,8 +26,8 @@ Off-limits without a stated change to the business requirements:
 - adding an endpoint because some component would be easier to write with it;
 - moving a rule into the server to avoid implementing it in the domain.
 
-**The line is contract versus content.** The *shape* of the API belongs to the
-other team. The *rows* are demo fixtures, and may be edited, regenerated or
+**The line is contract versus content.** The _shape_ of the API belongs to the
+other team. The _rows_ are demo fixtures, and may be edited, regenerated or
 reseeded freely — moving an appointment to next Tuesday is fine, giving it a
 `startsAt` is not.
 
