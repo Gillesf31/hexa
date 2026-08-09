@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   filterAppointmentsWithCustomerName,
   filterCurrentAndFutureAppointments,
+  isReroutedToAnotherAdvisor,
 } from './appointment.rules';
 import type { Appointment } from './appointment';
 
@@ -91,5 +92,30 @@ describe('filterAppointmentsWithCustomerName', () => {
       '6',
       '7',
     ]);
+  });
+});
+
+describe('isReroutedToAnotherAdvisor', () => {
+  function appointmentLasting(durationMinutes: number): Appointment {
+    return {
+      id: '8',
+      customerName: 'Alice',
+      startsAt: new Date(2026, 6, 31, 9, 0),
+      durationMinutes,
+    };
+  }
+
+  it('re-routes an appointment shorter than half an hour', () => {
+    expect(isReroutedToAnotherAdvisor(appointmentLasting(15))).toBe(true);
+  });
+
+  // The boundary is the whole rule: `<` instead of `<=` here would silently stop
+  // re-routing the shortest appointments the business cares about.
+  it('re-routes an appointment lasting exactly half an hour', () => {
+    expect(isReroutedToAnotherAdvisor(appointmentLasting(30))).toBe(true);
+  });
+
+  it('keeps an appointment longer than half an hour', () => {
+    expect(isReroutedToAnotherAdvisor(appointmentLasting(31))).toBe(false);
   });
 });

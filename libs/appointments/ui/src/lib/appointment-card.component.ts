@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
-import type { Appointment } from '@hexa/appointments-domain';
+import { Component, computed, input } from '@angular/core';
+import { isReroutedToAnotherAdvisor, type Appointment } from '@hexa/appointments-domain';
 
 @Component({
   selector: 'app-appointment-card',
@@ -15,9 +15,14 @@ import type { Appointment } from '@hexa/appointments-domain';
         <span>📅 {{ appointment().startsAt | date: 'yyyy-MM-dd' }}</span>
         <span>🕐 {{ appointment().startsAt | date: 'HH:mm' }}</span>
       </div>
+      @if (isRerouted()) {
+        <p class="mt-3 text-xs text-amber-300">↪️ Re-routed to another advisor</p>
+      }
     </div>
   `,
 })
 export class AppointmentCardComponent {
   readonly appointment = input.required<Appointment>();
+
+  readonly isRerouted = computed(() => isReroutedToAnotherAdvisor(this.appointment()));
 }

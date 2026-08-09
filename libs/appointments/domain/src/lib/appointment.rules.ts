@@ -24,3 +24,14 @@ export function filterAppointmentsWithCustomerName(
 ): Appointment[] {
   return appointments.filter((appointment) => appointment.customerName.trim() !== '');
 }
+
+const REROUTED_MAX_DURATION_MINUTES = 30;
+
+// An appointment of half an hour or less is handled by someone else, and the
+// list has to say so: see acceptance criterion 8 in
+// docs/appointment-booking-business-requirements.md. Deliberately a predicate,
+// not a filter — the appointment is still displayed, it is who handles it that
+// changes. The boundary is inclusive: exactly thirty minutes is re-routed.
+export function isReroutedToAnotherAdvisor(appointment: Appointment): boolean {
+  return appointment.durationMinutes <= REROUTED_MAX_DURATION_MINUTES;
+}

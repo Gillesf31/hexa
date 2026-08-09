@@ -14,6 +14,7 @@ const appointmentSeeds: AppointmentSeed[] = [
   { id: '4', customerName: 'Bob', dayOffset: 0, startTime: '16:30', durationMinutes: 60 },
   { id: '5', customerName: 'Clara', dayOffset: 2, startTime: '11:00', durationMinutes: 90 },
   { id: '6', customerName: 'David', dayOffset: 9, startTime: '08:30', durationMinutes: 30 },
+  { id: '7', customerName: 'Elena', dayOffset: 1, startTime: '09:15', durationMinutes: 15 },
 ];
 
 export class InMemoryAppointmentsAdapter implements AppointmentsPort {

@@ -1,7 +1,7 @@
 # hexa
 
 An appointment-booking exercise whose deliverable is the *structure*, not the
-feature. Two lines of business rule sit behind eight Nx libraries, and that ratio
+feature. Three small business rules sit behind eight Nx libraries, and that ratio
 is deliberate — advice that would be right on a product ("this is over-built for
 what it does") is usually wrong here. What is genuinely under review is whether
 the second feature reuses `domain`, `ports` and `application` as they stand.

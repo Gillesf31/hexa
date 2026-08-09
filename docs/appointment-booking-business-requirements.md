@@ -20,6 +20,24 @@ Two exclusions apply to the list:
 
 The second exclusion is a domain rule rather than a display concern: whether an appointment is showable is a decision about the appointment, so it belongs with the rules and is tested without a browser. It is deliberately a *filter*, not a validation — a record with no customer name is dropped, not reported. If incomplete records need to be surfaced rather than hidden, that is a payload-validation concern for the HTTP adapter, and it is not in this increment.
 
+## Requirement 2: Announce re-routed appointments
+
+As a customer, I can see which of the listed appointments will be handled by
+someone else, so that I am not surprised on the day.
+
+An appointment of **30 minutes or less** is not handled by the advisor who would
+normally take it. The list says so on that appointment, in words: *re-routed to
+another advisor*. Exactly 30 minutes is short enough to be re-routed.
+
+This is a rule about the appointment, not about the screen, so it belongs with
+the other rules and is tested without a browser. Unlike the two exclusions above
+it is a *predicate*, not a filter: a re-routed appointment is still listed, still
+shows the same four fields, and nothing about it changes except what the list
+says about who will handle it.
+
+It re-routes; it does not assign. No advisor is named, chosen, or recorded — see
+*Not included* below.
+
 ## Technical boundaries
 
 Implement this requirement using the application's ports-and-adapters structure:
@@ -41,6 +59,7 @@ The use case depends only on the appointment repository port and the clock port.
 5. The use case excludes appointments whose customer name is empty or whitespace only.
 6. The primary adapter invokes the use case and displays each returned appointment's customer name, date, start time, and duration.
 7. No appointment can be created, changed, or deleted in this increment.
+8. The list states, on each displayed appointment of 30 minutes or less, that it will be re-routed to another advisor.
 
 ## Not included in this increment
 
@@ -48,5 +67,7 @@ The use case depends only on the appointment repository port and the clock port.
 - appointment availability or overlap checks;
 - opening-hour rules;
 - cancellations or rescheduling;
-- multiple advisors;
+- multiple advisors — requirement 2 says an appointment *is* re-routed, and stops
+  there. Who receives it, whether that advisor is free, and how the hand-over is
+  recorded are all out of scope: there is no advisor in the model at all;
 - customer accounts, payments, reminders, or time-zone conversion.

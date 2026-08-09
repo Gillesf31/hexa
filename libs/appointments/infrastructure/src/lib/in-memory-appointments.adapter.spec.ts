@@ -7,7 +7,7 @@ describe('InMemoryAppointmentsAdapter', () => {
   it('emits its seeded appointments', async () => {
     const appointments = await firstValueFrom(new InMemoryAppointmentsAdapter().getAppointments());
 
-    expect(appointments).toHaveLength(6);
+    expect(appointments).toHaveLength(7);
     expect(appointments.map((appointment) => appointment.id)).toEqual([
       '1',
       '2',
@@ -15,6 +15,7 @@ describe('InMemoryAppointmentsAdapter', () => {
       '4',
       '5',
       '6',
+      '7',
     ]);
   });
 
@@ -42,6 +43,7 @@ describe('InMemoryAppointmentsAdapter', () => {
       new Date(2026, 7, 7, 16, 30),
       new Date(2026, 7, 9, 11, 0),
       new Date(2026, 7, 16, 8, 30),
+      new Date(2026, 7, 8, 9, 15),
     ]);
   });
 

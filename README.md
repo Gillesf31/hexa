@@ -304,9 +304,25 @@ hiding forty good ones is the worse failure. The trigger is the first support
 question about a missing appointment; the fix is to collect the faults and
 report them alongside the results, not to ignore them.
 
+**Re-routing is a domain predicate the card calls directly.**
+`isReroutedToAnotherAdvisor` lives in `domain` with the two filters, but reaches
+the screen through `AppointmentCardComponent` rather than through the use case,
+the store, or a selector. It derives from the appointment alone, it changes
+nothing about which appointments are returned, and exactly one component asks the
+question — routing it through `application` and `state` would add two hops that
+carry no decision. The rule still cannot be edited from the UI layer: `ui` may
+import `domain`, and that is the only direction the boundary allows. Two things
+reverse this. A second consumer — a filter, a count in the header, anything that
+needs *which* appointments are re-routed rather than *whether this one is* — makes
+it a selector. A rule that needs anything an `Appointment` does not carry, such
+as who the receiving advisor is or whether they are free, makes it a use-case
+output, because that needs a port.
+
 **One feature, eight libraries.** Two ports, two DI tokens, an effect, a reducer
-and three selectors around two lines of business rule. On a product this ratio
-would be the finding; here the structure is the deliverable. The honest test is
-the *second* feature: if booking an appointment reuses `domain`, `ports` and
+and three selectors around three small rules. On a product this ratio would be
+the finding; here the structure is the deliverable. The honest test is the
+*second* feature: if booking an appointment reuses `domain`, `ports` and
 `application` as they stand, the granularity paid off. If it needs a new library
-at every layer to add one form, `ports` should merge into `application`.
+at every layer to add one form, `ports` should merge into `application`. The
+re-routing rule is a first, small piece of evidence: it added a domain function
+and three lines of template, and touched no other library.

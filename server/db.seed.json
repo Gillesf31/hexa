@@ -41,6 +41,13 @@
       "dayOffset": 9,
       "startTime": "08:30",
       "durationMinutes": 30
+    },
+    {
+      "id": "7",
+      "customerName": "Elena",
+      "dayOffset": 1,
+      "startTime": "09:15",
+      "durationMinutes": 15
     }
   ]
 }
