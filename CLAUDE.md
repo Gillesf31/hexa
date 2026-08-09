@@ -6,6 +6,24 @@ is deliberate — advice that would be right on a product ("this is over-built f
 what it does") is usually wrong here. What is genuinely under review is whether
 the second feature reuses `domain`, `ports` and `application` as they stand.
 
+## The rules are written down
+
+[`docs/appointment-booking-business-requirements.md`](docs/appointment-booking-business-requirements.md)
+states the three rules, the acceptance criteria, and — as load-bearing as the
+rest — what this increment deliberately leaves out. Read it before adding
+behaviour, not after.
+
+It is the authority the rest of this file appeals to. The reasons it gives are
+the specification: re-routing is a _predicate_ and the empty customer name is a
+_filter_, and swapping one for the other changes the requirement rather than the
+implementation. Nothing in the "Not included" list — booking, overlap checks,
+opening hours, a named advisor — is an omission waiting to be helpfully filled
+in.
+
+The architecture review in the same folder is dated and has already been
+superseded once. Prefer this file and the README for what is true now; read the
+review for how the code got here.
+
 ## The API is not ours to bend
 
 `server/db.json` and the json-server routes stand in for a backend owned by
@@ -19,7 +37,8 @@ Editing the server so the two shapes already agree deletes the reason the adapte
 exists. This repository shipped that bug once: the domain type _was_ the wire
 schema, and nothing caught it because both happened to have identical fields.
 
-Off-limits without a stated change to the business requirements:
+Off-limits without a stated change to
+[the business requirements](docs/appointment-booking-business-requirements.md):
 
 - renaming, adding, or removing a field so it matches the domain model;
 - merging `date` and `startTime` because `Appointment` wants one `startsAt`;
