@@ -255,19 +255,28 @@ npx nx build book
 npx nx e2e book-e2e
 ```
 
-**These run on `git push`, not on request.** There is no CI, so
-[`lefthook.yml`](lefthook.yml) is the only thing standing between a broken commit
-and the remote. `lefthook` installs the hook from its own `postinstall`, so
-`npm install` is all a fresh clone needs — except Playwright's browser, which is
-downloaded on demand:
+**These run on `git push`, not on request**, and then again on what landed.
+[`lefthook.yml`](lefthook.yml) is the copy that runs before the push, so a broken
+commit never reaches the remote; [`.github/workflows/checks.yml`](.github/workflows/checks.yml)
+runs the same three stages, in the same order, under the same names. `lefthook`
+installs the hook from its own `postinstall`, so `npm install` is all a fresh
+clone needs — except Playwright's browser, which is downloaded on demand:
 
 ```sh
 npx playwright install chromium
 ```
 
-`LEFTHOOK=0 git push` skips the gate. Reach for it when the check is wrong, not
-when it is slow; if it is slow, that is the trade-off below asking to be
-revisited.
+To read the remote half:
+
+```sh
+gh run list --workflow=checks.yml
+gh run watch
+```
+
+`LEFTHOOK=0 git push` skips the local gate. Reach for it when the check is wrong,
+not when it is slow; if it is slow, that is the trade-off below asking to be
+revisited. Skipping no longer means unchecked — it means finding out from a red
+run rather than from a blocked push, on a `main` anyone may be reading.
 
 To run the gate without pushing — the whole thing, in the order the hook runs it:
 
@@ -309,7 +318,15 @@ typechecks, so a type error survives a green test run. Each project runs `tsc
 `npx nx e2e book-e2e` is Playwright, and it is currently one smoke test. It runs
 against `serve-memory`, so it starts its own dev server on the in-memory adapter
 and needs no json-server. Chromium only: nothing here is browser-specific yet.
-Artifacts land in `dist/.playwright`, which is already ignored.
+Artifacts land in `dist/.playwright`, which is already ignored; CI uploads that
+directory as `playwright-report` when — and only when — the e2e step is the step
+that failed, so a trace from a remote failure is downloadable.
+
+Nx starts the dev server, not Playwright: `@nx/playwright/plugin` reads
+`webServer.command` out of the config and makes `book:serve-memory` a continuous
+dependency of the inferred `e2e` target. That is why `reuseExistingServer` is
+unconditionally `true` rather than `!process.env.CI`. `npx nx show project
+book-e2e --json` prints the target Nx actually inferred.
 
 For a coverage report across `libs/`:
 
@@ -321,21 +338,47 @@ npm run test:coverage
 
 These are decisions, not oversights. Each has a stated trigger for revisiting.
 
-**The pre-push gate runs e2e, and everything else.** Format, lint, typecheck,
-unit tests, an Angular build and Playwright, all before a push is allowed. That
-is more than a hook usually carries, and it is deliberate: with no CI, a check
-that does not run here does not run anywhere. Nx caches all of it except e2e,
-which boots a real dev server every time to run one smoke test — affordable at
-one spec, and the first thing to move once there are twenty. The trigger is the
+**The gate runs twice, and the pre-push half still runs e2e.** Format, lint,
+typecheck, unit tests, an Angular build and Playwright, all before a push is
+allowed — and all again in CI. Running both is redundant on purpose: `main` is
+unprotected, so CI reports a failure it cannot prevent, and the hook is what
+keeps a broken commit off a branch anyone may clone. Nx caches all of it, e2e
+included, so a repeat push is mostly cache reads. The trigger is unchanged — the
 first `LEFTHOOK=0` reached for because the gate is slow rather than because the
-check is wrong; the fix is to stand up CI and leave the fast half here, not to
-delete the checks.
+check is wrong — but the fix now on the shelf is to drop `e2e` from
+`lefthook.yml` and let CI own it, not to delete the check. Protecting `main` on
+the `checks` job would make that obviously right, by turning CI into prevention.
 
 **One `run-many`, not one job per target.** `lefthook.yml` groups lint,
-typecheck, test and build into a single command. Splitting them would name each
-failure in lefthook's own summary, at the cost of four Nx processes contending
-for one daemon and one cache. Revisit if a failure ever becomes hard to locate
-in the combined output.
+typecheck, test and build into a single command, and
+[`checks.yml`](.github/workflows/checks.yml) repeats it as one step in one job.
+Splitting them would name each failure in lefthook's own summary, at the cost of
+four Nx processes contending for one daemon and one cache. In CI the cost is
+worse and the benefit is already paid: Nx disables its daemon there, so each job
+would recompute the project graph from cold on top of its own `npm ci`, and both
+`appointments-ui:test` and `e2e` would rebuild the Angular app separately —
+while GitHub names the failing step and times it without any of that. Revisit if
+a failure ever becomes hard to locate in the combined output.
+
+**CI runs `run-many` on one runner, not `affected` across a matrix.** `affected`
+would let CI pass a change the hook fails, and `LEFTHOOK=0 git push` is only safe
+while the two run the same commands. It also buys little here: every library
+reaches `domain`, so the common change is affected-everywhere. Revisit the first
+time `npx nx affected -t lint typecheck test build --base=HEAD~1` selects a
+strict subset on a change you actually made **and** you were waiting on the full
+run — both halves, not either.
+
+**No Nx Cloud, and no restored Nx cache in CI either.** One contributor and a
+graph this size do not repay an account, a token secret and a third-party
+dependency. The obvious substitute — `actions/cache` on `.nx/cache` — does not
+work: since Nx 21 the cache _index_ is a SQLite file under `.nx/workspace-data`
+whose name is derived from the machine, so restoring the artifacts alone
+restores an empty index and hits nothing. Only npm's download cache is kept.
+Revisit at the first CI run you sit and wait on; the experiment is one throwaway
+commit printing `/etc/machine-id` and `ls .nx/workspace-data` on two runs, and if
+that id is stable, cache both paths on a rolling key. If it is not, the honest
+answer is Nx Cloud or a self-hosted remote cache, and this entry is the one that
+was wrong.
 
 **Ports return `Observable`.** `AppointmentsPort` is typed
 `Observable<Appointment[]>`, so `rxjs` sits in the ports and application

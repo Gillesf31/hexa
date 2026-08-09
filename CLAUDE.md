@@ -134,6 +134,12 @@ initial bundle. Configuration reaches the shell as a function argument through t
 route's dynamic import instead. If lint refuses an import, that is usually the
 rule working.
 
+**The workflow file has to pass the gate it defines.** `npx prettier --check .`
+now covers `.github/workflows/*.yml`, and Prettier rewrites double-quoted YAML
+scalars to single quotes — so `branches: ["main"]`, copied from GitHub's own
+docs, fails the first stage of the workflow that contains it. Run `npx prettier
+--check .` after editing it, not only after editing TypeScript.
+
 **`includedScripts: []` in `package.json` is load-bearing.** Without it Nx infers
 targets from `scripts`, so `npm test` (`nx run-many -t test`) finds a `test`
 script and recurses.

@@ -29,11 +29,22 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
-  /* Run your local dev server before starting the tests */
   webServer: {
+    // `@nx/playwright/plugin` parses this command back out of the config and
+    // turns it into a `dependsOn` on the inferred `e2e` target — confirm with
+    // `npx nx show project book-e2e --json`. So Nx boots `book:serve-memory` as
+    // a continuous task first, and :4200 is already answering by the time
+    // Playwright looks.
     command: 'npx nx serve-memory book',
     url: 'http://localhost:4200',
+    // Which is why this is `true` and not `!process.env.CI`. The usual advice
+    // assumes Playwright owns the server; here it would make Playwright fight
+    // Nx for the port.
     reuseExistingServer: true,
+    // Playwright's default is 60s, and the thing being waited on is a cold
+    // Angular build on a two-core CI runner. `npx nx serve-memory book` on a
+    // cleared cache prints what that costs locally.
+    timeout: 120_000,
     cwd: workspaceRoot,
   },
   // Chromium only. Nothing here is browser-specific yet, so a second engine
