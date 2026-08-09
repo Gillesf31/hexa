@@ -121,5 +121,3 @@ itself, and name the command that reprints it.
 Every entry under **Deliberate trade-offs** in the README carries the condition
 that should reverse it. A trade-off without a trigger is indistinguishable from
 an oversight a year later.
-
-`CONTEXT.md` is untracked. Leave it that way unless asked.
