@@ -6,6 +6,10 @@ Appointment-booking exercise built with Angular and a local JSON Server API.
 
 Read [the current architecture review](docs/architecture-review-2026-08-07.md).
 
+Read [why the state layer is still classic NgRx](docs/state-management-signal-store-2026-08-09.md)
+for what a move to the signal store would take, and what would have to change
+for it to be worth doing.
+
 ## Architecture boundaries
 
 The appointment-booking slice is split into Nx libraries. Arrows show allowed
@@ -418,6 +422,19 @@ needs _which_ appointments are re-routed rather than _whether this one is_ — m
 it a selector. A rule that needs anything an `Appointment` does not carry, such
 as who the receiving advisor is or whether they are free, makes it a use-case
 output, because that needs a port.
+
+**Classic NgRx, not the signal store.** `@ngrx/signals/events` would keep the
+dispatch this design depends on — a component raises a named event and never
+calls a method that changes state — so the move is mechanical rather than a
+redesign, and `domain`, `ports`, `application` and `infrastructure` would not
+change by a line. That last part is the argument for doing it eventually and
+also the reason it is not urgent: it is evidence about a boundary that is
+already holding. What it costs today is Redux DevTools, which `@ngrx/signals`
+does not ship and whose third-party replacement does not yet accept this
+workspace's Angular, plus the two lines binding an event to its reducer and its
+handler, which no framework-free spec can reach. Both triggers that reverse this
+are recorded in
+[the decision record](docs/state-management-signal-store-2026-08-09.md).
 
 **One feature, eight libraries.** Two ports, two DI tokens, an effect, a reducer
 and three selectors around three small rules. On a product this ratio would be
