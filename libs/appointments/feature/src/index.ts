@@ -1,1 +1,1 @@
-export { AppointmentBookComponent } from './lib/appointment-book.component';
+export { AppointmentsPageComponent } from './lib/appointments-page.component';

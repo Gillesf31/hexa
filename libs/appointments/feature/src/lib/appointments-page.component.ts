@@ -18,7 +18,7 @@ import {
     AppointmentsHeaderComponent,
     StatusMessageComponent,
   ],
-  selector: 'app-appointment-book',
+  selector: 'app-appointments-page',
   template: `
     <div class="block max-w-xl mx-auto px-4 py-8 font-sans">
       <app-appointments-header [busy]="isLoading()" (refresh)="refresh()">
@@ -35,7 +35,7 @@ import {
     </div>
   `,
 })
-export class AppointmentBookComponent implements OnInit {
+export class AppointmentsPageComponent implements OnInit {
   private readonly store = inject(Store);
 
   readonly appointments = this.store.selectSignal(

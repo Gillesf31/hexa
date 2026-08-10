@@ -115,7 +115,7 @@ never having been distinguished.
 
 **A signal store is constructed lazily.** `provideEffects` subscribes when the
 route's environment injector is created; a store class does nothing until
-something injects it. Today `AppointmentBookComponent` injects it in a field
+something injects it. Today `AppointmentsPageComponent` injects it in a field
 initialiser, strictly before `ngOnInit` dispatches — so it works, and it works
 by accident of who reads the state first. `provideEnvironmentInitializer(() => inject(AppointmentsStore))`
 in `provideAppointmentsState()` restores the guarantee in one line.

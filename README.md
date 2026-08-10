@@ -95,7 +95,7 @@ the store knows the use cases, the use cases know nothing about the store.
 
 ```mermaid
 sequenceDiagram
-  participant C as AppointmentBookComponent
+  participant C as AppointmentsPageComponent
   participant S as Store
   participant E as LoadAppointmentsEffects
   participant U as GetAppointmentsUseCase
