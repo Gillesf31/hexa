@@ -43,6 +43,11 @@ Thumbs.db
 .nx/migrate-runs
 .claude/worktrees
 .claude/settings.local.json
+.claude/agents
+.claude/skills
+
+# Scratch TDD plans written by the tdd-analyze agent, not a deliverable
+workspace
 
 .angular
 
