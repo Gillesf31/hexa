@@ -41,10 +41,12 @@ export default defineConfig({
     // assumes Playwright owns the server; here it would make Playwright fight
     // Nx for the port.
     reuseExistingServer: true,
-    // Playwright's default is 60s, and the thing being waited on is a cold
-    // Angular build on a two-core CI runner. `npx nx serve-memory book` on a
-    // cleared cache prints what that costs locally.
-    timeout: 120_000,
+    // No explicit `timeout`. Playwright's default is 60s and a cold CI runner
+    // reaches the first test in well under that — `gh run view --log` on the
+    // e2e step prints the gap between `nx run book:serve-memory` and the run
+    // summary. Tightening it would trade a cheap failure (waiting out a hang
+    // that a 20-minute job timeout catches anyway) for an expensive one: a red
+    // run on a noisy shared runner that nothing is actually wrong with.
     cwd: workspaceRoot,
   },
   // Chromium only. Nothing here is browser-specific yet, so a second engine
