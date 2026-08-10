@@ -20,9 +20,18 @@
       }
     },
     "test": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/angular:unit-test",
       "options": {
-        "command": "npx vitest run libs/appointments/feature/src --passWithNoTests"
+        "buildTarget": "book:build:development",
+        "tsConfig": "libs/appointments/feature/tsconfig.spec.json",
+        "runner": "vitest",
+        "include": ["libs/appointments/feature/src/**/*.spec.ts"],
+        "watch": false
+      },
+      "configurations": {
+        "watch": {
+          "watch": true
+        }
       }
     }
   }

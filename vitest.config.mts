@@ -39,7 +39,7 @@ export default defineConfig({
   test: {
     setupFiles: [fileURLToPath(new URL('./vitest.setup.ts', import.meta.url))],
     // Component specs need the Angular AOT compiler for signal inputs, so the ui
-    // library runs through `nx test appointments-ui` (@angular/build:unit-test).
+    // and feature libraries run through `nx test <project>` (@nx/angular:unit-test).
     // `.claude/worktrees` holds full copies of the workspace; without this a
     // path filter like `libs/appointments/domain/src` matches them too and every
     // count is doubled against stale code.
@@ -48,6 +48,7 @@ export default defineConfig({
       '**/dist/**',
       '**/.claude/**',
       'libs/appointments/ui/**',
+      'libs/appointments/feature/**',
     ],
   },
 });
