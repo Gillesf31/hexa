@@ -37,3 +37,25 @@ const REROUTED_MAX_DURATION_MINUTES = 30;
 export function isReroutedToAnotherAdvisor(appointment: Appointment): boolean {
   return appointment.durationMinutes <= REROUTED_MAX_DURATION_MINUTES;
 }
+
+const STARTING_SOON_WITHIN_MINUTES = 60;
+const MILLISECONDS_PER_MINUTE = 60_000;
+
+// The list says of an imminent appointment that it is starting soon: see
+// acceptance criteria 9 to 12 in
+// docs/appointment-booking-business-requirements.md. Deliberately a predicate,
+// not a filter — like re-routing, the appointment is still displayed and only
+// what the list says about it changes. The instant is passed in rather than
+// read here, so every rule can be judged against one reading of the clock.
+//
+// The window has two ends, and the lower one is not decoration: appointments
+// are excluded by day, so one at nine o'clock is still displayed at four in
+// the afternoon. It is seven hours "within the next hour" of the horizon, and
+// without `>= now` the list would announce it as imminent.
+export function isStartingSoon(appointment: Appointment, now: Date): boolean {
+  const horizon = new Date(
+    now.getTime() + STARTING_SOON_WITHIN_MINUTES * MILLISECONDS_PER_MINUTE,
+  );
+
+  return appointment.startsAt >= now && appointment.startsAt <= horizon;
+}

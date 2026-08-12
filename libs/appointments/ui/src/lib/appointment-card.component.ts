@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import {
   isReroutedToAnotherAdvisor,
-  type Appointment,
+  type ListedAppointment,
 } from '@hexa/appointments-domain';
 
 @Component({
@@ -29,11 +29,14 @@ import {
           ↪️ Re-routed to another advisor
         </p>
       }
+      @if (appointment().startingSoon) {
+        <p class="mt-1 text-xs text-sky-300">⏳ Starting soon</p>
+      }
     </div>
   `,
 })
 export class AppointmentCardComponent {
-  readonly appointment = input.required<Appointment>();
+  readonly appointment = input.required<ListedAppointment>();
 
   readonly isRerouted = computed(() =>
     isReroutedToAnotherAdvisor(this.appointment()),

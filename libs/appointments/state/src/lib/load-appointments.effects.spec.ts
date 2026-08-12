@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Actions } from '@ngrx/effects';
 import { firstValueFrom, of, Subject, throwError } from 'rxjs';
 import type { Action } from '@ngrx/store';
-import type { Appointment } from '@hexa/appointments-domain';
+import type { Appointment, ListedAppointment } from '@hexa/appointments-domain';
 import { GetAppointmentsUseCase } from '@hexa/appointments-application';
 import {
   appointmentsApiActions,
@@ -24,6 +24,14 @@ const futureAppointment: Appointment = {
   customerName: 'Future',
   startsAt: new Date(2026, 7, 5, 14, 0),
   durationMinutes: 30,
+};
+
+// What the use case hands back: the appointment plus what the list says about
+// it. Nothing here is due in an hour — the clock reads the thirty-first and the
+// appointment is on the fifth of August.
+const listedFutureAppointment: ListedAppointment = {
+  ...futureAppointment,
+  startingSoon: false,
 };
 
 function createEffects(getAppointments: GetAppointmentsUseCase) {
@@ -63,7 +71,7 @@ describe('LoadAppointmentsEffects', () => {
 
     expect(await emitted).toEqual(
       appointmentsApiActions.loadedSuccess({
-        appointments: [futureAppointment],
+        appointments: [listedFutureAppointment],
       }),
     );
   });
@@ -78,7 +86,7 @@ describe('LoadAppointmentsEffects', () => {
 
     expect(await emitted).toEqual(
       appointmentsApiActions.loadedSuccess({
-        appointments: [futureAppointment],
+        appointments: [listedFutureAppointment],
       }),
     );
   });
@@ -130,7 +138,7 @@ describe('LoadAppointmentsEffects', () => {
     expect(emitted).toEqual([
       appointmentsApiActions.loadedFailure({ message: 'boom' }),
       appointmentsApiActions.loadedSuccess({
-        appointments: [futureAppointment],
+        appointments: [listedFutureAppointment],
       }),
     ]);
   });

@@ -3,6 +3,7 @@ import {
   filterAppointmentsWithCustomerName,
   filterCurrentAndFutureAppointments,
   isReroutedToAnotherAdvisor,
+  isStartingSoon,
 } from './appointment.rules';
 import type { Appointment } from './appointment';
 
@@ -131,5 +132,51 @@ describe('isReroutedToAnotherAdvisor', () => {
 
   it('keeps an appointment longer than half an hour', () => {
     expect(isReroutedToAnotherAdvisor(appointmentLasting(31))).toBe(false);
+  });
+});
+
+describe('isStartingSoon', () => {
+  const now = new Date(2026, 6, 31, 9, 0);
+
+  function appointmentStartingAt(startsAt: Date): Appointment {
+    return {
+      id: '9',
+      customerName: 'Alice',
+      startsAt,
+      durationMinutes: 60,
+    };
+  }
+
+  it('announces an appointment that begins twenty minutes from now as starting soon', () => {
+    expect(
+      isStartingSoon(appointmentStartingAt(new Date(2026, 6, 31, 9, 20)), now),
+    ).toBe(true);
+  });
+
+  it('does not announce an appointment that begins sixty-one minutes from now', () => {
+    expect(
+      isStartingSoon(appointmentStartingAt(new Date(2026, 6, 31, 10, 1)), now),
+    ).toBe(false);
+  });
+
+  // The boundary is the whole rule, as it is for re-routing: `<` instead of
+  // `<=` here would silently stop announcing an appointment exactly an hour
+  // away, which the requirement says is close enough.
+  it('announces an appointment that begins in exactly one hour', () => {
+    expect(
+      isStartingSoon(appointmentStartingAt(new Date(2026, 6, 31, 10, 0)), now),
+    ).toBe(true);
+  });
+
+  // Appointments are excluded by day, not by instant, so a nine o'clock
+  // appointment is still displayed at four in the afternoon. It has already
+  // started, and "within the next hour" is a window with two ends.
+  it('does not announce an appointment that already started earlier today', () => {
+    expect(
+      isStartingSoon(
+        appointmentStartingAt(new Date(2026, 6, 31, 9, 0)),
+        new Date(2026, 6, 31, 16, 0),
+      ),
+    ).toBe(false);
   });
 });

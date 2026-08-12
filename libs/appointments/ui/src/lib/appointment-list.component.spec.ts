@@ -1,25 +1,27 @@
 import { describe, expect, it } from 'vitest';
 import { inputBinding, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import type { Appointment } from '@hexa/appointments-domain';
+import type { ListedAppointment } from '@hexa/appointments-domain';
 import { AppointmentListComponent } from './appointment-list.component';
 
-const appointments: Appointment[] = [
+const appointments: ListedAppointment[] = [
   {
     id: '1',
     customerName: 'Ada Lovelace',
     startsAt: new Date(2026, 7, 6, 9, 0),
     durationMinutes: 30,
+    startingSoon: false,
   },
   {
     id: '2',
     customerName: 'Grace Hopper',
     startsAt: new Date(2026, 7, 7, 14, 0),
     durationMinutes: 60,
+    startingSoon: false,
   },
 ];
 
-function render(value: readonly Appointment[]) {
+function render(value: readonly ListedAppointment[]) {
   const fixture = TestBed.createComponent(AppointmentListComponent, {
     bindings: [inputBinding('appointments', signal(value))],
   });

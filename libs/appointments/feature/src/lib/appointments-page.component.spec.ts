@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import type { Action } from '@ngrx/store';
 import { provideState, provideStore, Store } from '@ngrx/store';
-import type { Appointment } from '@hexa/appointments-domain';
+import type { ListedAppointment } from '@hexa/appointments-domain';
 import {
   appointmentsApiActions,
   appointmentsFeature,
@@ -10,12 +10,15 @@ import {
 } from '@hexa/appointments-state';
 import { AppointmentsPageComponent } from './appointments-page.component';
 
-const appointments: Appointment[] = [
+// What the store holds is what the use case handed back: the appointment plus
+// what the list says about it.
+const appointments: ListedAppointment[] = [
   {
     id: '1',
     customerName: 'Ada Lovelace',
     startsAt: new Date(2026, 7, 6, 9, 0),
     durationMinutes: 60,
+    startingSoon: false,
   },
 ];
 

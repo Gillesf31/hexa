@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import type { Appointment } from '@hexa/appointments-domain';
+import type { ListedAppointment } from '@hexa/appointments-domain';
 import {
   appointmentsApiActions,
   appointmentsPageActions,
@@ -8,7 +8,7 @@ import {
 export type AppointmentsStatus = 'idle' | 'loading' | 'loaded' | 'failed';
 
 export type AppointmentsState = {
-  appointments: Appointment[];
+  appointments: ListedAppointment[];
   status: AppointmentsStatus;
   errorMessage: string | null;
 };

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Appointment } from '@hexa/appointments-domain';
+import type { ListedAppointment } from '@hexa/appointments-domain';
 import {
   appointmentsApiActions,
   appointmentsPageActions,
@@ -12,11 +12,12 @@ import type { AppointmentsState } from './appointments.reducer';
 
 const { reducer } = appointmentsFeature;
 
-const appointment: Appointment = {
+const appointment: ListedAppointment = {
   id: '1',
   customerName: 'Alice',
   startsAt: new Date(2026, 7, 5, 14, 0),
   durationMinutes: 30,
+  startingSoon: false,
 };
 
 const failedState: AppointmentsState = {

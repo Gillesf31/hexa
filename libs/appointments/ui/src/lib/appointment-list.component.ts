@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import type { Appointment } from '@hexa/appointments-domain';
+import type { ListedAppointment } from '@hexa/appointments-domain';
 import { AppointmentCardComponent } from './appointment-card.component';
 import { StatusMessageComponent } from './status-message.component';
 
@@ -17,5 +17,5 @@ import { StatusMessageComponent } from './status-message.component';
   `,
 })
 export class AppointmentListComponent {
-  readonly appointments = input.required<readonly Appointment[]>();
+  readonly appointments = input.required<readonly ListedAppointment[]>();
 }
