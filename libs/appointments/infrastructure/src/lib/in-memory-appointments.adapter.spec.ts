@@ -45,12 +45,34 @@ describe('InMemoryAppointmentsAdapter', () => {
     expect(appointments.map((appointment) => appointment.startsAt)).toEqual([
       new Date(2026, 7, 1, 9, 0),
       new Date(2026, 7, 6, 10, 0),
-      new Date(2026, 7, 7, 14, 0),
+      new Date(2026, 7, 7, 12, 30), // half an hour after the injected instant
       new Date(2026, 7, 7, 16, 30),
       new Date(2026, 7, 9, 11, 0),
       new Date(2026, 7, 16, 8, 30),
       new Date(2026, 7, 8, 9, 15),
     ]);
+  });
+
+  // The demo has to show the "starting soon" notice at any hour, and a fixed
+  // start time cannot: it is imminent for one hour a day and stale for the
+  // other twenty-three. Both instants below are deliberately awkward — one
+  // before the working day, one where the next hour falls on the following
+  // date.
+  it.each([
+    ['before the working day', new Date(2026, 7, 7, 3, 10)],
+    ['just before midnight', new Date(2026, 7, 7, 23, 50)],
+  ])('starts one appointment within the hour, seen %s', async (_, now) => {
+    const adapter = new InMemoryAppointmentsAdapter(() => now);
+    const anHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+
+    const appointments = await firstValueFrom(adapter.getAppointments());
+
+    expect(
+      appointments.some(
+        (appointment) =>
+          appointment.startsAt >= now && appointment.startsAt <= anHourFromNow,
+      ),
+    ).toBe(true);
   });
 
   it('always emits appointments at or after the start of today', async () => {

@@ -2,10 +2,17 @@ import { of } from 'rxjs';
 import type { Appointment } from '@hexa/appointments-domain';
 import type { AppointmentsPort } from '@hexa/appointments-ports';
 
-type AppointmentSeed = Omit<Appointment, 'startsAt'> & {
-  dayOffset: number;
-  startTime: string;
-};
+// Seeds are relative so the demo cannot rot against rules that ask what time
+// it is. A day offset is enough for a rule that filters on today; the
+// "starting soon" rule reads the hour, and a fixed `startTime` is imminent for
+// one hour a day and stale for the other twenty-three. `minutesFromNow` is the
+// same idea one unit down.
+//
+// This is the in-memory adapter only. `server/db.seed.json` is a payload for an
+// API owned by another team, and the Bruno collection derives its dates from
+// that same seed — see CLAUDE.md.
+type AppointmentSeed = Omit<Appointment, 'startsAt'> &
+  ({ dayOffset: number; startTime: string } | { minutesFromNow: number });
 
 const appointmentSeeds: AppointmentSeed[] = [
   {
@@ -22,11 +29,12 @@ const appointmentSeeds: AppointmentSeed[] = [
     startTime: '10:00',
     durationMinutes: 45,
   },
+  // Half an hour away and half an hour long, so the list says both things
+  // about it at once: re-routed, and starting soon.
   {
     id: '3',
     customerName: 'Alice',
-    dayOffset: 0,
-    startTime: '14:00',
+    minutesFromNow: 30,
     durationMinutes: 30,
   },
   {
@@ -64,11 +72,26 @@ export class InMemoryAppointmentsAdapter implements AppointmentsPort {
 
   getAppointments = () =>
     of<Appointment[]>(
-      appointmentSeeds.map(({ dayOffset, startTime, ...appointment }) => ({
-        ...appointment,
-        startsAt: this.startsAtFromToday(dayOffset, startTime),
+      appointmentSeeds.map((seed) => ({
+        id: seed.id,
+        customerName: seed.customerName,
+        durationMinutes: seed.durationMinutes,
+        startsAt: this.startsAtFrom(seed),
       })),
     );
+
+  private startsAtFrom(seed: AppointmentSeed): Date {
+    return 'minutesFromNow' in seed
+      ? this.startsAtInMinutes(seed.minutesFromNow)
+      : this.startsAtFromToday(seed.dayOffset, seed.startTime);
+  }
+
+  private startsAtInMinutes(minutesFromNow: number): Date {
+    const startsAt = new Date(this.now());
+    startsAt.setMinutes(startsAt.getMinutes() + minutesFromNow, 0, 0);
+
+    return startsAt;
+  }
 
   private startsAtFromToday(dayOffset: number, startTime: string): Date {
     const [hours, minutes] = startTime.split(':').map(Number);
