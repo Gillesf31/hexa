@@ -38,6 +38,33 @@ says about who will handle it.
 It re-routes; it does not assign. No advisor is named, chosen, or recorded — see
 _Not included_ below.
 
+## Requirement 3: Announce appointments starting soon
+
+As a customer, I can see which of the listed appointments start within the hour,
+so that I know which one is imminent.
+
+An appointment that starts within the next **60 minutes** is announced in the
+list, in words: _starting soon_. Exactly 60 minutes away is close enough to be
+announced, the same inclusive convention requirement 2 uses for its 30.
+
+Like re-routing, this is a _predicate_, not a filter: the appointment is still
+listed, still shows the same four fields, and nothing about it changes except
+what the list says about it. The two announcements are independent — a
+half-hour appointment starting in twenty minutes is both re-routed and starting
+soon, and the list says both.
+
+The rule is a window with two ends, and the second end is the point of it. The
+exclusion in requirement 1 is at day granularity, so an appointment at 09:00
+today is still displayed at 16:00 today. That appointment has already started
+and is **not** starting soon. "Within the next 60 minutes" therefore means
+_between now and an hour from now_, not merely _no more than an hour away_,
+which an appointment seven hours in the past also satisfies.
+
+Imminence is decided against the current instant, so the same reading of the
+clock that decides what is displayed must decide what is announced. One reading
+per execution: two readings taken moments apart can straddle midnight and make
+the two rules disagree about which day it is.
+
 ## Technical boundaries
 
 Implement this requirement using the application's ports-and-adapters structure:
@@ -60,6 +87,13 @@ The use case depends only on the appointment repository port and the clock port.
 6. The primary adapter invokes the use case and displays each returned appointment's customer name, date, start time, and duration.
 7. No appointment can be created, changed, or deleted in this increment.
 8. The list states, on each displayed appointment of 30 minutes or less, that it will be re-routed to another advisor.
+9. The domain decides whether an appointment is starting soon, from the appointment and the current instant.
+10. An appointment starting in exactly 60 minutes is starting soon.
+11. An appointment starting in 61 minutes is not starting soon.
+12. An appointment whose start is in the past is not starting soon, even though it is still displayed.
+13. The list states, on each displayed appointment that is starting soon, that it is starting soon.
+14. Both statements appear together on an appointment that is both re-routed and starting soon.
+15. The use case reads the current instant once per execution and judges every rule against that one reading.
 
 ## Not included in this increment
 
@@ -70,4 +104,8 @@ The use case depends only on the appointment repository port and the clock port.
 - multiple advisors — requirement 2 says an appointment _is_ re-routed, and stops
   there. Who receives it, whether that advisor is free, and how the hand-over is
   recorded are all out of scope: there is no advisor in the model at all;
-- customer accounts, payments, reminders, or time-zone conversion.
+- customer accounts, payments, reminders, or time-zone conversion;
+- notifications, reminders, live countdowns, or auto-refresh — requirement 3
+  announces imminence as a sentence in a list that is rendered once. It is not a
+  reminder: nothing is pushed, nothing counts down, and the announcement is as
+  fresh as the moment the screen was loaded and no fresher.
