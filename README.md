@@ -4,7 +4,8 @@ Appointment-booking exercise built with Angular and a local JSON Server API.
 
 ## Architecture review
 
-Read [the current architecture review](docs/architecture-review-2026-08-07.md).
+Read [the 2026-08-07 architecture review](docs/architecture-review-2026-08-07.md),
+which describes the earlier use-case composition.
 
 Read [why the state layer is still classic NgRx](docs/state-management-signal-store-2026-08-09.md)
 for what a move to the signal store would take, and what would have to change
@@ -24,7 +25,6 @@ flowchart TB
     FEATURE["feature\n(type:feature)"]
     UI["ui\n(type:ui)"]
     STATE["state\n(type:state)"]
-    APPLICATION["application\n(type:application)"]
     INFRA["infrastructure\n(type:infrastructure)"]
     PORTS["ports\n(type:ports)"]
     DOMAIN["domain\n(type:domain)"]
@@ -33,16 +33,13 @@ flowchart TB
   APP --> SHELL
   SHELL --> FEATURE
   SHELL --> STATE
-  SHELL --> APPLICATION
   SHELL --> INFRA
   SHELL --> PORTS
   FEATURE --> UI
   FEATURE --> STATE
   UI --> DOMAIN
-  STATE --> APPLICATION
   STATE --> DOMAIN
-  APPLICATION --> PORTS
-  APPLICATION --> DOMAIN
+  STATE --> PORTS
   INFRA --> PORTS
   INFRA --> DOMAIN
   PORTS --> DOMAIN
@@ -63,7 +60,6 @@ flowchart TB
   SHELL_TYPE --> FEATURE_TYPE["type:feature"]
   SHELL_TYPE --> UI_TYPE["type:ui"]
   SHELL_TYPE --> STATE_TYPE["type:state"]
-  SHELL_TYPE --> APPLICATION_TYPE["type:application"]
   SHELL_TYPE --> INFRASTRUCTURE_TYPE["type:infrastructure"]
   SHELL_TYPE --> PORTS_TYPE["type:ports"]
   SHELL_TYPE --> DOMAIN_TYPE["type:domain\n(no outward cross-type imports)"]
@@ -71,10 +67,8 @@ flowchart TB
   FEATURE_TYPE --> STATE_TYPE
   FEATURE_TYPE --> DOMAIN_TYPE
   UI_TYPE --> DOMAIN_TYPE
-  STATE_TYPE --> APPLICATION_TYPE
   STATE_TYPE --> DOMAIN_TYPE
-  APPLICATION_TYPE --> PORTS_TYPE
-  APPLICATION_TYPE --> DOMAIN_TYPE
+  STATE_TYPE --> PORTS_TYPE
   INFRASTRUCTURE_TYPE --> PORTS_TYPE
   INFRASTRUCTURE_TYPE --> DOMAIN_TYPE
   PORTS_TYPE --> DOMAIN_TYPE
@@ -82,38 +76,39 @@ flowchart TB
 
 ## State management
 
-NgRx holds the page state in `libs/appointments/state`. It is an outer layer:
-the store knows the use cases, the use cases know nothing about the store.
+NgRx holds both the page state and this screen's loading operation in
+`libs/appointments/state`.
 
 - **Actions** are named after their source, not after the reducer:
   `appointmentsPageActions` for user intents, `appointmentsApiActions` for results.
 - **The reducer** stores `Appointment` values from the domain plus a `status`
   and an `errorMessage`, so loading, empty, and failed states are distinguishable.
-- **Effects** call `GetAppointmentsUseCase` and translate its result into actions.
-  They never reach a port, an HTTP client, or a domain rule directly.
+- **Effects** are the Redux use cases. They call the abstract appointments and
+  clock ports, apply the domain rules, then translate the result into actions.
+  The effect never reaches an HTTP client or concrete adapter.
 - **Selectors** derive what the template needs; components only dispatch and select.
 
 ```mermaid
 sequenceDiagram
   participant C as AppointmentsPageComponent
   participant S as Store
-  participant E as LoadAppointmentsEffects
-  participant U as GetAppointmentsUseCase
+  participant E as loadAppointments effect
   participant P as AppointmentsPort
+  participant K as ClockPort
 
   C->>S: appointmentsPageActions.opened()
   S->>E: action
-  E->>U: execute()
-  U->>P: getAppointments()
-  P-->>U: Appointment[]
-  U-->>E: Appointment[] (domain rules applied)
+  E->>P: getAppointments()
+  P-->>E: Appointment[]
+  E->>K: now()
+  E->>E: apply domain rules
   E->>S: appointmentsApiActions.loadedSuccess()
   S-->>C: selectors emit
 ```
 
-`provideAppointmentsState()` registers the feature slice and its effects, and is
-called from `provideAppointmentsShell()`. That provider is applied on the
-appointments route in
+`provideAppointmentsState()` registers the feature slice. The shell registers
+the functional Effect and binds its ports to adapters. The shell provider is
+applied on the appointments route in
 [`libs/appointments/shell`](libs/appointments/shell/src/lib/appointments.routes.ts),
 so the port bindings and the state slice live in the route's environment
 injector rather than the application root. The root store and the devtools live

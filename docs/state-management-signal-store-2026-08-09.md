@@ -3,7 +3,7 @@
 **Date** · 2026-08-09
 **Question** · Can `libs/appointments/state` move from NgRx Store/Effects to `@ngrx/signals` without giving up dispatch?
 **Verdict** · Yes, through `@ngrx/signals/events`. Not taken now.
-**Scope** · `libs/appointments/state`, `libs/appointments/feature`, `apps/book/src/app.config.ts`, `package.json`. No other library would change.
+**Scope** · `libs/appointments/state`, `libs/appointments/feature`, `libs/appointments/shell`, `apps/book/src/app.config.ts`, `package.json`.
 **Checked against** · `@ngrx/signals@22.0.0-rc.0`, read from the published tarball — not from memory
 
 ---
@@ -27,45 +27,49 @@ signal store.
 
 One-to-one, with nothing left over:
 
-| today                                 | after                                                    |
-| ------------------------------------- | -------------------------------------------------------- |
-| `createActionGroup` / `props`         | a record of `event(type, type<Payload>())` creators      |
-| `createFeature` + `createReducer`     | `signalStore(withState(…), withReducer(on(…)))`          |
-| `createSelector`                      | `withComputed`                                           |
-| `@Injectable` effect + `createEffect` | `withEventHandlers`                                      |
-| `store.dispatch(…)`                   | `injectDispatch(events).opened()`                        |
-| `store.selectSignal(…)`               | `store.appointments()` — the store _is_ signals          |
-| `provideState` + `provideEffects`     | `provideDispatcher()` and the store class                |
-| `provideStore()` in `app.config.ts`   | nothing; the application root stops knowing state exists |
+| today                                  | after                                                    |
+| -------------------------------------- | -------------------------------------------------------- |
+| `createActionGroup` / `props`          | a record of `event(type, type<Payload>())` creators      |
+| `createFeature` + `createReducer`      | `signalStore(withState(…), withReducer(on(…)))`          |
+| `createSelector`                       | `withComputed`                                           |
+| functional `createEffect` in the shell | `withEventHandlers`                                      |
+| `store.dispatch(…)`                    | `injectDispatch(events).opened()`                        |
+| `store.selectSignal(…)`                | `store.appointments()` — the store _is_ signals          |
+| `provideState` + shell effect wiring   | `provideDispatcher()` and the store class                |
+| `provideStore()` in `app.config.ts`    | nothing; the application root stops knowing state exists |
 
 The store, as it would actually be written:
 
 ```ts
-export const AppointmentsStore = signalStore(
-  withState(initialAppointmentsState),
-  withComputed(({ status, lastErrorMessage }) => ({
-    isLoading: computed(() => isLoading(status())),
-    errorMessage: computed(() => visibleErrorMessage(status(), lastErrorMessage())),
-  })),
-  withReducer(
-    on(appointmentsPageEvents.opened, appointmentsPageEvents.refreshed, startedLoading),
-    on(appointmentsApiEvents.loadedSuccess, ({ payload }) => loadedAppointments(payload)),
-    on(appointmentsApiEvents.loadedFailure, ({ payload }) => failedToLoad(payload)),
-  ),
-  withEventHandlers((_store, events = inject(Events), getAppointments = inject(GetAppointmentsUseCase)) => ({
-    loadAppointments: loadAppointments(events.on(appointmentsPageEvents.opened, appointmentsPageEvents.refreshed), getAppointments),
-  })),
-);
+export function createAppointmentsStore(appointmentsPort: AppointmentsPort, clock: ClockPort) {
+  return signalStore(
+    withState(initialAppointmentsState),
+    withComputed(({ status, lastErrorMessage }) => ({
+      isLoading: computed(() => isLoading(status())),
+      errorMessage: computed(() => visibleErrorMessage(status(), lastErrorMessage())),
+    })),
+    withReducer(
+      on(appointmentsPageEvents.opened, appointmentsPageEvents.refreshed, startedLoading),
+      on(appointmentsApiEvents.loadedSuccess, ({ payload }) => loadedAppointments(payload)),
+      on(appointmentsApiEvents.loadedFailure, ({ payload }) => failedToLoad(payload)),
+    ),
+    withEventHandlers((_store, events = inject(Events)) => ({
+      loadAppointments: loadAppointments(events.on(appointmentsPageEvents.opened, appointmentsPageEvents.refreshed), appointmentsPort, clock),
+    })),
+  );
+}
 ```
 
-Every name in that file comes from a file with no framework in it.
+The handler implements the same Redux use case as the classic Effect: it calls
+the two ports and applies the domain rules before emitting a result event. The
+shell would inject its port tokens, call `createAppointmentsStore`, and provide
+the resulting store class; no port token belongs in `state`.
 `startedLoading`, `loadedAppointments` and `failedToLoad` return
 `Partial<AppointmentsState>`; `isLoading` and `visibleErrorMessage` are
 projections over two plain values; `loadAppointments` is
-`(requests$: Observable<unknown>, useCase: GetAppointmentsUseCase) => Observable<AppointmentsApiEvent>`.
-The store file is wiring and contains no branch. That is what keeps the specs
-framework-free, and it is the whole reason this shape was chosen over the
-idiomatic one that inlines the reducers and the effect.
+`(requests$: Observable<unknown>, appointmentsPort: AppointmentsPort, clock: ClockPort) => Observable<AppointmentsApiEvent>`.
+The store file contains the Redux operation and the rule coordination, so its
+specs remain free of Angular TestBed but are intentionally Redux-oriented.
 
 Two behaviours of the plugin are load-bearing and not obvious from reading it:
 
@@ -128,13 +132,13 @@ could reach this store.
 
 ## What the boundaries say
 
-Nothing has to move. `type:state` may depend on `type:domain` and
-`type:application` and carries no `bannedExternalImports`, so `@ngrx/signals` is
-legal there exactly as `@ngrx/store` is. The three
-`bannedExternalImports: ['@angular/*', '@ngrx/*']` entries on `domain`, `ports`
-and `application` keep working unchanged — `@ngrx/signals` matches `@ngrx/*`. The
-only new external import outside `state` would be `@ngrx/signals/events` in
-`feature`, for `injectDispatch`, where `@ngrx/store` is imported today.
+Nothing has to move. `type:state` may depend on `type:domain` and `type:ports`
+and carries no `bannedExternalImports`, so `@ngrx/signals` is legal there exactly
+as `@ngrx/store` is. The `bannedExternalImports: ['@angular/*', '@ngrx/*']`
+entries on `domain` and `ports` keep working unchanged — `@ngrx/signals` matches
+`@ngrx/*`. The only new external import outside `state` would be
+`@ngrx/signals/events` in `feature`, for `injectDispatch`, where `@ngrx/store` is
+imported today.
 
 Dependencies: three packages out (`@ngrx/store`, `@ngrx/effects`,
 `@ngrx/store-devtools`), one in. `@ngrx/signals@22.0.0-rc.0` peers only
@@ -155,11 +159,11 @@ is ceremony around calling a pure function, and extracting `isLoading` and
 `visibleErrorMessage` deletes the wrapper.
 
 `load-appointments.effects.spec.ts` survives nearly intact.
-`new LoadAppointmentsEffects(new Actions(subject), useCase)` becomes
-`loadAppointments(subject, useCase)` — still a `Subject`, still `firstValueFrom`,
-still no `TestBed`. The structural-fake trap is untouched: the port fakes stay
-compile-checked, so `npx nx run-many -t typecheck` still catches a renamed port
-method.
+`loadAppointments(new Actions(subject), appointmentsPort, clock)` already tests
+the current Redux operation with a `Subject` and `firstValueFrom`, without
+`TestBed`. The Signal Store handler can exercise the same function. The
+structural-fake trap is untouched: the port fakes stay compile-checked, so
+`npx nx run-many -t typecheck` still catches a renamed port method.
 
 `appointments.reducer.spec.ts` keeps every assertion but tests the updaters
 instead of a reducer, and the "keeps the current appointments visible while
