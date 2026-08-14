@@ -34,7 +34,6 @@ export default [
                 'type:feature',
                 'type:ui',
                 'type:state',
-                'type:application',
                 'type:infrastructure',
                 'type:ports',
                 'type:domain',
@@ -54,12 +53,7 @@ export default [
             },
             {
               sourceTag: 'type:state',
-              onlyDependOnLibsWithTags: ['type:domain', 'type:application'],
-            },
-            {
-              sourceTag: 'type:application',
               onlyDependOnLibsWithTags: ['type:domain', 'type:ports'],
-              bannedExternalImports: ['@angular/*', '@ngrx/*'],
             },
             {
               sourceTag: 'type:infrastructure',

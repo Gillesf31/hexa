@@ -3,12 +3,12 @@ import { Actions } from '@ngrx/effects';
 import { firstValueFrom, of, Subject, throwError } from 'rxjs';
 import type { Action } from '@ngrx/store';
 import type { Appointment, ListedAppointment } from '@hexa/appointments-domain';
-import { GetAppointmentsUseCase } from '@hexa/appointments-application';
+import type { AppointmentsPort, ClockPort } from '@hexa/appointments-ports';
 import {
   appointmentsApiActions,
   appointmentsPageActions,
 } from './appointments.actions';
-import { LoadAppointmentsEffects } from './load-appointments.effects';
+import { loadAppointments } from './load-appointments.effects';
 
 const now = new Date(2026, 6, 31);
 
@@ -34,39 +34,33 @@ const listedFutureAppointment: ListedAppointment = {
   startingSoon: false,
 };
 
-function createEffects(getAppointments: GetAppointmentsUseCase) {
+function createEffects(
+  appointmentsPort: AppointmentsPort,
+  clock: ClockPort = { now: () => now },
+) {
   const dispatched = new Subject<Action>();
 
   return {
     dispatched,
-    effects: new LoadAppointmentsEffects(
-      new Actions(dispatched),
-      getAppointments,
-    ),
+    effect: loadAppointments(new Actions(dispatched), appointmentsPort, clock),
   };
 }
 
-function createUseCase(appointments: Appointment[]) {
-  return new GetAppointmentsUseCase(
-    { getAppointments: () => of(appointments) },
-    { now: () => now },
-  );
+function appointmentsPort(appointments: Appointment[]): AppointmentsPort {
+  return { getAppointments: () => of(appointments) };
 }
 
-function createFailingUseCase(error: unknown) {
-  return new GetAppointmentsUseCase(
-    { getAppointments: () => throwError(() => error) },
-    { now: () => now },
-  );
+function failingAppointmentsPort(error: unknown): AppointmentsPort {
+  return { getAppointments: () => throwError(() => error) };
 }
 
-describe('LoadAppointmentsEffects', () => {
+describe('loadAppointments', () => {
   it('emits the appointments kept by the use case when the page is opened', async () => {
-    const { dispatched, effects } = createEffects(
-      createUseCase([pastAppointment, futureAppointment]),
+    const { dispatched, effect } = createEffects(
+      appointmentsPort([pastAppointment, futureAppointment]),
     );
 
-    const emitted = firstValueFrom(effects.loadAppointments$);
+    const emitted = firstValueFrom(effect);
     dispatched.next(appointmentsPageActions.opened());
 
     expect(await emitted).toEqual(
@@ -77,11 +71,11 @@ describe('LoadAppointmentsEffects', () => {
   });
 
   it('emits the appointments again when the page is refreshed', async () => {
-    const { dispatched, effects } = createEffects(
-      createUseCase([futureAppointment]),
+    const { dispatched, effect } = createEffects(
+      appointmentsPort([futureAppointment]),
     );
 
-    const emitted = firstValueFrom(effects.loadAppointments$);
+    const emitted = firstValueFrom(effect);
     dispatched.next(appointmentsPageActions.refreshed());
 
     expect(await emitted).toEqual(
@@ -91,12 +85,25 @@ describe('LoadAppointmentsEffects', () => {
     );
   });
 
-  it('emits a failure carrying the error message when loading fails', async () => {
-    const { dispatched, effects } = createEffects(
-      createFailingUseCase(new Error('API unreachable')),
+  it('emits an empty list when every appointment is in the past', async () => {
+    const { dispatched, effect } = createEffects(
+      appointmentsPort([pastAppointment]),
     );
 
-    const emitted = firstValueFrom(effects.loadAppointments$);
+    const emitted = firstValueFrom(effect);
+    dispatched.next(appointmentsPageActions.opened());
+
+    expect(await emitted).toEqual(
+      appointmentsApiActions.loadedSuccess({ appointments: [] }),
+    );
+  });
+
+  it('emits a failure carrying the error message when loading fails', async () => {
+    const { dispatched, effect } = createEffects(
+      failingAppointmentsPort(new Error('API unreachable')),
+    );
+
+    const emitted = firstValueFrom(effect);
     dispatched.next(appointmentsPageActions.opened());
 
     expect(await emitted).toEqual(
@@ -105,9 +112,11 @@ describe('LoadAppointmentsEffects', () => {
   });
 
   it('emits a default failure message when the error is not an Error', async () => {
-    const { dispatched, effects } = createEffects(createFailingUseCase('boom'));
+    const { dispatched, effect } = createEffects(
+      failingAppointmentsPort('boom'),
+    );
 
-    const emitted = firstValueFrom(effects.loadAppointments$);
+    const emitted = firstValueFrom(effect);
     dispatched.next(appointmentsPageActions.opened());
 
     expect(await emitted).toEqual(
@@ -119,19 +128,15 @@ describe('LoadAppointmentsEffects', () => {
 
   it('keeps loading after a failure', async () => {
     let attempt = 0;
-    const useCase = new GetAppointmentsUseCase(
-      {
-        getAppointments: () =>
-          attempt++ === 0
-            ? throwError(() => new Error('boom'))
-            : of([futureAppointment]),
-      },
-      { now: () => now },
-    );
-    const { dispatched, effects } = createEffects(useCase);
+    const { dispatched, effect } = createEffects({
+      getAppointments: () =>
+        attempt++ === 0
+          ? throwError(() => new Error('boom'))
+          : of([futureAppointment]),
+    });
 
     const emitted: Action[] = [];
-    effects.loadAppointments$.subscribe((action) => emitted.push(action));
+    effect.subscribe((action) => emitted.push(action));
     dispatched.next(appointmentsPageActions.opened());
     dispatched.next(appointmentsPageActions.refreshed());
 
@@ -141,5 +146,70 @@ describe('LoadAppointmentsEffects', () => {
         appointments: [listedFutureAppointment],
       }),
     ]);
+  });
+
+  it('keeps today and future appointments, then marks the imminent ones', async () => {
+    const todayAppointment: Appointment = {
+      id: '3',
+      customerName: 'Today',
+      startsAt: new Date(2026, 6, 31, 10, 0),
+      durationMinutes: 45,
+    };
+    const blankNameAppointment: Appointment = {
+      id: '4',
+      customerName: '   ',
+      startsAt: new Date(2026, 7, 5, 14, 0),
+      durationMinutes: 30,
+    };
+    const { dispatched, effect } = createEffects(
+      appointmentsPort([
+        pastAppointment,
+        todayAppointment,
+        futureAppointment,
+        blankNameAppointment,
+      ]),
+      { now: () => new Date(2026, 6, 31, 9, 30) },
+    );
+
+    const emitted = firstValueFrom(effect);
+    dispatched.next(appointmentsPageActions.opened());
+
+    expect(await emitted).toEqual(
+      appointmentsApiActions.loadedSuccess({
+        appointments: [
+          { ...todayAppointment, startingSoon: true },
+          listedFutureAppointment,
+        ],
+      }),
+    );
+  });
+
+  it('judges the whole list against one clock reading', async () => {
+    let reading = 0;
+    const imminentAppointment: Appointment = {
+      id: '4',
+      customerName: 'Imminent',
+      startsAt: new Date(2026, 6, 31, 9, 45),
+      durationMinutes: 30,
+    };
+    const { dispatched, effect } = createEffects(
+      appointmentsPort([imminentAppointment]),
+      {
+        now: () =>
+          [new Date(2026, 6, 31, 9, 0), new Date(2026, 6, 31, 10, 30)][
+            Math.min(reading++, 1)
+          ],
+      },
+    );
+
+    const emitted = firstValueFrom(effect);
+    dispatched.next(appointmentsPageActions.opened());
+
+    expect(await emitted).toEqual(
+      appointmentsApiActions.loadedSuccess({
+        appointments: [{ ...imminentAppointment, startingSoon: true }],
+      }),
+    );
+    expect(reading).toBe(1);
   });
 });

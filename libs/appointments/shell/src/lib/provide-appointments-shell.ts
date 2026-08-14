@@ -1,14 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, makeEnvironmentProviders } from '@angular/core';
-import { GetAppointmentsUseCase } from '@hexa/appointments-application';
+import { Actions, createEffect, provideEffects } from '@ngrx/effects';
 import {
   HttpAppointmentsAdapter,
   InMemoryAppointmentsAdapter,
   SystemClockAdapter,
 } from '@hexa/appointments-infrastructure';
-import { provideAppointmentsState } from '@hexa/appointments-state';
+import {
+  loadAppointments,
+  provideAppointmentsState,
+} from '@hexa/appointments-state';
 import type { AppointmentsConfig } from './appointments.config';
 import { APPOINTMENTS_PORT, CLOCK_PORT } from './port.tokens';
+
+const appointmentsEffects = {
+  loadAppointments: createEffect(
+    (
+      actions$ = inject(Actions),
+      appointmentsPort = inject(APPOINTMENTS_PORT),
+      clock = inject(CLOCK_PORT),
+    ) => loadAppointments(actions$, appointmentsPort, clock),
+    { functional: true },
+  ),
+};
 
 export function provideAppointmentsShell(config: AppointmentsConfig) {
   return makeEnvironmentProviders([
@@ -27,14 +41,7 @@ export function provideAppointmentsShell(config: AppointmentsConfig) {
                 config.apiBaseUrl,
               ),
     },
-    {
-      provide: GetAppointmentsUseCase,
-      useFactory: () =>
-        new GetAppointmentsUseCase(
-          inject(APPOINTMENTS_PORT),
-          inject(CLOCK_PORT),
-        ),
-    },
     provideAppointmentsState(),
+    provideEffects(appointmentsEffects),
   ]);
 }

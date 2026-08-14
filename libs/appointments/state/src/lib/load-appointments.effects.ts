@@ -1,7 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
-import { GetAppointmentsUseCase } from '@hexa/appointments-application';
+import { Actions, ofType } from '@ngrx/effects';
+import type { Action } from '@ngrx/store';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import {
+  filterAppointmentsWithCustomerName,
+  filterCurrentAndFutureAppointments,
+  isStartingSoon,
+} from '@hexa/appointments-domain';
+import type { ListedAppointment } from '@hexa/appointments-domain';
+import type { AppointmentsPort, ClockPort } from '@hexa/appointments-ports';
 import {
   appointmentsApiActions,
   appointmentsPageActions,
@@ -13,32 +19,42 @@ function toErrorMessage(error: unknown): string {
     : 'Appointments could not be loaded.';
 }
 
-@Injectable()
-export class LoadAppointmentsEffects {
-  readonly loadAppointments$;
+// The Redux use case. Its caller supplies the action stream and the two ports;
+// Angular DI remains in the shell that composes those dependencies.
+export function loadAppointments(
+  actions$: Actions,
+  appointmentsPort: AppointmentsPort,
+  clock: ClockPort,
+): Observable<Action> {
+  return actions$.pipe(
+    ofType(appointmentsPageActions.opened, appointmentsPageActions.refreshed),
+    switchMap(() =>
+      appointmentsPort.getAppointments().pipe(
+        map((appointments): ListedAppointment[] => {
+          // The whole list must be judged at one instant. A second clock
+          // reading could disagree after an appointment starts or midnight
+          // passes while the list is being prepared.
+          const now = clock.now();
+          const displayed = filterAppointmentsWithCustomerName(
+            filterCurrentAndFutureAppointments(appointments, now),
+          );
 
-  constructor(actions$: Actions, getAppointments: GetAppointmentsUseCase) {
-    this.loadAppointments$ = createEffect(() =>
-      actions$.pipe(
-        ofType(
-          appointmentsPageActions.opened,
-          appointmentsPageActions.refreshed,
+          return displayed.map((appointment) => ({
+            ...appointment,
+            startingSoon: isStartingSoon(appointment, now),
+          }));
+        }),
+        map((appointments) =>
+          appointmentsApiActions.loadedSuccess({ appointments }),
         ),
-        switchMap(() =>
-          getAppointments.execute().pipe(
-            map((appointments) =>
-              appointmentsApiActions.loadedSuccess({ appointments }),
-            ),
-            catchError((error: unknown) =>
-              of(
-                appointmentsApiActions.loadedFailure({
-                  message: toErrorMessage(error),
-                }),
-              ),
-            ),
+        catchError((error: unknown) =>
+          of(
+            appointmentsApiActions.loadedFailure({
+              message: toErrorMessage(error),
+            }),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

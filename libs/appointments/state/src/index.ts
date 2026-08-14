@@ -14,5 +14,5 @@ export {
   selectAppointmentsErrorMessage,
   selectIsLoadingAppointments,
 } from './lib/appointments.selectors';
-export { LoadAppointmentsEffects } from './lib/load-appointments.effects';
+export { loadAppointments } from './lib/load-appointments.effects';
 export { provideAppointmentsState } from './lib/provide-appointments-state';
