@@ -1,5 +1,10 @@
-<!doctype html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Spy example</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spy example</title>
+<style>
 /* cspell:disable-file */
 /* webkit printing magic: print all background colors */
 html {
@@ -25,7 +30,7 @@ body {
 
 body {
 	line-height: 1.5;
-	white-space: pre-wrap;
+	white-space: normal;
 }
 
 a,
@@ -119,7 +124,7 @@ summary {
 /*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
- * ::marker (▼), so the triangle and the title appear on separate lines.
+ * ::marker (&#9660;), so the triangle and the title appear on separate lines.
  */
 summary h1,
 summary h2,
@@ -362,7 +367,11 @@ ol > li {
 }
 
 .page-description {
-	margin-bottom: 2em;
+	margin: 0 0 0.75rem;
+}
+
+.page-description:empty {
+	display: none;
 }
 
 .simple-table {
@@ -792,9 +801,18 @@ blockquote.quote-large {
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
 }
 	
-</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="spy-example" class="page sans"><header><h1 class="page-title" dir="auto">Spy example</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><aside class="callout block-color-gray_background">
-      A spy observes interactions. It does not decide in advance which interactions are allowed; that is the role of a mock.
-    </aside><h2 class="" dir="auto">Example: recording a notification</h2><p class="" dir="auto">When a booking is confirmed, the service sends a notification. The test wants to verify that observable side effect without sending a real email.</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface Notifier {
+</style>
+<style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style>
+</head>
+<body>
+<article id="spy-example" class="page sans"><header><h1 class="page-title" dir="auto">Spy example</h1>
+<p class="page-description" dir="auto"></p></header><div class="page-body">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><aside class="callout block-color-gray_background">
+      A spy records interactions for later inspection. A mock makes an exact interaction part of the required outcome.
+    </aside><h2 class="" dir="auto">Example: recording a notification</h2>
+<p class="" dir="auto">When a booking is confirmed, the service sends a notification. The test wants to verify that observable side effect without sending a real email.</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface Notifier {
   send(message: string): void;
 }
 
@@ -804,18 +822,36 @@ class BookingService {
   confirm(bookingId: string): void {
     this.notifier.send(`Booking ${bookingId} confirmed`);
   }
-}</code></pre><p class="" dir="auto">The spy implements the dependency and preserves every message it receives:</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class NotifierSpy implements Notifier {
+}</code></pre>
+<p class="" dir="auto">The spy implements the dependency and preserves every message it receives:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class NotifierSpy implements Notifier {
   readonly messages: string[] = [];
 
   send(message: string): void {
     this.messages.push(message);
   }
-}</code></pre><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">const notifier = new NotifierSpy();
-const service = new BookingService(notifier);
+}</code></pre>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">import { expect, it } from 'vitest';
 
-service.confirm('booking-42');
+it('records the confirmation notification', () =&gt; {
+  const notifier = new NotifierSpy();
+  const service = new BookingService(notifier);
 
-// notifier.messages contains 'Booking booking-42 confirmed'.</code></pre><h2 class="" dir="auto">Why this is a spy</h2><ul class="bulleted-list" dir="auto"><li style="list-style-type:disc">The service runs before the interaction is examined.</li><li style="list-style-type:disc">The double records messages and makes that history available to the test.</li><li style="list-style-type:disc">The assertion happens afterward, using data the spy collected.</li><li style="list-style-type:disc">The spy does not fail merely because <code>send</code> is called differently or more often.</li></ul><hr dir="auto"/><h2 class="" dir="auto">Inspecting a specific interaction</h2><p class="" dir="auto">A spy can retain structured call data when the details matter:</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class AuditSpy {
+  service.confirm('booking-42');
+
+  expect(notifier.messages).toContain('Booking booking-42 confirmed');
+});</code></pre>
+<h2 class="" dir="auto">Why this is a spy</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">The service runs before the interaction is examined.</li>
+<li style="list-style-type:disc">The double records messages and makes that history available to the test.</li>
+<li style="list-style-type:disc">The assertion happens afterward, using data the spy collected.</li>
+<li style="list-style-type:disc">The spy does not fail merely because <code>send</code> is called differently or more often.</li>
+</ul>
+<hr dir="auto">
+<h2 class="" dir="auto">Inspecting a specific interaction</h2>
+<p class="" dir="auto">A spy can retain structured call data when the details matter:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class AuditSpy {
   readonly events: Array&lt;{ type: string; bookingId: string }&gt; = [];
 
   record(type: string, bookingId: string): void {
@@ -824,4 +860,47 @@ service.confirm('booking-42');
 }
 
 // audit.events contains:
-// { type: 'booking-confirmed', bookingId: 'booking-42' }</code></pre><p class="" dir="auto">The observation stays explicit in the test. The production behavior remains the focus: confirming a booking should produce the expected notification or audit event.</p><hr dir="auto"/><h2 class="" dir="auto">What would change the nature of the double?</h2><table class="simple-table" dir="ltr"><thead><tr><th>Change</th><th>The double becomes</th><th>Why</th></tr></thead><tbody><tr><td><code>send</code> does nothing and the test never reads its calls.</td><td>Dummy</td><td>It only enables the code to run.</td></tr><tr><td><code>send</code> returns a fixed delivery result to choose a path.</td><td>Stub</td><td>It controls input to the system under test.</td></tr><tr><td>The double throws if the expected message is not sent exactly once.</td><td>Mock</td><td>It enforces an interaction contract.</td></tr><tr><td>It behaves as a simplified, in-memory notification system.</td><td>Fake</td><td>It provides a working alternative implementation.</td></tr></tbody></table><h2 class="" dir="auto">Key distinction</h2><blockquote class="" dir="auto"><strong>A spy lets the test observe collaboration after execution; a mock predefines and enforces collaboration expectations.</strong></blockquote><p class="" dir="auto">Prefer asserting externally visible results when possible. Use a spy when the interaction itself is meaningful behavior, such as a notification, audit record, or command sent to another component.</p><figure class="link-to-page"><a href="TestDoubles.html">← Back to Test doubles</a></figure><p class="" dir="auto">Related: <a href="Fake.html">Fake example</a> · <a href="Stub.html">Stub example</a> · <a href="Dummy.html">Dummy example</a></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+// { type: 'booking-confirmed', bookingId: 'booking-42' }</code></pre>
+<p class="" dir="auto">The observation stays explicit in the test. The production behavior remains the focus: confirming a booking should produce the expected notification or audit event.</p>
+<p class="" dir="auto">A library helper such as <code>vi.fn()</code> also plays a spy role when the test merely inspects its recorded history afterward. The API name does not determine the role.</p>
+<hr dir="auto">
+<h2 class="" dir="auto">What would change the nature of the double?</h2>
+<table class="simple-table" dir="ltr">
+<thead><tr>
+<th>Change</th>
+<th>The double becomes</th>
+<th>Why</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+The constructor requires a notifier, but the selected path never calls <code>send</code>.</td>
+<td>Dummy</td>
+<td>It only fills an unused required slot.</td>
+</tr>
+<tr>
+<td>
+The collaborator returns a fixed answer that the service uses to choose a path.</td>
+<td>Stub</td>
+<td>It controls input to the system under test.</td>
+</tr>
+<tr>
+<td>The double throws if the expected message is not sent exactly once.</td>
+<td>Mock</td>
+<td>It enforces an interaction contract.</td>
+</tr>
+<tr>
+<td>It behaves as a simplified, in-memory notification system.</td>
+<td>Fake</td>
+<td>It provides a working alternative implementation.</td>
+</tr>
+</tbody>
+</table>
+<h2 class="" dir="auto">Key distinction</h2>
+<blockquote class="" dir="auto"><strong>A spy exposes collaboration history; a mock verifies a required collaboration protocol.</strong></blockquote>
+<p class="" dir="auto">Prefer asserting externally visible results when possible. Use a spy when the interaction itself is meaningful behavior, such as a notification, audit record, or command sent to another component.</p>
+<figure class="link-to-page"><a href="TestDoubles.html">&larr; Back to Test doubles</a></figure>
+<p class="" dir="auto">Related: <a href="Dummy.html">Dummy</a> &middot; <a href="Stub.html">Stub</a> &middot; <a href="Mock.html">Mock</a> &middot; <a href="Fake.html">Fake</a></p>
+</div></article><span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+</html>

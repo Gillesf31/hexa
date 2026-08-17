@@ -1,5 +1,10 @@
-<!doctype html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Stub example</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stub example</title>
+<style>
 /* cspell:disable-file */
 /* webkit printing magic: print all background colors */
 html {
@@ -25,7 +30,7 @@ body {
 
 body {
 	line-height: 1.5;
-	white-space: pre-wrap;
+	white-space: normal;
 }
 
 a,
@@ -119,7 +124,7 @@ summary {
 /*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
- * ::marker (▼), so the triangle and the title appear on separate lines.
+ * ::marker (&#9660;), so the triangle and the title appear on separate lines.
  */
 summary h1,
 summary h2,
@@ -362,7 +367,11 @@ ol > li {
 }
 
 .page-description {
-	margin-bottom: 2em;
+	margin: 0 0 0.75rem;
+}
+
+.page-description:empty {
+	display: none;
 }
 
 .simple-table {
@@ -792,9 +801,18 @@ blockquote.quote-large {
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
 }
 	
-</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="stub-example" class="page sans"><header><h1 class="page-title" dir="auto">Stub example</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><aside class="callout block-color-gray_background">
+</style>
+<style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style>
+</head>
+<body>
+<article id="stub-example" class="page sans"><header><h1 class="page-title" dir="auto">Stub example</h1>
+<p class="page-description" dir="auto"></p></header><div class="page-body">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><aside class="callout block-color-gray_background">
       A stub answers questions. It does not record calls for later assertions or enforce an interaction contract.
-    </aside><h2 class="" dir="auto">Example: controlling eligibility</h2><p class="" dir="auto">The production service asks an eligibility gateway whether a customer can receive a discount. The test needs a predictable answer without calling the real gateway.</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface EligibilityGateway {
+    </aside><h2 class="" dir="auto">Example: controlling eligibility</h2>
+<p class="" dir="auto">The production service asks an eligibility gateway whether a customer can receive a discount. The test needs a predictable answer without calling the real gateway.</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface EligibilityGateway {
   isEligible(customerId: string): boolean;
 }
 
@@ -808,19 +826,73 @@ class DiscountService {
 
     return amount * 0.9;
   }
-}</code></pre><p class="" dir="auto">This test uses a stub that always supplies the answer needed for the scenario:</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">const eligibilityStub: EligibilityGateway = {
-  isEligible: () =&gt; true
-};
+}</code></pre>
+<p class="" dir="auto">This test uses a stub that always supplies the answer needed for the scenario:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">import { expect, it } from 'vitest';
 
-const service = new DiscountService(eligibilityStub);
-const result = service.applyDiscount('customer-42', 100);
+it('applies the discount to an eligible customer', () =&gt; {
+  const eligibilityStub: EligibilityGateway = {
+    isEligible: () =&gt; true
+  };
+  const service = new DiscountService(eligibilityStub);
 
-// The result is 90.</code></pre><h2 class="" dir="auto">Why this is a stub</h2><ul class="bulleted-list" dir="auto"><li style="list-style-type:disc">The double returns a predefined value: <code>true</code>.</li><li style="list-style-type:disc">That value controls the service's execution path.</li><li style="list-style-type:disc">The test asserts the service's result, not the gateway interaction.</li><li style="list-style-type:disc">The implementation is passive: it has no real eligibility logic and records nothing.</li></ul><hr dir="auto"/><h2 class="" dir="auto">Another scenario, another answer</h2><p class="" dir="auto">Use a different stubbed answer to exercise the ineligible path:</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">const eligibilityStub: EligibilityGateway = {
-  isEligible: () =&gt; false
-};
+  expect(service.applyDiscount('customer-42', 100)).toBe(90);
+});</code></pre>
+<h2 class="" dir="auto">Why this is a stub</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">The double returns a predefined value: <code>true</code>.</li>
+<li style="list-style-type:disc">That value controls the service's execution path.</li>
+<li style="list-style-type:disc">The test asserts the service's result, not the gateway interaction.</li>
+<li style="list-style-type:disc">The implementation is passive: it has no real eligibility logic and records nothing.</li>
+</ul>
+<hr dir="auto">
+<h2 class="" dir="auto">Another scenario, another answer</h2>
+<p class="" dir="auto">Use a different stubbed answer to exercise the ineligible path:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">it('keeps the price for an ineligible customer', () =&gt; {
+  const eligibilityStub: EligibilityGateway = {
+    isEligible: () =&gt; false
+  };
+  const service = new DiscountService(eligibilityStub);
 
-const service = new DiscountService(eligibilityStub);
-const result = service.applyDiscount('customer-7', 100);
-
-// The result is 100.
-});</code></pre><p class="" dir="auto">The test is deterministic because it owns the gateway's answer. It does not depend on network availability, remote data, or the rules maintained by the real eligibility service.</p><hr dir="auto"/><h2 class="" dir="auto">What would change the nature of the double?</h2><table class="simple-table" dir="ltr"><thead><tr><th>Change</th><th>The double becomes</th><th>Why</th></tr></thead><tbody><tr><td>The return value is ignored and exists only to satisfy the constructor.</td><td>Dummy</td><td>It is no longer relevant to the tested behavior.</td></tr><tr><td>It stores each customer ID so the test can inspect it after execution.</td><td>Spy</td><td>It observes interactions.</td></tr><tr><td>The test requires <code>isEligible</code> to be called once with a specific ID.</td><td>Mock</td><td>It enforces an interaction expectation.</td></tr><tr><td>It implements real, simplified eligibility rules in memory.</td><td>Fake</td><td>It contains a working alternative implementation.</td></tr></tbody></table><h2 class="" dir="auto">Key distinction</h2><blockquote class="" dir="auto"><strong>A stub supplies state to the system under test; it does not verify collaboration.</strong></blockquote><p class="" dir="auto">If you find yourself asserting how many times the stub was called or which arguments it received, consider whether a spy or mock better expresses the test's intent.</p><figure class="link-to-page"><a href="TestDoubles.html">← Back to Test doubles</a></figure><p class="" dir="auto">Related: <a href="Dummy.html">Dummy example</a></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+  expect(service.applyDiscount('customer-7', 100)).toBe(100);
+});</code></pre>
+<p class="" dir="auto">The test is deterministic because it owns the gateway's answer. It does not depend on network availability, remote data, or the rules maintained by the real eligibility service.</p>
+<hr dir="auto">
+<h2 class="" dir="auto">What would change the nature of the double?</h2>
+<table class="simple-table" dir="ltr">
+<thead><tr>
+<th>Change</th>
+<th>The double becomes</th>
+<th>Why</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>The dependency is required, but the selected execution path never calls it.</td>
+<td>Dummy</td>
+<td>It only fills an unused required slot.</td>
+</tr>
+<tr>
+<td>It stores each customer ID so the test can inspect it after execution.</td>
+<td>Spy</td>
+<td>It observes interactions.</td>
+</tr>
+<tr>
+<td>The test requires <code>isEligible</code> to be called once with a specific ID.</td>
+<td>Mock</td>
+<td>It enforces an interaction expectation.</td>
+</tr>
+<tr>
+<td>It implements real, simplified eligibility rules in memory.</td>
+<td>Fake</td>
+<td>It contains a working alternative implementation.</td>
+</tr>
+</tbody>
+</table>
+<h2 class="" dir="auto">Key distinction</h2>
+<blockquote class="" dir="auto"><strong>A stub supplies state to the system under test; it does not verify collaboration.</strong></blockquote>
+<p class="" dir="auto">Fixed clocks, deterministic random values, and generated IDs are also common stubs. If you assert how many times a stub was called or which arguments it received, consider whether a spy or mock better expresses the test&rsquo;s intent.</p>
+<figure class="link-to-page"><a href="TestDoubles.html">&larr; Back to Test doubles</a></figure>
+<p class="" dir="auto">Related: <a href="Dummy.html">Dummy</a> &middot; <a href="Spy.html">Spy</a> &middot; <a href="Mock.html">Mock</a> &middot; <a href="Fake.html">Fake</a></p>
+</div></article><span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+</html>

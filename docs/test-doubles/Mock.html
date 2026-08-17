@@ -1,5 +1,10 @@
-<!doctype html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Mock example</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock example</title>
+<style>
 /* cspell:disable-file */
 /* webkit printing magic: print all background colors */
 html {
@@ -25,7 +30,7 @@ body {
 
 body {
 	line-height: 1.5;
-	white-space: pre-wrap;
+	white-space: normal;
 }
 
 a,
@@ -119,7 +124,7 @@ summary {
 /*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
- * ::marker (▼), so the triangle and the title appear on separate lines.
+ * ::marker (&#9660;), so the triangle and the title appear on separate lines.
  */
 summary h1,
 summary h2,
@@ -362,7 +367,11 @@ ol > li {
 }
 
 .page-description {
-	margin-bottom: 2em;
+	margin: 0 0 0.75rem;
+}
+
+.page-description:empty {
+	display: none;
 }
 
 .simple-table {
@@ -792,7 +801,16 @@ blockquote.quote-large {
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
 }
 	
-</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="mock-example" class="page sans"><header><h1 class="page-title" dir="auto">Mock example</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><aside class="callout block-color-gray_background">A mock is a deliberately narrow tool. Use one only when a collaboration is itself an important rule of the system.</aside><h2 class="" dir="auto">Example: a required domain event</h2><p class="" dir="auto">After confirming a booking, the service must tell the rest of the system that the booking was confirmed. The event is part of the contract at this boundary.</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface EventPublisher {
+</style>
+<style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style>
+</head>
+<body>
+<article id="mock-example" class="page sans"><header><h1 class="page-title" dir="auto">Mock example</h1>
+<p class="page-description" dir="auto"></p></header><div class="page-body">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><aside class="callout block-color-gray_background">A mock is a deliberately narrow tool. Use one only when a collaboration is itself an important rule of the system.</aside><h2 class="" dir="auto">Example: a required domain event</h2>
+<p class="" dir="auto">After confirming a booking, the service must tell the rest of the system that the booking was confirmed. The event is part of the contract at this boundary.</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface EventPublisher {
   publish(event: { type: string; bookingId: string }): void;
 }
 
@@ -809,10 +827,45 @@ class BookingService {
       bookingId
     });
   }
-}</code></pre><p class="" dir="auto">The framework-independent specification is:</p><pre class="code code-wrap"><code style="white-space:pre-wrap;word-break:break-all">Given the publisher expects exactly:
-  { type: 'booking-confirmed', bookingId: 'booking-42' }
+}</code></pre>
+<p class="" dir="auto">This Vitest test makes the exact interaction part of the expected outcome:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">import { expect, it, vi } from 'vitest';
 
-When BookingService.confirm('booking-42') runs
+it('publishes one booking-confirmed event', () =&gt; {
+  const publish = vi.fn&lt;EventPublisher['publish']&gt;();
+  const publisher: EventPublisher = { publish };
+  const service = new BookingService(publisher);
 
-Then the expectation is satisfied
-  — and the test fails if the event is missing, duplicated, or different</code></pre><p class="" dir="auto">The point is not the object used in the test. The point is that publishing this event is a requirement, just like returning the correct price would be.</p><h2 class="" dir="auto">When to use a mock</h2><ul class="bulleted-list" dir="auto"><li style="list-style-type:disc">A command to another system is a meaningful contract.</li><li style="list-style-type:disc">An extra, missing, or malformed call would be a real defect.</li><li style="list-style-type:disc">The behavior cannot be expressed more clearly through a result or state change.</li></ul><h2 class="" dir="auto">When not to use one</h2><ul class="bulleted-list" dir="auto"><li style="list-style-type:disc">To provide data or choose a return value — use a <strong>Stub</strong>.</li><li style="list-style-type:disc">To observe a notification or audit event afterward — use a <strong>Spy</strong>.</li><li style="list-style-type:disc">To replace a database, queue, or cache with useful behavior — use a <strong>Fake</strong>.</li><li style="list-style-type:disc">Just because a constructor needs a dependency — use a <strong>Dummy</strong>.</li></ul><hr dir="auto"/><h2 class="" dir="auto">The maintenance trade-off</h2><p class="" dir="auto">Your concern is the right one: a mock can couple a test to how code is arranged. Do not write or maintain a complex fake implementation merely to make a mock work. If the collaboration is not a genuine contract, prefer a result-based test or an integration test instead.</p><p class="" dir="auto">In practice, mocks should be rare and small. They are most useful at a few stable boundaries, such as a message bus, payment command, or irreversible external action.</p><h2 class="" dir="auto">Key distinction</h2><blockquote class="" dir="auto"><strong>A mock verifies a required collaboration. A stub supplies an answer; a spy records what happened.</strong></blockquote><figure class="link-to-page"><a href="TestDoubles.html">← Back to Test doubles</a></figure><p class="" dir="auto">Related: <a href="Spy.html">Spy example</a> · <a href="Fake.html">Fake example</a> · <a href="Stub.html">Stub example</a> · <a href="Dummy.html">Dummy example</a></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+  service.confirm('booking-42');
+
+  expect(publish).toHaveBeenCalledTimes(1);
+  expect(publish).toHaveBeenCalledWith({
+    type: 'booking-confirmed',
+    bookingId: 'booking-42'
+  });
+});</code></pre>
+<p class="" dir="auto">The test fails if the event is missing, duplicated, or different. The point is not that <code>vi.fn()</code> created the helper: the exact publishing protocol is the requirement, so this use is mock-style.</p>
+<h2 class="" dir="auto">When to use a mock</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">A command to another system is a meaningful contract.</li>
+<li style="list-style-type:disc">An extra, missing, or malformed call would be a real defect.</li>
+<li style="list-style-type:disc">The behavior cannot be expressed more clearly through a result or state change.</li>
+</ul>
+<h2 class="" dir="auto">When not to use one</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">To provide data or choose a return value &mdash; use a <strong>Stub</strong>.</li>
+<li style="list-style-type:disc">To observe a notification or audit event afterward &mdash; use a <strong>Spy</strong>.</li>
+<li style="list-style-type:disc">To replace a database, queue, or cache with useful behavior &mdash; use a <strong>Fake</strong>.</li>
+<li style="list-style-type:disc">If a constructor requires a dependency and the selected path never uses it &mdash; use a <strong>Dummy</strong>.</li>
+</ul>
+<hr dir="auto">
+<h2 class="" dir="auto">The maintenance trade-off</h2>
+<p class="" dir="auto">A mock can couple a test to how code is arranged. If the collaboration is not a genuine contract, prefer a result-based test, a stateful fake, or an integration test instead.</p>
+<p class="" dir="auto">In practice, mocks should be rare and small. Prefer a hand-written fake for ordinary repository or gateway behavior. A mock is most useful at a stable wire boundary, such as one message-bus publication, payment command, or irreversible external action.</p>
+<h2 class="" dir="auto">Key distinction</h2>
+<blockquote class="" dir="auto"><strong>A mock verifies a required collaboration. A stub supplies an answer; a spy records what happened.</strong></blockquote>
+<figure class="link-to-page"><a href="TestDoubles.html">&larr; Back to Test doubles</a></figure>
+<p class="" dir="auto">Related: <a href="Dummy.html">Dummy</a> &middot; <a href="Stub.html">Stub</a> &middot; <a href="Spy.html">Spy</a> &middot; <a href="Fake.html">Fake</a></p>
+</div></article><span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+</html>

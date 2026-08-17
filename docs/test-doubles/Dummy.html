@@ -1,4 +1,10 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Dummy example</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dummy example</title>
+<style>
 /* cspell:disable-file */
 /* webkit printing magic: print all background colors */
 html {
@@ -24,7 +30,7 @@ body {
 
 body {
 	line-height: 1.5;
-	white-space: pre-wrap;
+	white-space: normal;
 }
 
 a,
@@ -118,7 +124,7 @@ summary {
 /*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
- * ::marker (▼), so the triangle and the title appear on separate lines.
+ * ::marker (&#9660;), so the triangle and the title appear on separate lines.
  */
 summary h1,
 summary h2,
@@ -361,7 +367,11 @@ ol > li {
 }
 
 .page-description {
-	margin-bottom: 2em;
+	margin: 0 0 0.75rem;
+}
+
+.page-description:empty {
+	display: none;
 }
 
 .simple-table {
@@ -791,31 +801,77 @@ blockquote.quote-large {
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
 }
 	
-</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="2d0b5f7b-33b4-802a-9762-f3519352afc2" class="page sans"><header><h1 class="page-title" dir="auto">Dummy example</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><pre id="2d0b5f7b-33b4-8095-8838-e6e005992a5a" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">interface Logger {
-  info(message: string): void;
+</style>
+<style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style>
+</head>
+<body>
+<article id="2d0b5f7b-33b4-802a-9762-f3519352afc2" class="page sans"><header><h1 class="page-title" dir="auto">Dummy example</h1>
+<p class="page-description" dir="auto"></p></header><div class="page-body">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<aside class="callout block-color-gray_background">A dummy only fills a required slot. The tested execution path must not read from it or call it.</aside>
+<h2 class="" dir="auto">Example: an unused collaborator</h2>
+<p class="" dir="auto">This validator needs an audit log for rejection, but the behavior under test only checks whether a name is valid.</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">interface AuditLog {
+  record(message: string): void;
 }
 
-class DiscountService {
-  constructor(private readonly logger: Logger) {}
+class TravellerValidator {
+  constructor(private readonly auditLog: AuditLog) {}
 
-  applyDiscount(amount: number): number {
-    if (amount &lt;= 0) {
-      this.logger.info(&#x27;Invalid amount&#x27;);
-      return 0;
-    }
-
-    this.logger.info(&#x27;Discount applied&#x27;);
-    return amount * 0.9;
+  hasValidName(name: string): boolean {
+    return name.trim().length &gt;= 2;
   }
-}</code></pre><p id="2d0b5f7b-33b4-80f6-b312-fa40e529b660" class="" dir="auto">👉 The logger is used in production, but it does not participate in the rule we test.</p><pre id="2d0b5f7b-33b4-806f-b4d3-c8b07be59da3" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">const dummyLogger: Logger = {
-  info: () =&gt; {
-    /* intentionally empty */
+
+  reject(name: string): void {
+    this.auditLog.record(`Rejected traveller: ${name}`);
   }
-};
+}</code></pre>
+<p class="" dir="auto">A fail-loud dummy makes accidental use visible while still implementing the required type:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">import { expect, it } from 'vitest';
 
-const service = new DiscountService(dummyLogger);
+class FailingDummyAuditLog implements AuditLog {
+  record(): never {
+    throw new Error('The dummy audit log must not be called');
+  }
+}
 
-const result = service.applyDiscount(100);
+it('accepts a valid traveller name', () =&gt; {
+  const validator = new TravellerValidator(new FailingDummyAuditLog());
 
-// The result is 90.
-</code></pre><h3 id="2d0b5f7b-33b4-80e0-bc97-d9300acad935" class="" dir="auto"></h3><h3 id="2d0b5f7b-33b4-8089-8866-d4eaf88179f9" class="" dir="auto">Why This Is a <strong>Dummy</strong></h3><ul id="2d0b5f7b-33b4-80da-bc6a-e212db43602c" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>Logger</code> <strong>is executed</strong> at runtime</li></ul><ul id="2d0b5f7b-33b4-80c3-b35f-cacdd90289b6" class="bulleted-list" dir="auto"><li style="list-style-type:disc">But the test:<ul id="2d0b5f7b-33b4-80a4-868c-d2e5eaf5629d" class="bulleted-list" dir="auto"><li style="list-style-type:circle">does not care <em>that</em> it was called</li></ul><ul id="2d0b5f7b-33b4-80c9-9dcc-c0fc1692299a" class="bulleted-list" dir="auto"><li style="list-style-type:circle">does not care <em>how many times</em></li></ul><ul id="2d0b5f7b-33b4-80a0-a1ce-f42661d3b4ae" class="bulleted-list" dir="auto"><li style="list-style-type:circle">does not care <em>with what message</em></li></ul></li></ul><ul id="2d0b5f7b-33b4-8004-a676-ed2198f0e543" class="bulleted-list" dir="auto"><li style="list-style-type:disc">The logger exists <strong>only to let the code run</strong></li></ul><ul id="2d0b5f7b-33b4-8058-a94c-f0cef03151c8" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Removing it would break execution, not behavior</li></ul><hr id="2d0b5f7b-33b4-8092-8ed0-e83afb374382" dir="auto"/><h3 id="2d0b5f7b-33b4-80b2-b1e2-db5fe31ac0b5" class="" dir="auto">What Would Change the Nature of the Double</h3><h3 id="2d0b5f7b-33b4-80c3-8aba-ecc9225d769c" class="" dir="auto">Becomes a <strong>Spy</strong></h3><pre id="2d0b5f7b-33b4-80b0-93b5-cd1c2056a0ef" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">// The test observes the message: &#x27;Discount applied&#x27;.</code></pre><h3 id="2d0b5f7b-33b4-8062-8a31-e775932f34ce" class="" dir="auto">Becomes a <strong>Stub</strong></h3><pre id="2d0b5f7b-33b4-8023-a632-ec781cce5070" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">info:() =&gt; {thrownewError(&#x27;log failed&#x27;); }</code></pre><p id="2d0b5f7b-33b4-8065-9058-e78746105dfb" class="" dir="auto"><strong>(now influencing execution path)</strong></p><h3 id="2d0b5f7b-33b4-80ee-85f1-e6308e2ba4de" class="" dir="auto">Becomes a <strong>Mock (You need to know how many times it’s called</strong></h3><pre id="2d0b5f7b-33b4-80c2-a76b-cdbc8fc73b28" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">// The test requires exactly one call to logger.info.</code></pre><hr id="2d0b5f7b-33b4-800a-81bd-f3d8e06cfa05" dir="auto"/><h3 id="2d0b5f7b-33b4-80ff-aa7a-c109d1607ab4" class="" dir="auto">Key Distinction (This Is the Real Point)</h3><blockquote id="2d0b5f7b-33b4-80a1-ad48-e8c07fb0e336" class="" dir="auto"><strong>A Dummy can be executed</strong><p id="2d0b5f7b-33b4-808f-93a1-ed3e31e8076b" class="" dir="auto"><strong>but must be semantically irrelevant to the test</strong></p></blockquote><p id="2d0b5f7b-33b4-80bd-acaa-f15099be203d" class="" dir="auto">The moment the test <em>observes</em> or <em>relies on</em> the dependency, it stops being a Dummy.</p><hr id="2d0b5f7b-33b4-8020-ad3f-c42b4cb8884f" dir="auto"/><h3 id="2d0b5f7b-33b4-800c-a942-f97aa8f624f7" class="" dir="auto">Mental Model That Actually Holds</h3><ul id="2d0b5f7b-33b4-803f-90ae-f01e819302a3" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Injected</strong> ≠ <strong>Relevant</strong></li></ul><ul id="2d0b5f7b-33b4-80e3-8661-e78103ada280" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Used at runtime</strong> ≠ <strong>Used in the test</strong></li></ul><ul id="2d0b5f7b-33b4-80e7-bb23-c19f29032150" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Dummy exists for execution, not for meaning</strong></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+  expect(validator.hasValidName('Ada')).toBe(true);
+});</code></pre>
+<h2 class="" dir="auto">Why this is a dummy</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">The constructor requires an <code>AuditLog</code>.</li>
+<li style="list-style-type:disc">The <code>hasValidName</code> path never calls it.</li>
+<li style="list-style-type:disc">The test neither configures nor inspects it.</li>
+<li style="list-style-type:disc">The throw is a guard against accidental use, not behavior needed by the scenario.</li>
+</ul>
+<h2 class="" dir="auto">Dummy values</h2>
+<p class="" dir="auto">A dummy can also be an irrelevant value supplied only because a function signature requires it. This does not make ordinary representative data a double: real domain inputs used by the scenario are fixtures.</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">function registerTraveller(
+  name: string,
+  _referralCode: string
+): string {
+  return name.trim();
+}
+
+const dummyReferralCode = 'not-used-on-this-path';
+
+expect(registerTraveller('Ada', dummyReferralCode)).toBe('Ada');</code></pre>
+<h2 class="" dir="auto">When the role changes</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">If the test needs a controlled answer, use a <strong>Stub</strong>.</li>
+<li style="list-style-type:disc">If the test inspects recorded calls afterward, use a <strong>Spy</strong>.</li>
+<li style="list-style-type:disc">If an exact call is the required protocol, use a <strong>Mock</strong>.</li>
+<li style="list-style-type:disc">If the substitute provides simplified working behavior, use a <strong>Fake</strong>.</li>
+</ul>
+<h2 class="" dir="auto">Key distinction</h2>
+<blockquote class="" dir="auto"><strong>A dummy is present but unexercised by the behavior under test.</strong></blockquote>
+<p class="" dir="auto">The moment the selected path reads from or calls the placeholder, it is no longer a dummy for that test.</p>
+<figure class="link-to-page"><a href="TestDoubles.html">&larr; Back to Test doubles</a></figure>
+<p class="" dir="auto">Related: <a href="Stub.html">Stub</a> &middot; <a href="Spy.html">Spy</a> &middot; <a href="Mock.html">Mock</a> &middot; <a href="Fake.html">Fake</a></p>
+</div></article><span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+</html>

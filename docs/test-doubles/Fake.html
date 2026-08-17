@@ -1,5 +1,10 @@
-<!doctype html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Fake example</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fake example</title>
+<style>
 /* cspell:disable-file */
 /* webkit printing magic: print all background colors */
 html {
@@ -25,7 +30,7 @@ body {
 
 body {
 	line-height: 1.5;
-	white-space: pre-wrap;
+	white-space: normal;
 }
 
 a,
@@ -119,7 +124,7 @@ summary {
 /*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
- * ::marker (▼), so the triangle and the title appear on separate lines.
+ * ::marker (&#9660;), so the triangle and the title appear on separate lines.
  */
 summary h1,
 summary h2,
@@ -362,7 +367,11 @@ ol > li {
 }
 
 .page-description {
-	margin-bottom: 2em;
+	margin: 0 0 0.75rem;
+}
+
+.page-description:empty {
+	display: none;
 }
 
 .simple-table {
@@ -792,9 +801,18 @@ blockquote.quote-large {
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
 }
 	
-</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="fake-example" class="page sans"><header><h1 class="page-title" dir="auto">Fake example</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><aside class="callout block-color-gray_background">
+</style>
+<style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style>
+</head>
+<body>
+<article id="fake-example" class="page sans"><header><h1 class="page-title" dir="auto">Fake example</h1>
+<p class="page-description" dir="auto"></p></header><div class="page-body">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><aside class="callout block-color-gray_background">
       A fake has real behavior. Unlike a stub, it does not merely return an answer chosen for one test case.
-    </aside><h2 class="" dir="auto">Example: an in-memory booking repository</h2><p class="" dir="auto">The production application persists bookings through a repository. Tests can use a small in-memory implementation that obeys the same contract without a database.</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">type Booking = {
+    </aside><h2 class="" dir="auto">Example: an in-memory booking repository</h2>
+<p class="" dir="auto">The production application persists bookings through a repository. Tests can use a small in-memory implementation that obeys the same contract without a database.</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">type Booking = {
   id: string;
   trainId: string;
   passengerName: string;
@@ -803,7 +821,9 @@ blockquote.quote-large {
 interface BookingRepository {
   save(booking: Booking): void;
   findById(id: string): Booking | undefined;
-}</code></pre><p class="" dir="auto">The fake implements the repository contract and retains state just as a real repository would:</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class InMemoryBookingRepository implements BookingRepository {
+}</code></pre>
+<p class="" dir="auto">The fake implements the repository contract and retains state just as a real repository would:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class InMemoryBookingRepository implements BookingRepository {
   private readonly bookings = new Map&lt;string, Booking&gt;();
 
   save(booking: Booking): void {
@@ -813,17 +833,11 @@ interface BookingRepository {
   findById(id: string): Booking | undefined {
     return this.bookings.get(id);
   }
-}</code></pre><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">const repository = new InMemoryBookingRepository();
+}</code></pre>
+<p class="" dir="auto">The class plays the Fake role when a service test uses it in place of the production repository:</p>
+<pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">import { expect, it } from 'vitest';
 
-repository.save({
-  id: 'booking-1',
-  trainId: 'train-99',
-  passengerName: 'Ada Lovelace'
-});
-
-const savedBooking = repository.findById('booking-1');
-
-// savedBooking contains the booking that was saved.</code></pre><h2 class="" dir="auto">Why this is a fake</h2><ul class="bulleted-list" dir="auto"><li style="list-style-type:disc">It has a genuine implementation of the repository behavior.</li><li style="list-style-type:disc">Its internal state changes when <code>save</code> is called.</li><li style="list-style-type:disc">It supports more than one preselected test answer.</li><li style="list-style-type:disc">It replaces infrastructure while remaining fast and deterministic.</li></ul><hr dir="auto"/><h2 class="" dir="auto">Using the fake with a service</h2><p class="" dir="auto">A fake is especially useful when several calls need to cooperate naturally during one test.</p><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-ts" style="white-space:pre-wrap;word-break:break-all">class BookingService {
+class BookingService {
   constructor(private readonly repository: BookingRepository) {}
 
   confirm(booking: Booking): Booking {
@@ -832,11 +846,68 @@ const savedBooking = repository.findById('booking-1');
   }
 }
 
-const repository = new InMemoryBookingRepository();
-const service = new BookingService(repository);
+it('confirms a booking without a database', () =&gt; {
+  const repository = new InMemoryBookingRepository();
+  const service = new BookingService(repository);
+  const booking: Booking = {
+    id: 'booking-1',
+    trainId: 'train-99',
+    passengerName: 'Ada Lovelace'
+  };
 
-const booking = service.confirm({
-  id: 'booking-1', trainId: 'train-99', passengerName: 'Ada Lovelace'
-});
+  const confirmed = service.confirm(booking);
 
-// booking.passengerName is 'Ada Lovelace'.</code></pre><p class="" dir="auto">The test exercises a realistic sequence of repository operations without database setup, network I/O, migrations, or cleanup.</p><hr dir="auto"/><h2 class="" dir="auto">What would change the nature of the double?</h2><table class="simple-table" dir="ltr"><thead><tr><th>Change</th><th>The double becomes</th><th>Why</th></tr></thead><tbody><tr><td><code>findById</code> always returns one hard-coded booking.</td><td>Stub</td><td>It supplies a selected answer instead of modeling repository behavior.</td></tr><tr><td>The repository is required by the constructor but its result is irrelevant.</td><td>Dummy</td><td>It only fills a required parameter.</td></tr><tr><td>It records which bookings were saved for a later assertion.</td><td>Spy</td><td>Its purpose is now observing interaction.</td></tr><tr><td>It fails unless <code>save</code> is called in an exact prescribed way.</td><td>Mock</td><td>It enforces an interaction contract.</td></tr></tbody></table><h2 class="" dir="auto">Key distinction</h2><blockquote class="" dir="auto"><strong>A fake is a small, useful substitute for the real thing; a stub is a source of predefined answers.</strong></blockquote><p class="" dir="auto">Keep fakes intentionally simple. If they start reproducing production constraints, performance behavior, or implementation details, the fake can become another system that needs extensive testing and maintenance.</p><figure class="link-to-page"><a href="TestDoubles.html">← Back to Test doubles</a></figure><p class="" dir="auto">Related: <a href="Stub.html">Stub example</a> · <a href="Dummy.html">Dummy example</a></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+  expect(confirmed).toEqual(booking);
+  expect(repository.findById('booking-1')).toEqual(booking);
+});</code></pre>
+<h2 class="" dir="auto">Why this is a fake</h2>
+<ul class="bulleted-list" dir="auto">
+<li style="list-style-type:disc">It has a genuine implementation of the repository behavior.</li>
+<li style="list-style-type:disc">Its internal state changes when <code>save</code> is called.</li>
+<li style="list-style-type:disc">It supports more than one preselected test answer.</li>
+<li style="list-style-type:disc">It replaces infrastructure while remaining fast and deterministic.</li>
+</ul>
+<p class="" dir="auto">The same in-memory class can be a local runtime adapter outside tests. It plays the Fake role only when a test selects it as the substitute for the production repository.</p>
+<hr dir="auto">
+<h2 class="" dir="auto">Verify outcome and state, not calls</h2>
+<p class="" dir="auto">The test exercises a realistic sequence of repository operations without database setup, network I/O, migrations, or cleanup. It proves the returned booking and observable repository state instead of requiring exact <code>save</code> or <code>findById</code> call counts.</p>
+<hr dir="auto">
+<h2 class="" dir="auto">What would change the nature of the double?</h2>
+<table class="simple-table" dir="ltr">
+<thead><tr>
+<th>Change</th>
+<th>The double becomes</th>
+<th>Why</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+<code>findById</code> always returns one hard-coded booking.</td>
+<td>Stub</td>
+<td>It supplies a selected answer instead of modeling repository behavior.</td>
+</tr>
+<tr>
+<td>The repository is required by the constructor, but the selected path never calls it.</td>
+<td>Dummy</td>
+<td>It only fills an unused required slot.</td>
+</tr>
+<tr>
+<td>Its sole purpose becomes recording calls and arguments, without useful repository behavior.</td>
+<td>Spy</td>
+<td>The test observes interaction history instead of repository state.</td>
+</tr>
+<tr>
+<td>It fails unless <code>save</code> is called in an exact prescribed way.</td>
+<td>Mock</td>
+<td>It enforces an interaction contract.</td>
+</tr>
+</tbody>
+</table>
+<h2 class="" dir="auto">Key distinction</h2>
+<blockquote class="" dir="auto"><strong>A fake is a small, useful substitute for the real thing; a stub is a source of predefined answers.</strong></blockquote>
+<p class="" dir="auto">Prefer a fake over a mock when an observable result or state change proves the behavior. Keep fakes intentionally simple: if they reproduce production constraints, performance behavior, or implementation details, they become another system to maintain.</p>
+<figure class="link-to-page"><a href="TestDoubles.html">&larr; Back to Test doubles</a></figure>
+<p class="" dir="auto">Related: <a href="Dummy.html">Dummy</a> &middot; <a href="Stub.html">Stub</a> &middot; <a href="Spy.html">Spy</a> &middot; <a href="Mock.html">Mock</a></p>
+</div></article><span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+</html>
